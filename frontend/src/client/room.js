@@ -104,8 +104,7 @@ export default (code, host) => {
     }
 
     function startGame() {
-        status = 'playing';
-        console.log("LETSS gOOO BOISSS");
+        // TODO: add logic to start the game
     }
 
     return {
@@ -128,6 +127,7 @@ export default (code, host) => {
         sendMessage,
         getSafePlayers,
         updatePlayerPicture,
-        updatePlayer
+        updatePlayer,
+        startGame
     }
 }

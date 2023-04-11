@@ -60,6 +60,7 @@ export default class PlayerList extends Component {
     }
 
     render () {
+        console.log(this.state.players)
         let playersItems = Object.keys(this.state.players).map(key =>
             
             <PlayerProfile key={key} image={this.state.players[key].picture} name={Socket.Game.playerData.id == key ? this.state.players[key].name + ' (YOU)': this.state.players[key].name}/>
@@ -67,8 +68,13 @@ export default class PlayerList extends Component {
           )
 
         Object.keys(this.state.players).map(key => {
-            const b = new Blob([this.state.players[key].picture], {type: 'image/png'})
-            this.state.players[key].picture = URL.createObjectURL(b)
+            
+            const picture = this.state.players[key].picture
+            const b = new Blob([picture], {type: 'image/jpeg'})
+
+            const url = URL.createObjectURL(b)
+            this.state.players[key].picture = url
+            //console.log(picture.src)
         })
 
         return (
