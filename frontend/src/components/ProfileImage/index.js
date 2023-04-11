@@ -33,7 +33,9 @@ export default class ProfileImage extends Component {
             Socket.Game.playerData.picture = file;
         }
 
-        console.log(Socket.Game.playerData);
+        if (this.props.onChange) {
+            this.props.onChange(file);
+        }
     }
 
     removeImage = () => {
@@ -41,6 +43,10 @@ export default class ProfileImage extends Component {
 
         if (Socket.Game) {
             Socket.Game.playerData.picture = null;
+        }
+
+        if (this.props.onChange) {
+            this.props.onChange(file);
         }
     }
 

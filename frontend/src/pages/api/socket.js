@@ -42,10 +42,20 @@ const SocketHandler = (req, res) => {
 
                 callback({
                     success: true,
-                    //players: room.getPlayers(),
+                    processedCode: room.getCode(),
+                    players: room.getSafePlayers(),
                     room_status: room.getStatus(),
                     client_id: socket.id
                 })
+            })
+
+            socket.on('update-picture', (picture) => {
+                if (!socket.Room) {
+                    return;
+                }
+
+                //socket.Room.updatePlayer(socket, picture);
+                socket.Room.updatePlayerPicture(socket, picture);
             })
 
             socket.on('leave-game', () => {
@@ -69,6 +79,19 @@ const SocketHandler = (req, res) => {
                 }
 
                 socket.Room.sendMessage(socket, message);
+            })
+
+            socket.on('start-game', () => {
+                if (!socket.Room) {
+                    return;
+                }
+
+                // check if the player is the host
+                if (socket.id !== socket.Room.getHost().id) {
+                    return;
+                }
+
+                socket.Room.startGame(socket);
             })
 
             socket.on('disconnect', () => {

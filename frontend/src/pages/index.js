@@ -26,6 +26,7 @@ Socket.io = socket;
 export default function Home() {
 
     const [name, setName] = useState('')
+    const [image, setImage] = useState(null)
     var [code, setCode] = useState(null)
     const [game, setGame] = useState(null)
     const [createdGame, setCreatedGame] = useState(false)
@@ -34,20 +35,13 @@ export default function Home() {
         setName(e.target.value)
     }
 
-    async function startClient() {
-        await fetch('/api/socket')
-        const socket = io();
-
-        Socket.io = socket;
-    }
-
     function handlePlay (createGame) {
         code = Router.query['']
 
-        Socket.io.emit('join-game', name, code, createdGame, ({success, players, room_status, client_id}) => {
+        Socket.io.emit('join-game', name, code, createdGame, ({success, players, room_status, client_id, processedCode}) => {
             if (success) {
                 Socket.Game = {
-                    code: code,
+                    code: processedCode,
                     players: players,
                     status: room_status,
                     client_id: client_id,
@@ -55,7 +49,7 @@ export default function Home() {
                     playerData: {
                         id: client_id,
                         name: name,
-                        gameCode: code,
+                        gameCode: processedCode,
                         score: 0,
                         picture: null
                     }
@@ -68,32 +62,30 @@ export default function Home() {
     }
 
     function confirmGame () {
-        //handlePlay()
         Router.push('/game')
     }
 
     function createGame () {
         setCreatedGame(true)
-        handlePlay()
+        handlePlay(true)
     }
 
     function cancelGame () {
         Socket.io.emit('leave-game');
         setCreatedGame(false)
+        setImage(null)
         setGame(null)
         setCode(null)
     }
 
-    function onImageChange (e) {
-        if (e.target.files[0] === undefined) return;
+    function onImageChange (file) {
+        
+        
 
-        const reader = new FileReader();
-        reader.onload = () => {
-            if (reader.readyState === 2) {
-                Socket.Game.playerData.picture = reader.result;
-            }
-        }
-        reader.readAsDataURL(e.target.files[0])
+        Socket.Game.players[Socket.Game.client_id].picture = file
+
+
+        Socket.io.emit('update-picture', file)
     }
 
     useEffect(() => {

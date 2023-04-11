@@ -1,4 +1,4 @@
-import { getValidName } from '@/util/StringUtil.js';
+import { getValidName, getCleanedString } from '@/util/StringUtil.js';
 
 export default (code, host) => {
     let joinCode = code,
@@ -30,20 +30,36 @@ export default (code, host) => {
     const getCurrentWordGuesses = () => currentWordGuesses;
     const getCurrentWordGuessesCorrect = () => currentWordGuessesCorrect;
 
+    function getSafePlayers () {
+        const safePlayers = {};
+
+        for (let player in players) {
+            safePlayers[player] = {
+                name: players[player].name,
+                score: players[player].score,
+                id: players[player].id,
+                picture: players[player].picture
+            };
+        }
+
+        return safePlayers;
+    }
+
     function getPlayerLength () {
         return Object.keys(players).length;
     }
 
-    function addPlayer(socket, name) {
+    function addPlayer(socket, name, picture) {
         players[socket.id] = {
             client: socket,
             name: getValidName(name, players),
             score: 0,
-            id: socket.id
+            id: socket.id,
+            picture: null
         }
 
         for (let player in players) {
-            players[player].client.emit('player-joined', name);
+            players[player].client.emit('player-joined', name, socket.id, picture);
         }
     }
 
@@ -57,12 +73,39 @@ export default (code, host) => {
         delete players[socket.id];
     }
 
+    function updatePlayer(socket, {picture}) {
+        players[socket.id].picture = picture;
+
+        for (let player in players) {
+            players[player].client.emit('player-updated', socket.id, picture);
+        }
+    }
+
+    function updatePlayerPicture(socket, picture) {
+        players[socket.id].picture = picture;
+
+        console.log('updated')
+        for (let player in players) {
+            players[player].client.emit('image-updated', socket.id, picture);
+        }
+    }
+
     function sendMessage(socket, message) {
         const name = players[socket.id].name;
+
+        // Check if message is empty or only contains spaces
+        if (message.length === 0 || getCleanedString(message).length === 0) {
+            return;
+        }
 
         for (let player in players) {
             players[player].client.emit('message-receive', name, message);
         }
+    }
+
+    function startGame() {
+        status = 'playing';
+        console.log("LETSS gOOO BOISSS");
     }
 
     return {
@@ -82,6 +125,9 @@ export default (code, host) => {
         getCurrentWordGuessesCorrect,
         addPlayer,
         removePlayer,
-        sendMessage
+        sendMessage,
+        getSafePlayers,
+        updatePlayerPicture,
+        updatePlayer
     }
 }
