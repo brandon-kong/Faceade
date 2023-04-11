@@ -1,0 +1,4 @@
+.container {
+    background-color: rgb(var(--background-start-rgb));
+    border: 2px solid rgb(var(--background-light-rgb));
+}

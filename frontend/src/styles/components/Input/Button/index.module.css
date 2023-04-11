@@ -1,0 +1,9 @@
+.input {
+    cursor: pointer;
+    border: 2px solid rgb(var(--background-light-rgb));
+    transition: background-color 0.2s ease-in-out;
+}
+
+.input:hover {
+    background-color: rgb(var(--background-light-rgb));
+}
