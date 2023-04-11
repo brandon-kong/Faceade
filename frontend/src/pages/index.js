@@ -79,12 +79,10 @@ export default function Home() {
     }
 
     function onImageChange (file) {
-        
-        
-
+        console.log(file)
         Socket.Game.players[Socket.Game.client_id].picture = file
 
-
+        
         Socket.io.emit('update-picture', file)
     }
 

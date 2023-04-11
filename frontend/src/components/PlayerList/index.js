@@ -20,6 +20,10 @@ export default class PlayerList extends Component {
         Socket.io.on('player-joined', this.onPlayerJoined.bind(this))
         Socket.io.on('player-left', this.onPlayerLeave.bind(this))
         Socket.io.on('image-updated', this.onImageUpdated.bind(this))
+
+        this.setState({
+            players: Socket.Game.players
+        })
     }
 
     onPlayerJoined = (name, id, picture) => {
@@ -30,7 +34,6 @@ export default class PlayerList extends Component {
             score: 0,
         }
 
-        console.log(Socket.Game.players)
         this.setState({
             players: Socket.Game.players
         })
@@ -45,6 +48,10 @@ export default class PlayerList extends Component {
     }
 
     onImageUpdated = (id, picture) => {
+        console.log(picture)
+        // TODO: DOESNT WORK
+        //const blob = new Blob(picture, {type: 'image/png'})
+        //console.log(blob)
         Socket.Game.players[id].picture = picture
 
         this.setState({
@@ -55,14 +62,19 @@ export default class PlayerList extends Component {
     render () {
         let playersItems = Object.keys(this.state.players).map(key =>
             
-            <PlayerProfile key={key} image={this.state.players[key].picture} name={this.state.players[key].name}/>
+            <PlayerProfile key={key} image={this.state.players[key].picture} name={Socket.Game.playerData.id == key ? this.state.players[key].name + ' (YOU)': this.state.players[key].name}/>
       
           )
+
+        Object.keys(this.state.players).map(key => {
+            const b = new Blob([this.state.players[key].picture], {type: 'image/png'})
+            this.state.players[key].picture = URL.createObjectURL(b)
+        })
 
         return (
             <div className="flex flex-col items-center justify-center">
                 <h1 className="text-2xl font-semibold">Players</h1>
-                <div className="flex flex-col items-center justify-center">
+                <div className="flex flex-row items-center justify-center">
                     {playersItems}
                 </div>
             </div>
