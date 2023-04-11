@@ -26,11 +26,11 @@ export default class PlayerList extends Component {
         })
     }
 
-    onPlayerJoined = (name, id, picture) => {
+    onPlayerJoined = (name, id, image) => {
         Socket.Game.players[id] = {
             name: name,
             id: id,
-            picture: picture,
+            picture: image,
             score: 0,
         }
 
@@ -48,40 +48,30 @@ export default class PlayerList extends Component {
     }
 
     onImageUpdated = (id, picture) => {
-        console.log(picture)
-        // TODO: DOESNT WORK
-        //const blob = new Blob(picture, {type: 'image/png'})
-        //console.log(blob)
-        Socket.Game.players[id].picture = picture
 
+        console.log(Socket.Game.playerData.id, id, picture)
+        Socket.Game.players[id].picture = picture
         this.setState({
             players: Socket.Game.players
         })
+
+        this.forceUpdate()
+    }
+
+    getUpdatedPlayerProfile = (id, picture) => {
+        return <PlayerProfile key={id} image={picture} name={Socket.Game.playerData.id == id ? Socket.Game.players[id].name + ' (YOU)': Socket.Game.players[id].name}/>
     }
 
     render () {
-        console.log(this.state.players)
-        let playersItems = Object.keys(this.state.players).map(key =>
-            
-            <PlayerProfile key={key} image={this.state.players[key].picture} name={Socket.Game.playerData.id == key ? this.state.players[key].name + ' (YOU)': this.state.players[key].name}/>
-      
-          )
-
-        Object.keys(this.state.players).map(key => {
-            
-            const picture = this.state.players[key].picture
-            const b = new Blob([picture], {type: 'image/jpeg'})
-
-            const url = URL.createObjectURL(b)
-            this.state.players[key].picture = url
-            //console.log(picture.src)
-        })
-
         return (
             <div className="flex flex-col items-center justify-center">
                 <h1 className="text-2xl font-semibold">Players</h1>
                 <div className="flex flex-row items-center justify-center">
-                    {playersItems}
+                    {
+                        Object.keys(this.state.players).map(key =>
+                            this.getUpdatedPlayerProfile(key, this.state.players[key].picture)
+                          )
+                    }
                 </div>
             </div>
         )

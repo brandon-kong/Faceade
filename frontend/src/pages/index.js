@@ -29,6 +29,7 @@ export default function Home() {
     const [image, setImage] = useState(null)
     var [code, setCode] = useState(null)
     const [game, setGame] = useState(null)
+    const [inConfig, setInConfig] = useState(false)
     const [createdGame, setCreatedGame] = useState(false)
 
     function handleNameChange(e) {
@@ -38,7 +39,7 @@ export default function Home() {
     function handlePlay (createGame) {
         code = Router.query['']
 
-        Socket.io.emit('join-game', name, code, createdGame, ({success, players, room_status, client_id, processedCode}) => {
+        Socket.io.emit('join-game', name, code, createGame, image, ({success, players, room_status, client_id, processedCode}) => {
             if (success) {
                 Socket.Game = {
                     code: processedCode,
@@ -51,12 +52,12 @@ export default function Home() {
                         name: name,
                         gameCode: processedCode,
                         score: 0,
-                        picture: null
+                        picture: image
                     }
                 }
 
-                setGame(Socket.Game)
-                //Router.push('/game')
+                //setGame(Socket.Game)
+                Router.push('/game')
             }
         })        
     }
@@ -71,7 +72,8 @@ export default function Home() {
     }
 
     function cancelGame () {
-        Socket.io.emit('leave-game');
+        //Socket.io.emit('leave-game');
+        setInConfig(false)
         setCreatedGame(false)
         setImage(null)
         setGame(null)
@@ -79,24 +81,27 @@ export default function Home() {
     }
 
     function onImageChange (file) {
-        console.log(file)
-        Socket.Game.players[Socket.Game.client_id].picture = file
 
+        if (!file) {
+            Socket.io.emit('update-picture', null)
+            setImage(null)
+            return
+        }
+
+        const blob = new Blob([file], {type: file.type})
+        const url = URL.createObjectURL(blob)
         
-        Socket.io.emit('update-picture', file)
+        Socket.io.emit('update-picture', url)
+        setImage(url)
     }
-
-    useEffect(() => {
-        //startClient()
-    }, [])
 
     return (
         <>
             {
-                game ?
+                inConfig ?
                     <ProfileImage 
                     onCancel={cancelGame}
-                    onConfirm={confirmGame}
+                    onConfirm={() => handlePlay(createdGame)}
                     onChange={onImageChange}
                     />
                 : null
@@ -106,7 +111,7 @@ export default function Home() {
                 <div className="flex flex-col gap-5 items-center justify-center w-2/3 max-w-sm">
                     <IconLabel />
                     <Textbox name="name" onChange={handleNameChange} placeholder="Name" />
-                    <Button value="Play" onClick={handlePlay} />
+                    <Button value="Play" onClick={() => setInConfig(true)} />
                     <OrSeperator />
                     <Button value="Create room" onClick={createGame} />
                 </div>

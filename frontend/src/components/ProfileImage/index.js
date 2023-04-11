@@ -46,7 +46,7 @@ export default class ProfileImage extends Component {
         }
 
         if (this.props.onChange) {
-            this.props.onChange(file);
+            this.props.onChange(null);
         }
     }
 

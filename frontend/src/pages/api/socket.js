@@ -16,7 +16,7 @@ const SocketHandler = (req, res) => {
         io.on('connection', (socket) => {
             console.log('New client connected')
 
-            socket.on('join-game', (name, code, createGame, callback) => {
+            socket.on('join-game', (name, code, createGame, image, callback) => {
 
                 if (!code) {
                     if (createGame === true) {
@@ -36,7 +36,7 @@ const SocketHandler = (req, res) => {
                 }
 
                 const room = rooms[code];
-                room.addPlayer(socket, name)
+                room.addPlayer(socket, name, image)
 
                 socket.Room = room;
 
@@ -47,15 +47,6 @@ const SocketHandler = (req, res) => {
                     room_status: room.getStatus(),
                     client_id: socket.id
                 })
-            })
-
-            socket.on('update-picture', (picture) => {
-                if (!socket.Room) {
-                    return;
-                }
-
-                //socket.Room.updatePlayer(socket, picture);
-                socket.Room.updatePlayerPicture(socket, picture);
             })
 
             socket.on('leave-game', () => {

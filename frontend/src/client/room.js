@@ -50,16 +50,17 @@ export default (code, host) => {
     }
 
     function addPlayer(socket, name, picture) {
+        const safeName = getValidName(name, players);
         players[socket.id] = {
             client: socket,
-            name: getValidName(name, players),
+            name: safeName,
             score: 0,
             id: socket.id,
-            picture: null
+            picture: picture
         }
 
         for (let player in players) {
-            players[player].client.emit('player-joined', name, socket.id, picture);
+            players[player].client.emit('player-joined', safeName, socket.id, picture);
         }
     }
 
@@ -71,23 +72,6 @@ export default (code, host) => {
         }
 
         delete players[socket.id];
-    }
-
-    function updatePlayer(socket, {picture}) {
-        players[socket.id].picture = picture;
-
-        for (let player in players) {
-            players[player].client.emit('player-updated', socket.id, picture);
-        }
-    }
-
-    function updatePlayerPicture(socket, picture) {
-        players[socket.id].picture = picture;
-
-        console.log('updated')
-        for (let player in players) {
-            players[player].client.emit('image-updated', socket.id, picture);
-        }
     }
 
     function sendMessage(socket, message) {
@@ -103,8 +87,13 @@ export default (code, host) => {
         }
     }
 
+    function startRound() {
+
+    }
+
     function startGame() {
         // TODO: add logic to start the game
+        
     }
 
     return {
@@ -126,8 +115,6 @@ export default (code, host) => {
         removePlayer,
         sendMessage,
         getSafePlayers,
-        updatePlayerPicture,
-        updatePlayer,
         startGame
     }
 }

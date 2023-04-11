@@ -6,8 +6,6 @@ const getValidName = (str, players) => {
     const cleaned = getCleanedString(str);
     let name = cleaned;
 
-    console.log(cleaned);
-
     if (cleaned.length === 0) {
         name = 'Player ' + (Object.keys(players).length + 1);
     }
