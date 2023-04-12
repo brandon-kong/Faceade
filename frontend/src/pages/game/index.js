@@ -5,44 +5,66 @@ import React, { Component } from 'react';
 // Element components
 import Button from '@/components/Input/Button';
 import Chat from '@/components/Chat';
-import PlayerProfile from '@/components/PlayerProfile';
 import PlayerList from '@/components/PlayerList';
+import Redirect from '@/components/Redirect';
+import GameViewComponent from '@/components/GameView';
 
 // Client components
 import Socket from '@/client/Socket';
 
-import Router from 'next/router'
+import Router from 'next/router';
 
 export default class GameView extends Component {
 
     constructor(props) {
         super(props);
 
+        if (Socket.Game === undefined) {
+            return
+        }
+
         this.state = {
-            status: '',
+            status: Socket.Game.status,
             isInWaitingRoom: true,
             game: Socket.Game,
             clientVideoOn: false,
         };
+
+        Socket.io.on('game-start', this.onGameStarted.bind(this))
+        Socket.io.on('', this.onGameEnded.bind(this))
     }
 
     componentDidMount() {
-        if (!Socket.Game) {
-            Router.push('/');
-        }
         this.setState({
             game: Socket.Game
         })
     }
 
     startGame = () => {
-        Socket.io.emit('start-game', Socket.Game.code, ({success, status}) => {
-            if (success) {
-                this.setState({
-                    status: status
-                })
-            }
-        })
+        Socket.io.emit('start-game', Socket.Game.code)
+    }
+
+    onGameStarted = (rounds, time) => {
+        if (Socket.Game.status == "running") {
+            // no need to change state if game is already running
+            return;
+        }
+
+        Socket.Game.status = "running";
+        Socket.Game.round = 1;
+        Socket.Game.rounds = rounds;
+        Socket.Game.roundTime = time;
+
+        this.setState({
+            status: Socket.Game.status,
+            isInWaitingRoom: false,
+        });
+
+        console.log('Game started!');
+    }
+
+    onGameEnded = () => {
+
     }
 
     toggleVideo = () => {
@@ -56,7 +78,13 @@ export default class GameView extends Component {
 
     render () {
 
+        if (!Socket.Game) return <Redirect to="/" />
+
+        if (Socket.Game.status == "running") {
+            return <GameViewComponent />
+        }
         return (
+            
             <div className="bg-primary-light h-screen p-20">
                 {
                     this.state.game ?
