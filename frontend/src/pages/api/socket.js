@@ -18,8 +18,11 @@ const SocketHandler = (req, res) => {
 
             socket.on('join-game', (name, code, createGame, image, callback) => {
 
+                var gameCreated = false;
+
                 if (!code) {
                     if (createGame === true) {
+                        gameCreated = true;
                         code = generateNewGameCode(rooms);
                     }
                     else {
@@ -32,7 +35,9 @@ const SocketHandler = (req, res) => {
                 }
 
                 if (!rooms[code]) {
-                    rooms[code] = Room(code, socket);
+                    // create room if it doesn't exist
+                    gameCreated = true;
+                    rooms[code] = Room(code);
                 }
 
                 const room = rooms[code];
@@ -40,11 +45,16 @@ const SocketHandler = (req, res) => {
 
                 socket.Room = room;
 
+                if (gameCreated) {
+                    room.setHost(socket)
+                }
+
                 callback({
                     success: true,
                     processedCode: room.getCode(),
                     players: room.getSafePlayers(),
                     room_status: room.getStatus(),
+                    host_id: room.getHost().id,
                     client_id: socket.id
                 })
             })

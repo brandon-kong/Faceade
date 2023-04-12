@@ -1,8 +1,8 @@
 import { getValidName, getCleanedString } from '@/util/StringUtil.js';
 
-export default (code, host) => {
+export default (code) => {
     let joinCode = code,
-        gameHost = host,
+        gameHost = null,
         players = {},
         status = '',
         words = [],
@@ -49,6 +49,10 @@ export default (code, host) => {
         return Object.keys(players).length;
     }
 
+    function setHost(socket) {
+        gameHost = socket;
+    }
+
     function addPlayer(socket, name, picture) {
         const safeName = getValidName(name, players);
         players[socket.id] = {
@@ -93,7 +97,7 @@ export default (code, host) => {
 
     function startGame() {
         // TODO: add logic to start the game
-        
+
     }
 
     return {
@@ -115,6 +119,7 @@ export default (code, host) => {
         removePlayer,
         sendMessage,
         getSafePlayers,
-        startGame
+        startGame,
+        setHost
     }
 }

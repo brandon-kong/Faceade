@@ -11,7 +11,8 @@ export default class PlayerList extends Component {
         super();
 
         this.state = {
-            players: Socket.Game ? Socket.Game.players : {}
+            players: Socket.Game ? Socket.Game.players : {},
+            videoOn: false,
         }
     }
 
@@ -59,14 +60,14 @@ export default class PlayerList extends Component {
     }
 
     getUpdatedPlayerProfile = (id, picture) => {
-        return <PlayerProfile key={id} image={picture} name={Socket.Game.playerData.id == id ? Socket.Game.players[id].name + ' (YOU)': Socket.Game.players[id].name}/>
+        return <PlayerProfile key={id} id={id} image={picture} name={Socket.Game.playerData.id == id ? Socket.Game.players[id].name + ' (YOU)': Socket.Game.players[id].name}/>
     }
 
     render () {
         return (
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col gap-5 items-center justify-center">
                 <h1 className="text-2xl font-semibold">Players</h1>
-                <div className="flex flex-row items-center justify-center">
+                <div className="flex flex-row gap-10 items-center justify-center">
                     {
                         Object.keys(this.state.players).map(key =>
                             this.getUpdatedPlayerProfile(key, this.state.players[key].picture)

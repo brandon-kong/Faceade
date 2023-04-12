@@ -39,10 +39,11 @@ export default function Home() {
     function handlePlay (createGame) {
         code = Router.query['']
 
-        Socket.io.emit('join-game', name, code, createGame, image, ({success, players, room_status, client_id, processedCode}) => {
+        Socket.io.emit('join-game', name, code, createGame, image, ({success, players, host_id, room_status, client_id, processedCode}) => {
             if (success) {
                 Socket.Game = {
                     code: processedCode,
+                    host_id: host_id,
                     players: players,
                     status: room_status,
                     client_id: client_id,
@@ -52,18 +53,14 @@ export default function Home() {
                         name: name,
                         gameCode: processedCode,
                         score: 0,
-                        picture: image
+                        picture: image,
+                        videoOn: false,
                     }
                 }
 
-                //setGame(Socket.Game)
                 Router.push('/game')
             }
         })        
-    }
-
-    function confirmGame () {
-        Router.push('/game')
     }
 
     function createGame () {

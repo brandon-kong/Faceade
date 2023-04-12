@@ -21,7 +21,8 @@ export default class GameView extends Component {
         this.state = {
             status: '',
             isInWaitingRoom: true,
-            game: Socket.Game
+            game: Socket.Game,
+            clientVideoOn: false,
         };
     }
 
@@ -29,6 +30,9 @@ export default class GameView extends Component {
         if (!Socket.Game) {
             Router.push('/');
         }
+        this.setState({
+            game: Socket.Game
+        })
     }
 
     startGame = () => {
@@ -41,10 +45,19 @@ export default class GameView extends Component {
         })
     }
 
+    toggleVideo = () => {
+        this.setState({
+            clientVideoOn: !this.state.clientVideoOn
+        })
+
+        Socket.Game.players[Socket.Game.client_id].videoOn = this.state.clientVideoOn;
+        Socket.Game.playerData.videoOn = this.state.clientVideoOn;
+    }
+
     render () {
 
         return (
-            <div className="bg-primary-light">
+            <div className="bg-primary-light h-screen p-20">
                 {
                     this.state.game ?
                     (
@@ -58,8 +71,16 @@ export default class GameView extends Component {
                 }
                 {this.state.isInWaitingRoom ? <h1>Waiting room</h1> : null}
                 <h1>GameView</h1>
+
+                <button onClick={this.toggleVideo.bind(this)} >Video: {Socket.Game && Socket.Game.playerData.videoOn ? "on" : "off"}</button>
                 <Chat />
-                <Button onClick={this.startGame.bind(this)} value="START GAME"/>
+                {
+                    (Socket.Game && Socket.Game.host_id == Socket.Game.client_id) ? (
+                        <Button onClick={this.startGame.bind(this)} value="START GAME"/>
+                    )
+                    :
+                    null
+                }
                 <PlayerList />
             </div>
         )
