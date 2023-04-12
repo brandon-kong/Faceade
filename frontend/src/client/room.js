@@ -67,7 +67,8 @@ export default (code) => {
             name: safeName,
             score: 0,
             id: socket.id,
-            picture: picture
+            picture: picture,
+            guessedCorrectly: false
         }
 
         playerOrder.push(socket.id);
@@ -150,15 +151,47 @@ export default (code) => {
                     
                     // TODO: add logic to help the guessers with the word by displaying hints
 
-                })
+                }, 1000);
 
 
             });
+
+            const finishDrawing = () => {
+                if (getPlayerLength() == 0) {
+                    // no players left, the game shouldn't exist
+                    return;
+                }
+
+                clearInterval(timeLeftInterval);
+
+                let drawerPoints = 0;
+
+                // TODO: add logic to calculate points for the drawer
+
+                for (let player in players) {
+                    if (players[player].guessedCorrectly) {
+                        players[player].score += 10;
+                    }
+                }
+
+                // TODO: add logic to calculate points for the guessers
+
+                if (players[currentDrawer] === undefined) {
+                    return;
+                }
+
+                players[currentDrawer].score += drawerPoints;
+
+                for (let player in players) {
+                    players[player].client.emit('player-score-changed', currentDrawer, players[player].score);
+                }
+
+                
+            }
         }
     }
 
     function startGame() {
-        // TODO: add logic to start the game
 
         // when in development, we can just start the game, otherwise USE MIN_PLAYERS
         if (getPlayerLength() < 0) {

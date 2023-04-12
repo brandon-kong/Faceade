@@ -10,17 +10,16 @@ import Router from 'next/router';
 
 
 export default class GameView extends Component {
-    constructor () {
+    constructor (props) {
         super();
 
-        this.state = {
-            
-        }
+        this.state = props.state
     }
 
     render () {
         return (
             <div className="h-screen">
+                {this.state.isInWaitingRoom}
                 <p>GAME SCREEN :d</p>
             </div>
         )

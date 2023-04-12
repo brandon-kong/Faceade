@@ -81,7 +81,7 @@ export default class GameView extends Component {
         if (!Socket.Game) return <Redirect to="/" />
 
         if (Socket.Game.status == "running") {
-            return <GameViewComponent />
+            return <GameViewComponent state={this.state} />
         }
         return (
             
@@ -92,7 +92,6 @@ export default class GameView extends Component {
                         <>
                             http://localhost:3000/?={Socket.Game.code}
                         </>
-                        
                     )
                     :
                     null
