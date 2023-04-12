@@ -85,6 +85,8 @@ export default (code) => {
             players[player].client.emit('player-left', name, socket.id);
         }
 
+        // TODO: add logic to check if the player is the host and give host to someone else
+
         delete players[socket.id];
     }
 
