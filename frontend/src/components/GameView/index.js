@@ -19,7 +19,6 @@ export default class GameView extends Component {
     render () {
         return (
             <div className="h-screen">
-                {this.state.isInWaitingRoom}
                 <p>GAME SCREEN :d</p>
             </div>
         )

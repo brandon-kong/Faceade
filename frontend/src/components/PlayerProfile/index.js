@@ -30,6 +30,8 @@ export default class PlayerProfile extends Component {
     configureVideoState = () => {
         if (!Socket.Game) return;
 
+        var localstream;
+
         if (Socket.Game.players[this.state.id].videoOn) {
             navigator.mediaDevices.getUserMedia({ video: {
                 width: { min: 500, ideal: 500, max: 1000 },
@@ -38,6 +40,7 @@ export default class PlayerProfile extends Component {
             .then(stream => {
                 const video = document.querySelector('video');
                 if (video) video.srcObject = stream;
+                localstream = stream;
             })
             .catch(err => {
                 console.log(err);
@@ -46,6 +49,7 @@ export default class PlayerProfile extends Component {
         else {
             const video = document.querySelector('video');
             if (video) video.srcObject = null;
+            if (localstream) localstream.getTracks().forEach(track => track.stop());
         }
     }
 
