@@ -14,6 +14,7 @@ export default class PlayerProfile extends Component {
             videoOn: props.videoOn,
             Game: Socket.Game,
         }
+
     }
 
     componentDidMount () {
@@ -29,7 +30,7 @@ export default class PlayerProfile extends Component {
     configureVideoState = () => {
         if (!Socket.Game) return;
 
-        if (Socket.Game.playerData.videoOn) {
+        if (Socket.Game.players[this.state.id].videoOn) {
             navigator.mediaDevices.getUserMedia({ video: {
                 width: { min: 500, ideal: 500, max: 1000 },
                 height: { min: 500, ideal: 500, max: 1000 }
@@ -44,7 +45,7 @@ export default class PlayerProfile extends Component {
         }
         else {
             const video = document.querySelector('video');
-            if (video) video.srcObject = stream;
+            if (video) video.srcObject = null;
         }
     }
 
@@ -54,13 +55,13 @@ export default class PlayerProfile extends Component {
                 <div className="flex flex-col gap-2 items-center justify-center">
 
                     {
-                        Socket.Game && Socket.Game.client_id == this.state.id && Socket.Game.playerData.videoOn ?
-                        <video className="w-20 h-20 bg-primary drop-shadow-lg rounded-full" autoPlay muted></video>
+                        Socket.Game && Socket.Game.players[this.state.id].videoOn ?
+                        <video className="w-36 h-36 bg-primary drop-shadow-lg rounded-full" muted></video>
                         :
-                        <img src={this.state.image ? this.state.image : img.src} alt="Profile picture" className="w-20 h-20 bg-primary drop-shadow-lg rounded-full"/>
+                        <img src={this.state.image ? this.state.image : img.src} alt="Profile picture" className="w-36 h-36 bg-primary drop-shadow-lg rounded-full"/>
                     }
 
-                    <h1 className="text-md">{this.state.name} {}</h1>
+                    <h1 className="text-md">{this.state.name}</h1>
                 </div>
             </div>
         )

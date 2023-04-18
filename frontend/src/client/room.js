@@ -45,7 +45,8 @@ export default (code) => {
                 name: players[player].name,
                 score: players[player].score,
                 id: players[player].id,
-                picture: players[player].picture
+                picture: players[player].picture,
+                videoOn: players[player].videoOn
             };
         }
 
@@ -68,7 +69,8 @@ export default (code) => {
             score: 0,
             id: socket.id,
             picture: picture,
-            guessedCorrectly: false
+            guessedCorrectly: false,
+            videoOn: false
         }
 
         playerOrder.push(socket.id);
@@ -211,6 +213,14 @@ export default (code) => {
         startRound();
     }
 
+    function setVideo(socket, toggle) {
+        players[socket.id].videoOn = toggle;
+
+        for (let player in players) {
+            players[player].client.emit('toggle-camera', socket.id, toggle);
+        }
+    }
+
     return {
         getCode,
         getHost,
@@ -231,6 +241,7 @@ export default (code) => {
         sendMessage,
         getSafePlayers,
         startGame,
-        setHost
+        setHost,
+        setVideo
     }
 }

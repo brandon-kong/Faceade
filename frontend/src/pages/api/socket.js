@@ -82,6 +82,14 @@ const SocketHandler = (req, res) => {
                 socket.Room.sendMessage(socket, message);
             })
 
+            socket.on('video-changed', (videoOn) => {
+                if (!socket.Room) {
+                    return;
+                }
+
+                socket.Room.setVideo(socket, videoOn);
+            })
+
             socket.on('start-game', () => {
                 if (!socket.Room) {
                     return;

@@ -18,6 +18,7 @@ export default class PlayerList extends Component {
 
     componentDidMount() {
         if (!Socket.Game) return;
+        Socket.io.on('toggle-camera', this.onVideoChanged.bind(this))
         Socket.io.on('player-joined', this.onPlayerJoined.bind(this))
         Socket.io.on('player-left', this.onPlayerLeave.bind(this))
         Socket.io.on('image-updated', this.onImageUpdated.bind(this))
@@ -50,17 +51,23 @@ export default class PlayerList extends Component {
 
     onImageUpdated = (id, picture) => {
 
-        console.log(Socket.Game.playerData.id, id, picture)
         Socket.Game.players[id].picture = picture
         this.setState({
             players: Socket.Game.players
         })
 
-        this.forceUpdate()
+        //this.forceUpdate()
+    }
+
+    onVideoChanged = (id, videoOn) => {
+        Socket.Game.players[id].videoOn = videoOn
+        this.setState({
+            players: Socket.Game.players
+        })
     }
 
     getUpdatedPlayerProfile = (id, picture) => {
-        return <PlayerProfile key={id} id={id} image={picture} name={Socket.Game.playerData.id == id ? Socket.Game.players[id].name + ' (YOU)': Socket.Game.players[id].name}/>
+        return <PlayerProfile  key={id} id={id} image={picture} name={Socket.Game.playerData.id == id ? Socket.Game.players[id].name + ' (YOU)': Socket.Game.players[id].name}/>
     }
 
     render () {

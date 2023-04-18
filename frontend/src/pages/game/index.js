@@ -72,6 +72,7 @@ export default class GameView extends Component {
             clientVideoOn: !this.state.clientVideoOn
         })
 
+        Socket.io.emit('video-changed', this.state.clientVideoOn)
         Socket.Game.players[Socket.Game.client_id].videoOn = this.state.clientVideoOn;
         Socket.Game.playerData.videoOn = this.state.clientVideoOn;
     }
