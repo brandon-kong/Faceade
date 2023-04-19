@@ -10,6 +10,7 @@ export default (code) => {
         password = '',
         players = {},
         playerOrder = [],
+        authenticatedPlayers = [],
         status = '',
         words = [],
         drawingData = [],
@@ -55,6 +56,18 @@ export default (code) => {
         }
 
         return safePlayers;
+    }
+
+    function getRandomPlayerThatIsntHost() {
+        const playerIds = Object.keys(players);
+        const randomIndex = Math.floor(Math.random() * playerIds.length);
+        const randomPlayer = players[playerIds[randomIndex]];
+
+        if (randomPlayer.id === gameHost.id) {
+            return getRandomPlayerThatIsntHost();
+        }
+
+        return randomPlayer;
     }
 
     function getPlayerLength () {
@@ -109,6 +122,21 @@ export default (code) => {
         }
 
         // TODO: add logic to check if the player is the host and give host to someone else
+        if (socket.id === gameHost.id) {
+            console.log(getPlayerLength())
+            if (getPlayerLength()-1 > 0) {
+                // TODO: give host to the first player in the list, not first entry in dictionary
+                const newHost = getRandomPlayerThatIsntHost();
+                console.log(newHost != null)
+                console.log(newHost.id, gameHost.id)
+                setHost(newHost);
+
+                // update the host for all players
+                for (let player in players) {
+                    players[player].client.emit('host-changed', newHost.id);
+                }
+            }
+        }
 
         delete players[socket.id];
     }
@@ -242,6 +270,19 @@ export default (code) => {
         }
     }
 
+    function authenticate(socket) {
+        if (isPrivate) {
+            authenticatedPlayers.push(socket.id);
+        }
+    }
+
+    function isAuthenticated(socket) {
+        if (isPrivate) {
+            return authenticatedPlayers.includes(socket.id);
+        }
+        return true;
+    }
+
     return {
         getCode,
         getHost,
@@ -268,5 +309,7 @@ export default (code) => {
         getPassword,
         setPassword,
         setIsPrivate,
+        authenticate,
+        isAuthenticated
     }
 }

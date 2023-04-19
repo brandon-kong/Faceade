@@ -34,6 +34,7 @@ export default class GameView extends Component {
         };
 
         Socket.io.on('game-start', this.onGameStarted.bind(this))
+        Socket.io.on('host-changed', this.hostChanged.bind(this))
         Socket.io.on('', this.onGameEnded.bind(this))
     }
 
@@ -78,6 +79,15 @@ export default class GameView extends Component {
         Socket.io.emit('video-changed', this.state.clientVideoOn)
         Socket.Game.players[Socket.Game.client_id].videoOn = this.state.clientVideoOn;
         Socket.Game.playerData.videoOn = this.state.clientVideoOn;
+    }
+
+    hostChanged = (host_id) => {
+        Socket.Game.host_id = host_id;
+        this.setState({
+            game: Socket.Game
+        })
+
+        
     }
 
     render () {

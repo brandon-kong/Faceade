@@ -33,6 +33,7 @@ export default function Home() {
     const [inConfig, setInConfig] = useState(false)
     const [createdGame, setCreatedGame] = useState(false)
     const [password, setPassword] = useState(null)
+    const [pickedImage, setPickedImage] = useState(false)
 
     function handleNameChange(e) {
         setName(e.target.value)
@@ -40,6 +41,7 @@ export default function Home() {
 
     function handlePlay (createGame) {
         code = Router.query['']
+        setPickedImage(true)
 
         Socket.io.emit('join-game', name, code, createGame, image, password, ({success, players, host_id, room_status, client_id, processedCode, isPrivate}) => {
             // authenticate user on server
@@ -63,6 +65,12 @@ export default function Home() {
 
                 Router.push('/game')
             }
+            else {
+                if (isPrivate) {
+                    setPage('password')
+                    return
+                }
+            }
         })        
     }
 
@@ -79,6 +87,7 @@ export default function Home() {
         setImage(null)
         setGame(null)
         setCode(null)
+        setPickedImage(false)
     }
 
     function onImageChange (file) {
@@ -117,25 +126,12 @@ export default function Home() {
             // fix security/stuff
             // user is joining the room twice?
             if (success) {
-                Socket.Game = {
-                    code: processedCode,
-                    host_id: host_id,
-                    players: players,
-                    status: room_status,
-                    client_id: client_id,
-                    words: [],
-                    playerData: {
-                        id: client_id,
-                        name: name,
-                        gameCode: processedCode,
-                        score: 0,
-                        picture: image,
-                        videoOn: false,
-                    }
-                }
 
                 //Router.push('/game')
-                setPage('config')
+                if (pickedImage) {
+                    handlePlay(false)
+                }
+                else setPage('config')
             }
             else {
                 alert('Wrong password')
