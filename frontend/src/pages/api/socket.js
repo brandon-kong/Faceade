@@ -1,5 +1,5 @@
 import { Server } from 'socket.io';
-import { generateNewGameCode, getRandomGameCodeThatIsPublic } from '../../util/game/Code';
+import { generateNewGameCode, getRandomGameCodeThatIsPublic, getRandomGameCode } from '../../util/game/Code';
 
 import Room from '@/client/room';
 

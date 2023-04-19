@@ -42,10 +42,7 @@ export default function Home() {
         code = Router.query['']
 
         Socket.io.emit('join-game', name, code, createGame, image, password, ({success, players, host_id, room_status, client_id, processedCode, isPrivate}) => {
-            if (isPrivate) {
-                setPage('password')
-                return
-            }
+            // authenticate user on server
             if (success) {
                 Socket.Game = {
                     code: processedCode,
@@ -117,6 +114,8 @@ export default function Home() {
         code = Router.query['']
 
         Socket.io.emit('guess-password', name, code, image, guess, ({success, players, host_id, room_status, client_id, processedCode}) => {
+            // fix security/stuff
+            // user is joining the room twice?
             if (success) {
                 Socket.Game = {
                     code: processedCode,
@@ -135,7 +134,8 @@ export default function Home() {
                     }
                 }
 
-                Router.push('/game')
+                //Router.push('/game')
+                setPage('config')
             }
             else {
                 alert('Wrong password')
