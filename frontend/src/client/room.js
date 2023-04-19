@@ -6,6 +6,8 @@ import { MIN_PLAYERS, TIME_LIMIT } from '@/util/constants';
 export default (code) => {
     let joinCode = code,
         gameHost = null,
+        isPrivate = false,
+        password = '',
         players = {},
         playerOrder = [],
         status = '',
@@ -36,6 +38,8 @@ export default (code) => {
     const getCurrentWordLength = () => currentWordLength;
     const getCurrentWordGuesses = () => currentWordGuesses;
     const getCurrentWordGuessesCorrect = () => currentWordGuessesCorrect;
+    const getIsPrivate = () => isPrivate;
+    const getPassword = () => password;
 
     function getSafePlayers () {
         const safePlayers = {};
@@ -59,6 +63,23 @@ export default (code) => {
 
     function setHost(socket) {
         gameHost = socket;
+    }
+
+    function setIsPrivate(socket, value) {
+        // added layer of security
+        if (socket.id !== gameHost.id) {
+            return;
+        }   
+
+        isPrivate = value;
+    }
+
+    function setPassword (socket, sp) {
+        if (socket.id !== gameHost.id) {
+            return;
+        }
+
+        password = sp;
     }
 
     function addPlayer(socket, name, picture) {
@@ -242,6 +263,10 @@ export default (code) => {
         getSafePlayers,
         startGame,
         setHost,
-        setVideo
+        setVideo,
+        getIsPrivate,
+        getPassword,
+        setPassword,
+        setIsPrivate,
     }
 }
