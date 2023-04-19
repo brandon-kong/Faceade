@@ -52,6 +52,7 @@ export default function Home() {
                     players: players,
                     status: room_status,
                     client_id: client_id,
+                    private: isPrivate,
                     words: [],
                     playerData: {
                         id: client_id,
@@ -76,7 +77,8 @@ export default function Home() {
 
     function createGame () {
         setCreatedGame(true)
-        handlePlay(true)
+        setPage('config')
+        //handlePlay(true)
     }
 
     function cancelGame () {

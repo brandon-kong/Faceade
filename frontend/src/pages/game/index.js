@@ -35,6 +35,9 @@ export default class GameView extends Component {
 
         Socket.io.on('game-start', this.onGameStarted.bind(this))
         Socket.io.on('host-changed', this.hostChanged.bind(this))
+        Socket.io.on('room-privacy-changed', this.roomPrivacyChanged.bind(this))
+        Socket.io.on('room-password-changed', this.passwordChanged.bind(this))
+        Socket.io.on('new-host', this.newHost.bind(this))
         Socket.io.on('', this.onGameEnded.bind(this))
     }
 
@@ -71,6 +74,24 @@ export default class GameView extends Component {
 
     }
 
+    roomPrivacyChanged = (isPrivate) => {
+        Socket.Game.private = isPrivate;
+
+        this.setState({
+            private: isPrivate,
+            game: Socket.Game
+        })
+    }
+
+    passwordChanged = (password) => {
+        Socket.Game.password = password;
+
+        this.setState({
+            password: password,
+            game: Socket.Game
+        })
+    }
+
     toggleVideo = () => {
         this.setState({
             clientVideoOn: !this.state.clientVideoOn
@@ -86,8 +107,17 @@ export default class GameView extends Component {
         this.setState({
             game: Socket.Game
         })
+    }
 
+    newHost = (isPrivate, password) => {
+        Socket.Game.private = isPrivate;
+        Socket.Game.password = password;
         
+        this.setState({
+            private: isPrivate,
+            password: password,
+            game: Socket.Game
+        })
     }
 
     render () {
@@ -126,7 +156,12 @@ export default class GameView extends Component {
 
                             {
                                 this.state.private ?
-                                <Textbox value={this.state.password} onChange={(e) => {Socket.io.emit('change-password', e.target.value)} } placeholder="Password" type="password" />
+                                <Textbox value={ this.state.password } onChange={(e) => {
+                                    this.setState({
+                                        password: e.target.value
+                                    })
+                                    Socket.io.emit('change-password', e.target.value)
+                                } } placeholder="Password" type="password" />
                                 :
                                 null
                             }

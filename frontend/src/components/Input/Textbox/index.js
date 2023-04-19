@@ -6,7 +6,7 @@ export default class Textbox extends Component {
     constructor (props) {
         super();
         this.state = {
-            value: ''
+            value: props.value || ''
         }
     }
 

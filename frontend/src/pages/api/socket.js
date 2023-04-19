@@ -65,12 +65,15 @@ const SocketHandler = (req, res) => {
 
                 const room = rooms[code];
 
+                // handles users joining a private room,
+                // if user makes it to config screen and host makes room private, they need to readd password
                 if (!room.isAuthenticated(socket)) {
                     callback({
                         success: false,
                         message: 'You are not authenticated to join this room.',
                         isPrivate: true,
                     })
+                    return;
                 }
                 room.addPlayer(socket, name, image)
 
