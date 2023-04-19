@@ -8,6 +8,7 @@ import Chat from '@/components/Chat';
 import PlayerList from '@/components/PlayerList';
 import Redirect from '@/components/Redirect';
 import GameViewComponent from '@/components/GameView';
+import Textbox from '@/components/Input/Textbox';
 
 // Client components
 import Socket from '@/client/Socket';
@@ -28,6 +29,8 @@ export default class GameView extends Component {
             isInWaitingRoom: true,
             game: Socket.Game,
             clientVideoOn: false,
+            private: Socket.Game.private,
+            password: Socket.Game.password,
         };
 
         Socket.io.on('game-start', this.onGameStarted.bind(this))
@@ -98,8 +101,32 @@ export default class GameView extends Component {
                     null
                 }
                 {this.state.isInWaitingRoom ? <h1>Waiting room</h1> : null}
-                <h1>GameView</h1>
 
+                {
+                    (Socket.Game && Socket.Game.host_id == Socket.Game.client_id) ? (
+                        <>
+                            <input type="checkbox" checked={this.state.private} onChange={(e) => {
+                                this.setState({
+                                    private: e.target.checked
+                                })
+            
+                                Socket.io.emit('change-private', e.target.checked)
+                            }} />
+                            <label htmlFor="private">Private</label>
+
+                            {
+                                this.state.private ?
+                                <Textbox value={this.state.password} onChange={(e) => {Socket.io.emit('change-password', e.target.value)} } placeholder="Password" type="password" />
+                                :
+                                null
+                            }
+                        </>
+                    )
+                    :
+                    null
+                }
+                
+                <br />
                 <button onClick={this.toggleVideo.bind(this)} >Video: {Socket.Game && Socket.Game.playerData.videoOn ? "on" : "off"}</button>
                 <Chat />
                 {
