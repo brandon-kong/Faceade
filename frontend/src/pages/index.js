@@ -141,6 +141,14 @@ export default function Home() {
         })
     }
 
+    useEffect(() => {
+        if (Socket.io !== null) { Socket.io.close(); Socket.Game = null; }
+        fetch('http://localhost:3000/api/socket')
+        const socket = io();
+
+        Socket.io = socket;
+    }, [])
+
     return (
         <>
             {

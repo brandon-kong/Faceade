@@ -9,6 +9,7 @@ import PlayerList from '@/components/PlayerList';
 import Redirect from '@/components/Redirect';
 import GameViewComponent from '@/components/GameView';
 import Textbox from '@/components/Input/Textbox';
+import CopyContainer from '@/components/CopyContainer';
 
 // Client components
 import Socket from '@/client/Socket';
@@ -20,8 +21,8 @@ export default class GameView extends Component {
     constructor(props) {
         super(props);
 
-        if (Socket.Game === undefined) {
-            return
+        if (Socket.Game == null) {
+            return;
         }
 
         this.state = {
@@ -45,6 +46,10 @@ export default class GameView extends Component {
         this.setState({
             game: Socket.Game
         })
+
+        if (Socket.Game === undefined) {
+            Router.push('/')
+        }
     }
 
     startGame = () => {
@@ -118,11 +123,11 @@ export default class GameView extends Component {
             password: password,
             game: Socket.Game
         })
-    }
+    }   
 
     render () {
 
-        if (!Socket.Game) return <Redirect to="/" />
+        if (Socket.Game == null) return <Redirect to="/" />
 
         if (Socket.Game.status == "running") {
             return <GameViewComponent state={this.state} />
@@ -133,9 +138,7 @@ export default class GameView extends Component {
                 {
                     this.state.game ?
                     (
-                        <>
-                            http://localhost:3000/?={Socket.Game.code}
-                        </>
+                       <CopyContainer text={ 'http://localhost:3000/?=' +  Socket.Game.code} />
                     )
                     :
                     null

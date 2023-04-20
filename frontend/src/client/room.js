@@ -7,6 +7,7 @@ export default (code) => {
     let joinCode = code,
         gameHost = null,
         isPrivate = false,
+        totalPlayers = 0,
         password = '',
         players = {},
         playerOrder = [],
@@ -85,6 +86,7 @@ export default (code) => {
         }   
 
         isPrivate = value;
+        authenticatedPlayers = [];
 
         for (let player in players) {
             players[player].client.emit('room-privacy-changed', value);
@@ -97,6 +99,7 @@ export default (code) => {
         }
 
         password = sp;
+        authenticatedPlayers = [];
 
         for (let player in players) {
             players[player].client.emit('room-password-changed', sp);
@@ -105,7 +108,7 @@ export default (code) => {
     }
 
     function addPlayer(socket, name, picture) {
-        const safeName = getValidName(name, players);
+        const safeName = getValidName(name, players, totalPlayers);
         players[socket.id] = {
             client: socket,
             name: safeName,
@@ -116,6 +119,7 @@ export default (code) => {
             videoOn: false
         }
 
+        totalPlayers++;
         playerOrder.push(socket.id);
 
         for (let player in players) {
@@ -132,7 +136,6 @@ export default (code) => {
 
         // TODO: add logic to check if the player is the host and give host to someone else
         if (socket.id === gameHost.id) {
-            console.log(getPlayerLength())
             if (getPlayerLength()-1 > 0) {
                 // TODO: give host to the first player in the list, not first entry in dictionary
                 const newHost = getRandomPlayerThatIsntHost();
