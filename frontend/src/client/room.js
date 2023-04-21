@@ -7,9 +7,11 @@ export default (code) => {
     let joinCode = code,
         gameHost = null,
         isPrivate = false,
+        totalPlayers = 0,
         password = '',
         players = {},
         playerOrder = [],
+        authenticatedPlayers = [],
         status = '',
         words = [],
         drawingData = [],
@@ -57,6 +59,18 @@ export default (code) => {
         return safePlayers;
     }
 
+    function getRandomPlayerThatIsntHost() {
+        const playerIds = Object.keys(players);
+        const randomIndex = Math.floor(Math.random() * playerIds.length);
+        const randomPlayer = players[playerIds[randomIndex]];
+
+        if (randomPlayer.id === gameHost.id) {
+            return getRandomPlayerThatIsntHost();
+        }
+
+        return randomPlayer;
+    }
+
     function getPlayerLength () {
         return Object.keys(players).length;
     }
@@ -72,6 +86,11 @@ export default (code) => {
         }   
 
         isPrivate = value;
+        authenticatedPlayers = [];
+
+        for (let player in players) {
+            players[player].client.emit('room-privacy-changed', value);
+        }
     }
 
     function setPassword (socket, sp) {
@@ -80,10 +99,16 @@ export default (code) => {
         }
 
         password = sp;
+        authenticatedPlayers = [];
+
+        for (let player in players) {
+            players[player].client.emit('room-password-changed', sp);
+        }
+        
     }
 
     function addPlayer(socket, name, picture) {
-        const safeName = getValidName(name, players);
+        const safeName = getValidName(name, players, totalPlayers);
         players[socket.id] = {
             client: socket,
             name: safeName,
@@ -94,6 +119,7 @@ export default (code) => {
             videoOn: false
         }
 
+        totalPlayers++;
         playerOrder.push(socket.id);
 
         for (let player in players) {
@@ -109,6 +135,20 @@ export default (code) => {
         }
 
         // TODO: add logic to check if the player is the host and give host to someone else
+        if (socket.id === gameHost.id) {
+            if (getPlayerLength()-1 > 0) {
+                // TODO: give host to the first player in the list, not first entry in dictionary
+                const newHost = getRandomPlayerThatIsntHost();
+                setHost(newHost);
+
+                // update the host for all players
+                for (let player in players) {
+                    players[player].client.emit('host-changed', newHost.id);
+                }
+
+                players[newHost.id].client.emit('new-host', isPrivate, password);
+            }
+        }
 
         delete players[socket.id];
     }
@@ -162,16 +202,24 @@ export default (code) => {
                 players[player].client.emit('receive-drawing-data', drawingData);
             }
 
+            let timeLeftInterval;
+
             let startDrawing = new Promise((resolve, reject) => {
                 let thisRound = true;
                 // TIME_LIMIT is in seconds, so we need to multiply by 1000
                 timeLeft = TIME_LIMIT;
 
-                let timeLeftInterval = setInterval(() => {
+                timeLeftInterval = setInterval(() => {
                     if (!thisRound)
                         return;
 
                     timeLeft--;
+
+                    if (timeLeft <= 0) {
+                        thisRound = false;
+                        resolve();
+                        return;
+                    }
 
                     
                     // TODO: add logic to help the guessers with the word by displaying hints
@@ -187,7 +235,9 @@ export default (code) => {
                     return;
                 }
 
-                clearInterval(timeLeftInterval);
+                if (timeLeftInterval !== undefined) {
+                    clearInterval(timeLeftInterval);
+                }
 
                 let drawerPoints = 0;
 
@@ -211,8 +261,13 @@ export default (code) => {
                     players[player].client.emit('player-score-changed', currentDrawer, players[player].score);
                 }
 
+                round++;
+                //startRound();
+
                 
             }
+
+            startDrawing.then(finishDrawing);
         }
     }
 
@@ -242,6 +297,19 @@ export default (code) => {
         }
     }
 
+    function authenticate(socket) {
+        if (isPrivate) {
+            authenticatedPlayers.push(socket.id);
+        }
+    }
+
+    function isAuthenticated(socket) {
+        if (isPrivate) {
+            return authenticatedPlayers.includes(socket.id);
+        }
+        return true;
+    }
+
     return {
         getCode,
         getHost,
@@ -268,5 +336,7 @@ export default (code) => {
         getPassword,
         setPassword,
         setIsPrivate,
+        authenticate,
+        isAuthenticated
     }
 }

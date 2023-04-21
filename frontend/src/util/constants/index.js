@@ -7,7 +7,7 @@ const MAX_PLAYERS = 10
 const MIN_ROUNDS = 1
 const MAX_ROUNDS = 10
 
-const TIME_LIMIT = 60
+const TIME_LIMIT = 5
 
 export { PUBLIC_URL, 
         CODE_LENGTH,

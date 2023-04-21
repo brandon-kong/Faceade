@@ -1,5 +1,5 @@
 import { Server } from 'socket.io';
-import { generateNewGameCode, getRandomGameCodeThatIsPublic } from '../../util/game/Code';
+import { generateNewGameCode, getRandomGameCodeThatIsPublic, getRandomGameCode } from '../../util/game/Code';
 
 import Room from '@/client/room';
 
@@ -38,38 +38,6 @@ const SocketHandler = (req, res) => {
                 }
             })
 
-            socket.on('password-guess', (code, guess, callback) => {
-                if (socket.Room) {
-                    socket.Room.removePlayer(socket);
-                }
-
-                const room = rooms[code];
-
-                if (room && room.getPassword() === guess) {
-                    // join room
-                    room.addPlayer(socket, name, image)
-
-                    socket.Room = room;
-
-                    callback({
-                        success: true,
-                        processedCode: room.getCode(),
-                        players: room.getSafePlayers(),
-                        room_status: room.getStatus(),
-                        host_id: room.getHost().id,
-                        client_id: socket.id,
-                        isPrivate: room.getIsPrivate(),
-                    })
-                }
-
-                else {
-                    callback({
-                        success: false,
-                        isPrivate: true
-                    })
-                }
-            })
-
             socket.on('join-game', (name, code, createGame, image, password, callback) => {
 
                 var gameCreated = false;
@@ -93,8 +61,20 @@ const SocketHandler = (req, res) => {
                     gameCreated = true;
                     rooms[code] = Room(code);
                 }
+                
 
                 const room = rooms[code];
+
+                // handles users joining a private room,
+                // if user makes it to config screen and host makes room private, they need to readd password
+                if (!room.isAuthenticated(socket)) {
+                    callback({
+                        success: false,
+                        message: 'You are not authenticated to join this room.',
+                        isPrivate: true,
+                    })
+                    return;
+                }
                 room.addPlayer(socket, name, image)
 
                 socket.Room = room;
@@ -163,15 +143,14 @@ const SocketHandler = (req, res) => {
                 
                 if (room.getPassword() === password) {
                     
-                    room.addPlayer(socket, name, image)
-                    socket.Room = room;
+                    //room.addPlayer(socket, name, image)
+                    //socket.Room = room;
+
+                    room.authenticate(socket);
 
                     callback({
                         success: true,
                         processedCode: room.getCode(),
-                        players: room.getSafePlayers(),
-                        room_status: room.getStatus(),
-                        host_id: room.getHost().id,
                         client_id: socket.id,
                         isPrivate: room.getIsPrivate(),
                     })

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 
 import Socket from '@/client/Socket';
 import img from '@/assets/images/profile/avatar.png'
@@ -14,6 +14,8 @@ export default class PlayerProfile extends Component {
             videoOn: props.videoOn,
             Game: Socket.Game,
         }
+
+        this.videoRef = createRef();
 
     }
 
@@ -33,18 +35,25 @@ export default class PlayerProfile extends Component {
         var localstream;
 
         if (Socket.Game.players[this.state.id].videoOn) {
-            navigator.mediaDevices.getUserMedia({ video: {
-                width: { min: 500, ideal: 500, max: 1000 },
-                height: { min: 500, ideal: 500, max: 1000 }
-            }, audio: true })
-            .then(stream => {
-                const video = document.querySelector('video');
-                if (video) video.srcObject = stream;
-                localstream = stream;
-            })
-            .catch(err => {
-                console.log(err);
-            })
+            if (Socket.Game.client_id === this.state.id) {
+                navigator.mediaDevices.getUserMedia({ video: {
+                    width: { min: 500, ideal: 500, max: 1000 },
+                    height: { min: 500, ideal: 500, max: 1000 }
+                }, audio: true })
+                .then(stream => {
+                    const video = this.videoRef
+                    if (video && video.current) {
+                        video.current.srcObject = stream;
+                        localstream = stream;
+                    }
+
+                    
+                    
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+            }
         }
         else {
             const video = document.querySelector('video');
@@ -60,7 +69,7 @@ export default class PlayerProfile extends Component {
 
                     {
                         Socket.Game && Socket.Game.players[this.state.id].videoOn ?
-                        <video className="w-36 h-36 bg-primary drop-shadow-lg rounded-full" muted></video>
+                        <video ref={this.videoRef} className="w-36 h-36 bg-primary drop-shadow-lg rounded-full" autoPlay muted></video>
                         :
                         <img src={this.state.image ? this.state.image : img.src} alt="Profile picture" className="w-36 h-36 bg-primary drop-shadow-lg rounded-full"/>
                     }

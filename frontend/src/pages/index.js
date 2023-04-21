@@ -33,6 +33,7 @@ export default function Home() {
     const [inConfig, setInConfig] = useState(false)
     const [createdGame, setCreatedGame] = useState(false)
     const [password, setPassword] = useState(null)
+    const [pickedImage, setPickedImage] = useState(false)
 
     function handleNameChange(e) {
         setName(e.target.value)
@@ -40,12 +41,10 @@ export default function Home() {
 
     function handlePlay (createGame) {
         code = Router.query['']
+        setPickedImage(true)
 
         Socket.io.emit('join-game', name, code, createGame, image, password, ({success, players, host_id, room_status, client_id, processedCode, isPrivate}) => {
-            if (isPrivate) {
-                setPage('password')
-                return
-            }
+            // authenticate user on server
             if (success) {
                 Socket.Game = {
                     code: processedCode,
@@ -53,6 +52,7 @@ export default function Home() {
                     players: players,
                     status: room_status,
                     client_id: client_id,
+                    private: isPrivate,
                     words: [],
                     playerData: {
                         id: client_id,
@@ -66,12 +66,19 @@ export default function Home() {
 
                 Router.push('/game')
             }
+            else {
+                if (isPrivate) {
+                    setPage('password')
+                    return
+                }
+            }
         })        
     }
 
     function createGame () {
         setCreatedGame(true)
-        handlePlay(true)
+        setPage('config')
+        //handlePlay(true)
     }
 
     function cancelGame () {
@@ -82,6 +89,7 @@ export default function Home() {
         setImage(null)
         setGame(null)
         setCode(null)
+        setPickedImage(false)
     }
 
     function onImageChange (file) {
@@ -117,31 +125,29 @@ export default function Home() {
         code = Router.query['']
 
         Socket.io.emit('guess-password', name, code, image, guess, ({success, players, host_id, room_status, client_id, processedCode}) => {
+            // fix security/stuff
+            // user is joining the room twice?
             if (success) {
-                Socket.Game = {
-                    code: processedCode,
-                    host_id: host_id,
-                    players: players,
-                    status: room_status,
-                    client_id: client_id,
-                    words: [],
-                    playerData: {
-                        id: client_id,
-                        name: name,
-                        gameCode: processedCode,
-                        score: 0,
-                        picture: image,
-                        videoOn: false,
-                    }
-                }
 
-                Router.push('/game')
+                //Router.push('/game')
+                if (pickedImage) {
+                    handlePlay(false)
+                }
+                else setPage('config')
             }
             else {
                 alert('Wrong password')
             }
         })
     }
+
+    useEffect(() => {
+        if (Socket.io !== null) { Socket.io.close(); Socket.Game = null; }
+        fetch('http://localhost:3000/api/socket')
+        const socket = io();
+
+        Socket.io = socket;
+    }, [])
 
     return (
         <>
