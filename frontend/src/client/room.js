@@ -202,16 +202,24 @@ export default (code) => {
                 players[player].client.emit('receive-drawing-data', drawingData);
             }
 
+            let timeLeftInterval;
+
             let startDrawing = new Promise((resolve, reject) => {
                 let thisRound = true;
                 // TIME_LIMIT is in seconds, so we need to multiply by 1000
                 timeLeft = TIME_LIMIT;
 
-                let timeLeftInterval = setInterval(() => {
+                timeLeftInterval = setInterval(() => {
                     if (!thisRound)
                         return;
 
                     timeLeft--;
+
+                    if (timeLeft <= 0) {
+                        thisRound = false;
+                        resolve();
+                        return;
+                    }
 
                     
                     // TODO: add logic to help the guessers with the word by displaying hints
@@ -227,7 +235,9 @@ export default (code) => {
                     return;
                 }
 
-                clearInterval(timeLeftInterval);
+                if (timeLeftInterval !== undefined) {
+                    clearInterval(timeLeftInterval);
+                }
 
                 let drawerPoints = 0;
 
@@ -251,8 +261,13 @@ export default (code) => {
                     players[player].client.emit('player-score-changed', currentDrawer, players[player].score);
                 }
 
+                round++;
+                //startRound();
+
                 
             }
+
+            startDrawing.then(finishDrawing);
         }
     }
 
