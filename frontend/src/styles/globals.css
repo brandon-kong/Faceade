@@ -57,6 +57,12 @@ input:focus {
     background-color: rgb(220, 81, 81);
 }
 
-* {
-    box-sizing: border-box;
+.game-grid {
+    display: grid;
+    grid-template-areas: 
+    "brand brand brand"
+    "time time time"
+    "players canvas chat"
+    "misc misc misc"
+    ;
 }

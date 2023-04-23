@@ -54,6 +54,10 @@ export default class PlayerProfile extends Component {
                     console.log(err);
                 })
             }
+            else {
+                // TODO: Get video stream from server
+                    
+            }
         }
         else {
             const video = document.querySelector('video');
