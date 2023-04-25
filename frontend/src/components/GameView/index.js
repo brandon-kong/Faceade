@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 
 // Element components
-
+import PlayerList from '@/components/PlayerList';
+import Chat from '@/components/Chat';
+import Canvas from '@/components/Canvas';
+import GameInfo from '@/components/GameInfo';
 
 // Client components
 
@@ -20,9 +23,13 @@ export default class GameView extends Component {
 
     render () {
         return (
-            <div className="h-screen">
-                <h1>{Socket.Game && (Socket.Game.host_id == Socket.Game.client_id ? 'ur da host' : 'ur just a player')}</h1>
-                <p>GAME SCREEN :d</p>
+            <div className="h-screen flex items-center justify-center">
+                <div className="game">
+                    <GameInfo code={Socket.Game.code} />
+                    <Canvas />
+                    <PlayerList className="hi" />
+                    <Chat />
+                </div>
             </div>
         )
     }   

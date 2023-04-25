@@ -3,9 +3,7 @@ import React, { Component } from 'react';
 import Socket from '@/client/Socket';
 import PlayerProfile from '@/components/PlayerProfile';
 
-// Util
-import { arrayBufferToBase64 } from '@/util/game/Image';
-
+import styles from '@/styles/components/PlayerList/index.module.css'
 export default class PlayerList extends Component {
     constructor() {
         super();
@@ -72,7 +70,7 @@ export default class PlayerList extends Component {
 
     render () {
         return (
-            <div className="flex flex-col gap-5 items-center justify-center">
+            <div className={["flex flex-col w-52 gap-5 items-center justify-center", styles['player-list']].join(' ')}>
                 <h1 className="text-2xl font-semibold">Players</h1>
                 <div className="flex flex-row gap-10 items-center justify-center">
                     {
