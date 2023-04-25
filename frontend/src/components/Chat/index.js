@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Socket from '@/client/Socket';
 
+import styles from '@/styles/components/Chat/index.module.css'
 
 export default class Chat extends Component {
     constructor() {
@@ -45,7 +46,7 @@ export default class Chat extends Component {
         )
 
         return (
-            <div className="bg-primary-light">
+            <div className={["bg-primary-light w-72", styles.chat].join(' ')}>
                 <h1>Chat</h1>
                 <ul>
                     {chatAsArray}

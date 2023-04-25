@@ -9,6 +9,9 @@
 
     --background-light-rgb: 220, 220, 220;
     --background-light-hover-rgb: 210, 210, 210;
+
+    /* Gaps */
+    --border-gap: 3px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -57,12 +60,16 @@ input:focus {
     background-color: rgb(220, 81, 81);
 }
 
-.game-grid {
+.game {
     display: grid;
+    grid-template-columns: min-content auto auto;
+    grid-template-rows: min-content 48px min-content min-content;
+    grid-gap: var(--border-gap);
+    gap: var(--border-gap);
     grid-template-areas: 
     "brand brand brand"
-    "time time time"
-    "players canvas chat"
+    "game-info game-info game-info"
+    "player-list canvas chat"
     "misc misc misc"
     ;
 }
