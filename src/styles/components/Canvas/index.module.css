@@ -1,0 +1,8 @@
+.canvas {
+    grid-area: canvas;
+    image-rendering: pixelated;
+}
+
+.canvas-board {
+    aspect-ratio: 800 / 600;
+}

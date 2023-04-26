@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 230, 230, 230;
+    --background-end-rgb: 255, 255, 255;
+
+    --background-light-rgb: 220, 220, 220;
+    --background-light-hover-rgb: 210, 210, 210;
+
+    /* Gaps */
+    --border-gap: 3px;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --foreground-rgb: 255, 255, 255;
+        --background-start-rgb: 0, 0, 0;
+        --background-end-rgb: 0, 0, 0;
+
+        --background-light-rgb: 30, 30, 30;
+        --background-light-hover-rgb: 40, 40, 40;
+    }
+}
+
+body {
+    color: rgb(var(--foreground-rgb));
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+input {
+    color: rgb(var(--foreground-rgb));
+    background: rgb(var(--background-light-rgb));
+}
+
+input:focus {
+    outline: none;
+}
+
+.bg-primary {
+    background-color: rgb(var(--background-start-rgb));
+}
+
+.bg-primary-light {
+    background-color: rgb(var(--background-light-rgb));
+}
+
+.bg-confirm {
+    background-color: rgb(49, 163, 49);
+}
+
+.bg-cancel {
+    background-color: rgb(220, 81, 81);
+}
+
+.game {
+    display: grid;
+    grid-template-columns: min-content auto auto;
+    grid-template-rows: min-content 48px min-content min-content;
+    grid-gap: var(--border-gap);
+    gap: var(--border-gap);
+    grid-template-areas: 
+    "brand brand brand"
+    "game-info game-info game-info"
+    "player-list canvas chat"
+    "misc misc misc"
+    ;
+}

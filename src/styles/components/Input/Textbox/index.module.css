@@ -1,0 +1,11 @@
+.input {
+    transition: background-color 0.2s ease-in-out;
+}
+
+.input:hover {
+    background-color: rgb(var(--background-light-hover-rgb));
+}
+
+.input:focus {
+    background-color: rgb(var(--background-light-hover-rgb));
+}
