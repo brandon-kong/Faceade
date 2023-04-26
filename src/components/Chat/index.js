@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Socket from '@/client/Socket';
+import Textbox from '@/components/Input/Textbox';
+import Button from '@/components/Input/Button';
 
 import styles from '@/styles/components/Chat/index.module.css'
 
@@ -24,6 +26,7 @@ export default class Chat extends Component {
     }
 
     handleInputChange = (e) => {
+        console.log(e.target.value)
         this.setState({ [e.target.name]: e.target.value });
     }
 
@@ -41,20 +44,20 @@ export default class Chat extends Component {
 
     render() {
         let chatAsArray = this.state.messages.map((message, index) => 
-            <li key={index}>
+            <li key={index} className='flex items-center p-5 w-full h-8 bg-slate-50 rounded-md mt-2'>
                 <span>{message.name}: {message.message}</span>
             </li>
         )
 
         return (
-            <div className={["bg-primary-light w-72", styles.chat].join(' ')}>
-                <h1>Chat</h1>
+            <div className={["bg-white rounded-md drop-shadow w-72 p-3", styles.chat].join(' ')}>
+                <h1 className="text-2xl">Chat</h1>
                 <ul>
                     {chatAsArray}
                 </ul>
-                <form onSubmit={this.sendMessage.bind(this)}>
-                    <input value={this.state.message} name="message" onChange={this.handleInputChange.bind(this)} type="text" placeholder="Type message" />
-                    <button onClick={this.sendMessage.bind(this)}>Send message</button>
+                <form className="fixed flex bottom-3" onSubmit={this.sendMessage.bind(this)}>
+                    <Textbox name="message" value={this.state.message} onChange={this.handleInputChange}/>
+                    <button className='px-5' onClick={this.sendMessage.bind(this)}>Send</button>
                 </form>
                 
             </div>

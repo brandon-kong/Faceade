@@ -34,13 +34,20 @@ export default function Home() {
     const [createdGame, setCreatedGame] = useState(false)
     const [password, setPassword] = useState(null)
     const [pickedImage, setPickedImage] = useState(false)
+    const [joinWithUrl, setJoinWithUrl] = useState(true)
 
     function handleNameChange(e) {
         setName(e.target.value)
     }
 
+    function handleCodeChange(e) {
+        setCode(e.target.value);
+    }
+
     function handlePlay (createGame) {
-        code = Router.query['']
+        if (joinWithUrl) {
+            code = Router.query['']
+        }
         setPickedImage(true)
 
         Socket.io.emit('join-game', name, code, createGame, image, password, ({success, players, host_id, room_status, client_id, processedCode, isPrivate}) => {
@@ -122,7 +129,9 @@ export default function Home() {
     }
 
     function passwordGuess (guess) {
-        code = Router.query['']
+        if (joinWithUrl) {
+            setCode(Router.query[''])
+        }
 
         Socket.io.emit('guess-password', name, code, image, guess, ({success, players, host_id, room_status, client_id, processedCode}) => {
             // fix security/stuff
@@ -172,25 +181,33 @@ export default function Home() {
 
             }
 
-                <main className="h-screen w-screen flex items-center justify-center">
+                <main className="h-screen w-screen flex items-center justify-center bg">
                     <div className="bg-white px-8 py-10 rounded-lg drop-shadow flex flex-col gap-5 items-center justify-center w-2/3 max-w-sm">
                         <IconLabel />
+                        <a onClick={() => setJoinWithUrl(!joinWithUrl)} className="hover:underline cursor-pointer">{joinWithUrl ? 'Join game with code instead' : 'Join game with URL instead'}</a>
+                        {
+                            !joinWithUrl ?
+                            <Textbox name="joincode" onChange={handleCodeChange} placeholder="Join Code" />
+                            :
+                            null
+                        }
+
                         <Textbox name="name" onChange={handleNameChange} placeholder="Name" />
                         <Button value="Play" onClick={attemptToJoin} />
                         <OrSeperator />
                         <Button value="Create room" onClick={createGame} />
                     </div>
                 </main>
-                <footer class="fixed bottom-0 right-0 bg-white rounded-lg shadow m-4 dark:bg-gray-800">
-                        <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
-                        <span class="text-sm px-5 text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="#" class="px-1 hover:underline text-primary">Faceade</a>
+                <footer className="fixed bottom-0 right-0 bg-white rounded-lg drop-shadow m-4 dark:bg-gray-800">
+                        <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+                        <span className="text-sm px-5 text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="#" className="px-1 hover:underline text-primary">Faceade</a>
                         </span>
-                        <ul class="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
+                        <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
                             <li>
-                                <a href="#" class="mr-4 hover:underline md:mr-6 ">About</a>
+                                <a href="#" className="mr-4 hover:underline md:mr-6 ">About</a>
                             </li>
                             <li>
-                                <a href="#" class="mr-4 hover:underline md:mr-6">Privacy Policy</a>
+                                <a href="#" className="mr-4 hover:underline md:mr-6">Privacy Policy</a>
                             </li>
                         </ul>
                     </div>

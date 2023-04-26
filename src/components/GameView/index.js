@@ -23,7 +23,7 @@ export default class GameView extends Component {
 
     render () {
         return (
-            <div className="h-screen flex items-center justify-center">
+            <div className="h-screen flex items-center justify-center bg">
                 <div className="game">
                     <GameInfo code={Socket.Game.code} />
                     <Canvas />
