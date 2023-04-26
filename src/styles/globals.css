@@ -55,13 +55,13 @@
     0% { background-position: 50px 50px; }
   }
 
-body {
+
+.bg {
     color: rgb(var(--foreground-rgb));
     background: url('../assets/images/bg.png');
     background-repeat: repeat;
     background-size: 2200px 2200px;
     animation: animatedBackground 21s linear infinite;
-    
 }
 
 @keyframes animatedBackground {
