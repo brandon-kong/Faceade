@@ -52,7 +52,7 @@ export default class ProfileImage extends Component {
 
     render () {
         return (
-            <div className={'flex items-center justify-center flex-col absolute backdrop-blur-lg w-screen h-full ' + styles['bg']}>
+            <div className={'z-10 flex items-center justify-center flex-col absolute backdrop-blur-lg w-screen h-full ' + styles['bg']}>
                 <div className="flex flex-col gap-5 items-center justify-center w-2/3 max-w-sm">
                     <input onChange={this.uploadImage.bind(this)} type="file" accept="image/jpeg, image/png, image/jpg" hidden/>
                     <div className="overflow-hidden flex items-center justify-center w-32 h-32 rounded-full bg-white">

@@ -4,8 +4,7 @@ import Image from 'next/image'
 export default function IconLabel() {
     return (
         <div className="flex flex-row gap-5 items-center justify-center w-full max-w-xs">
-            <Image priority={true} src="/faceade.png" alt="Logo" width={100} height={100} />
-            <h1 className="text-2xl font-bold">Faceade</h1>
+            <Image priority={true} src="/faceade.svg" alt="Logo" width={500} height={150} />
         </div>
     )
 }

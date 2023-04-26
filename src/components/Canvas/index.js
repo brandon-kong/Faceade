@@ -17,8 +17,8 @@ export default class Canvas extends Component {
 
     render () {
         return (
-            <div className={[styles.canvas, 'overflow-hidden h-auto w-full border-2 border-black'].join(' ')}>
-                <canvas className={[styles['canvas-board'], 'w-full'].join(' ')} width="800" height="600" id="canvas"></canvas>
+            <div className={[styles.canvas, 'overflow-hidden h-fit w-full border-2 border-black'].join(' ')}>
+                <canvas className={[styles['canvas-board'], 'w-full bg-white'].join(' ')} width="800" height="600" id="canvas"></canvas>
             </div>
         )
     }
