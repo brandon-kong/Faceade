@@ -75,7 +75,7 @@ export default class PlayerProfile extends Component {
                         Socket.Game && Socket.Game.players[this.state.id].videoOn ?
                         <video ref={this.videoRef} className="w-36 h-36 bg-primary drop-shadow-lg rounded-full" autoPlay muted></video>
                         :
-                        <img src={this.state.image ? this.state.image : img.src} alt="Profile picture" className="w-36 h-36 bg-primary drop-shadow-lg rounded-full"/>
+                        <img src={this.state.image ? this.state.image : img.src} alt="Profile picture" className="aspect-square max-h-32 bg-primary drop-shadow-lg rounded-full"/>
                     }
 
                     <h1 className="text-md">{this.state.name}</h1>

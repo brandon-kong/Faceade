@@ -27,8 +27,9 @@ export default class Chat extends Component {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-    sendMessage = () => {
+    sendMessage = (e) => {
         if (!Socket.io) return;
+        e.preventDefault();
         Socket.io.emit('send-message', this.state.message);
         Socket.Game.lastMessage = this.state.message;
         this.setState({ message: '' });
@@ -51,8 +52,11 @@ export default class Chat extends Component {
                 <ul>
                     {chatAsArray}
                 </ul>
-                <input value={this.state.message} name="message" onChange={this.handleInputChange.bind(this)} type="text" placeholder="Type message" />
-                <button onClick={this.sendMessage.bind(this)}>Send message</button>
+                <form onSubmit={this.sendMessage.bind(this)}>
+                    <input value={this.state.message} name="message" onChange={this.handleInputChange.bind(this)} type="text" placeholder="Type message" />
+                    <button onClick={this.sendMessage.bind(this)}>Send message</button>
+                </form>
+                
             </div>
         )
     }

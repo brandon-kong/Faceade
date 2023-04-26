@@ -27,7 +27,7 @@ export default class GameView extends Component {
                 <div className="game">
                     <GameInfo code={Socket.Game.code} />
                     <Canvas />
-                    <PlayerList className="hi" />
+                    <PlayerList dir='col' />
                     <Chat />
                 </div>
             </div>
