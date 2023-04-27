@@ -13,7 +13,7 @@ import { io } from 'socket.io-client';
 import Socket from '@/client/Socket';
 
 import React, { useState, useEffect } from 'react';
-import { Head } from 'next/head';
+import Head from 'next/head';
 import { PUBLIC_URL } from '@/util/constants';
 import Router, { } from 'next/router'
 import { Inter, Albert_Sans } from 'next/font/google'
