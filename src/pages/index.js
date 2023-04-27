@@ -20,6 +20,11 @@ import { Inter, Albert_Sans } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })
 
+fetch(PUBLIC_URL+'/api/socket')
+const socket = io();
+
+Socket.io = socket;
+
 export default function Home() {
 
     const [page, setPage] = useState('home')
@@ -149,7 +154,6 @@ export default function Home() {
 
     useEffect(() => {
         if (Socket.io !== null) { Socket.io.close(); Socket.Game = null; }
-        console.log(PUBLIC_URL)
         fetch(PUBLIC_URL+'/api/socket')
         const socket = io();
 
