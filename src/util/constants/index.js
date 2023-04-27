@@ -1,4 +1,4 @@
-const IS_DEV = process.env.NODE_ENV === 'development'
+const IS_DEV = process.env.ENV_NODE === 'development'
 const PUBLIC_URL = IS_DEV ? 'http://localhost:3000' : process.env.PUBLIC_URL
 const CODE_LENGTH = 6
 
