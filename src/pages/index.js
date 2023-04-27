@@ -21,7 +21,7 @@ import { Inter, Albert_Sans } from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] })
 
 fetch('/api/socket')
-const socket = io();
+const socket = io('https://faceade.io');
 
 Socket.io = socket;
 
@@ -155,7 +155,7 @@ export default function Home() {
     useEffect(() => {
         if (Socket.io !== null) { Socket.io.close(); Socket.Game = null; }
         fetch('/api/socket')
-        const socket = io();
+        const socket = io('https://faceade.io');
 
         Socket.io = socket;
     }, [])
