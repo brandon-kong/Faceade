@@ -1,4 +1,5 @@
-const PUBLIC_URL = 'http://localhost:3000'
+const IS_DEV = process.env.NODE_ENV === 'development'
+const PUBLIC_URL = IS_DEV ? 'http://localhost:3000' : process.env.PUBLIC_URL
 const CODE_LENGTH = 6
 
 const MIN_PLAYERS = 2
