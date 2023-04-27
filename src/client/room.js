@@ -3,7 +3,7 @@ import { WORDS, getRandomWordThatIsntInList } from '@/util/game/WordUtil.js';
 
 import { MIN_PLAYERS, TIME_LIMIT } from '@/util/constants';
 
-export default (code) => {
+export default room = (code) => {
     let joinCode = code,
         gameHost = null,
         isPrivate = false,
