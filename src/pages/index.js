@@ -13,6 +13,7 @@ import { io } from 'socket.io-client';
 import Socket from '@/client/Socket';
 
 import React, { useState, useEffect } from 'react';
+import { PUBLIC_URL } from '@/util/constants';
 import Router, { } from 'next/router'
 import { Inter, Albert_Sans } from 'next/font/google'
 
@@ -152,7 +153,7 @@ export default function Home() {
 
     useEffect(() => {
         if (Socket.io !== null) { Socket.io.close(); Socket.Game = null; }
-        fetch('http://localhost:3000/api/socket')
+        fetch(PUBLIC_URL+'/api/socket')
         const socket = io();
 
         Socket.io = socket;
