@@ -5,6 +5,7 @@ import PlayerList from '@/components/PlayerList';
 import Chat from '@/components/Chat';
 import Canvas from '@/components/Canvas';
 import GameInfo from '@/components/GameInfo';
+import Vid from '@/components/Vid';
 
 // Client components
 
@@ -23,12 +24,13 @@ export default class GameView extends Component {
 
     render () {
         return (
-            <div className="h-screen flex items-center justify-center bg">
+            <div className="h-full p-8 flex items-center justify-center bg">
                 <div className="game">
                     <GameInfo code={Socket.Game.code} />
                     <Canvas />
                     <PlayerList dir='col' />
                     <Chat />
+                    <Vid />
                 </div>
             </div>
         )

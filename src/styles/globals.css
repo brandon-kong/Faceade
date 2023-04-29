@@ -58,10 +58,10 @@
 
 .bg {
     color: rgb(var(--foreground-rgb));
-    background: url('../assets/images/bg.png');
+    background-color: rgb(var(--background-end-rgb));
     background-repeat: repeat;
-    background-size: 2200px 2200px;
-    animation: animatedBackground 21s linear infinite;
+    background-size: 1500px 1500px;
+    
 }
 
 @keyframes animatedBackground {
@@ -102,14 +102,14 @@ input:focus {
 .game {
     display: grid;
     grid-template-columns: min-content auto auto;
-    grid-template-rows: min-content 48px min-content min-content;
+    grid-template-rows: min-content 48px auto auto;
     grid-gap: var(--border-gap);
     gap: var(--border-gap);
     grid-template-areas: 
     "brand brand brand"
     "game-info game-info game-info"
     "player-list canvas chat"
-    "misc misc misc"
+    "vid toolbar toolbar"
     ;
 }
 
@@ -124,4 +124,16 @@ input:focus {
 .button:hover {
     cursor: pointer;
     background-color: var(--primary-color);
+}
+
+.word-wrap {
+    word-wrap: break-word;
+}
+
+.vid {
+    grid-area: vid;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

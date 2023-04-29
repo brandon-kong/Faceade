@@ -18,7 +18,7 @@ export default class Textbox extends Component {
     render () {
         return (
             <div className="flex items-center justify-center w-full">
-                <input type="text" name={this.props.name || 'value'} placeholder={this.props.placeholder || "Text"} value={this.props.value} onChange={this.handleChange} className={"w-full rounded h-12 p-5 " + styles['input']} autoComplete='off' />
+                <input type="text" name={this.props.name || 'value'} placeholder={this.props.placeholder || "Text"} value={this.props.value} onChange={this.handleChange} className="transition-colors duration-200 w-full rounded h-12 p-5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:bg-gray-600" autoComplete='off' />
             </div>
         )
     }

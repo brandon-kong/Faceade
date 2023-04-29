@@ -13,6 +13,7 @@ export default class PlayerProfile extends Component {
             id: props.id,
             videoOn: props.videoOn,
             Game: Socket.Game,
+            localStream : null,
         }
 
         this.videoRef = createRef();
@@ -29,14 +30,12 @@ export default class PlayerProfile extends Component {
         this.configureVideoState();
     }
 
-    configureVideoState = () => {
+    configureVideoState = async () => {
         if (!Socket.Game) return;
-
-        var localstream;
 
         if (Socket.Game.players[this.state.id].videoOn) {
             if (Socket.Game.client_id === this.state.id) {
-                navigator.mediaDevices.getUserMedia({ video: {
+                const b = await navigator.mediaDevices.getUserMedia({ video: {
                     width: { min: 500, ideal: 500, max: 1000 },
                     height: { min: 500, ideal: 500, max: 1000 }
                 }, audio: true })
@@ -44,15 +43,17 @@ export default class PlayerProfile extends Component {
                     const video = this.videoRef
                     if (video && video.current) {
                         video.current.srcObject = stream;
-                        localstream = stream;
-                    }
 
-                    
-                    
+                        this.setState({
+                            localStream: stream
+                        })
+                        return stream;
+                    }
                 })
                 .catch(err => {
                     console.log(err);
                 })
+
             }
             else {
                 // TODO: Get video stream from server
@@ -61,21 +62,23 @@ export default class PlayerProfile extends Component {
         }
         else {
             const video = document.querySelector('video');
-            if (video) video.srcObject = null;
-            if (localstream) localstream.getTracks().forEach(track => track.stop());
+            if (video) {
+                //this.state.localStream.getTracks()[0].stop();
+                video.srcObject = null;
+            }
         }
     }
 
     render () {
         return (
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center mb-5 w-full">
                 <div className="flex flex-col gap-2 items-center justify-center">
 
                     {
                         Socket.Game && Socket.Game.players[this.state.id].videoOn ?
                         <video ref={this.videoRef} className="w-36 h-36 bg-primary drop-shadow-lg rounded-full" autoPlay muted></video>
                         :
-                        <img src={this.state.image ? this.state.image : img.src} alt="Profile picture" className="aspect-square max-h-32 bg-primary drop-shadow-lg rounded-full"/>
+                        <img src={this.state.image ? this.state.image : img.src} alt="Profile picture" className="aspect-square w-36 h-36 bg-white dark:bg-gray-700 drop-shadow-lg rounded-full"/>
                     }
 
                     <h1 className="text-md">{this.state.name}</h1>

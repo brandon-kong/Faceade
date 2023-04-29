@@ -191,7 +191,7 @@ export default function Home() {
             }
 
                 <main className="h-screen w-screen flex items-center justify-center bg">
-                    <div className="bg-white px-8 py-10 rounded-lg drop-shadow flex flex-col gap-5 items-center justify-center w-2/3 max-w-sm">
+                    <div className="bg-white dark:bg-gray-800 px-8 py-10 rounded-lg drop-shadow flex flex-col gap-5 items-center justify-center w-2/3 max-w-sm">
                         <IconLabel />
                         <a onClick={() => setJoinWithUrl(!joinWithUrl)} className="hover:underline cursor-pointer">{joinWithUrl ? 'Join game with code instead' : 'Join game with URL instead'}</a>
                         {
