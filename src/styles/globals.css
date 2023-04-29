@@ -15,7 +15,7 @@
     --background-light-active-rgb: 223, 223, 223;
 
     /* Gaps */
-    --border-gap: 3px;
+    --border-gap: 5px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -111,6 +111,16 @@ input:focus {
     "player-list canvas chat"
     "vid toolbar toolbar"
     ;
+
+    @media screen and (max-width: 1024px) {
+      grid-template-columns: calc(50% - var(--border-gap) ) calc(50% - var(--border-gap) );
+      grid-template-rows: min-content min-content auto 1fr;
+      grid-template-areas: 
+      "game-info game-info"
+      "canvas canvas"
+      "player-list chat"
+      "vid toolbar"
+    }
 }
 
 .drop-shadow {
@@ -136,4 +146,31 @@ input:focus {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.flipped {
+    transform: scaleX(-1);
+}
+
+.canvas {
+    grid-area: canvas;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    
+}
+
+.player-list {
+    grid-area: player-list;
+
+}
+
+.chat {
+    grid-area: chat;
+}
+
+.game-info {
+    grid-area: game-info;
 }

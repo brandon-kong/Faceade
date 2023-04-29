@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import Socket from '@/client/Socket';
 import styles from '@/styles/components/GameInfo/index.module.css'
 
 export default class GameInfo extends Component {
@@ -13,8 +14,10 @@ export default class GameInfo extends Component {
 
     render () {
         return (
-            <div className={[styles['game-info'], 'flex w-full h-full bg-gray-100 dark:bg-gray-800 rounded-md'].join(' ')}>
+            <div className={['game-info bg-gray-100 dark:bg-gray-800 rounded-md'].join(' ')}>
                 <h1>Game Code: {this.props.code}</h1>
+                <br />
+                { Socket.io.id }
             </div>
         )
     }

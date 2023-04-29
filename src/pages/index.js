@@ -164,6 +164,7 @@ export default function Home() {
         Socket.io = socket;
     }, [])
 
+    
     return (
         <>
             <Head>
@@ -191,7 +192,7 @@ export default function Home() {
             }
 
                 <main className="h-screen w-screen flex items-center justify-center bg">
-                    <div className="bg-white dark:bg-gray-800 px-8 py-10 rounded-lg drop-shadow flex flex-col gap-5 items-center justify-center w-2/3 max-w-sm">
+                    <div className="bg-white dark:bg-gray-800 px-8 py-10 rounded-lg drop-shadow flex flex-col gap-5 items-center justify-center w-4/5 min-w-lg max-w-sm md:w-2/3">
                         <IconLabel />
                         <a onClick={() => setJoinWithUrl(!joinWithUrl)} className="hover:underline cursor-pointer">{joinWithUrl ? 'Join game with code instead' : 'Join game with URL instead'}</a>
                         {
@@ -207,7 +208,7 @@ export default function Home() {
                         <Button value="Create room" onClick={createGame} />
                     </div>
                 </main>
-                <footer className="fixed bottom-0 right-0 bg-white rounded-lg drop-shadow m-4 dark:bg-gray-800">
+                <footer className="absolute block md:fixed md:bottom-0 md:right-0 bg-white rounded-lg drop-shadow m-4 dark:bg-gray-800">
                         <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
                         <span className="text-sm px-5 text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="#" className="px-1 hover:underline text-primary">Faceade</a>
                         </span>

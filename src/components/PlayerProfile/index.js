@@ -35,7 +35,7 @@ export default class PlayerProfile extends Component {
 
         if (Socket.Game.players[this.state.id].videoOn) {
             if (Socket.Game.client_id === this.state.id) {
-                const b = await navigator.mediaDevices.getUserMedia({ video: {
+                navigator.mediaDevices.getUserMedia({ video: {
                     width: { min: 500, ideal: 500, max: 1000 },
                     height: { min: 500, ideal: 500, max: 1000 }
                 }, audio: true })
@@ -43,11 +43,6 @@ export default class PlayerProfile extends Component {
                     const video = this.videoRef
                     if (video && video.current) {
                         video.current.srcObject = stream;
-
-                        this.setState({
-                            localStream: stream
-                        })
-                        return stream;
                     }
                 })
                 .catch(err => {
@@ -76,7 +71,7 @@ export default class PlayerProfile extends Component {
 
                     {
                         Socket.Game && Socket.Game.players[this.state.id].videoOn ?
-                        <video ref={this.videoRef} className="w-36 h-36 bg-primary drop-shadow-lg rounded-full" autoPlay muted></video>
+                        <video ref={this.videoRef} className="w-36 h-36 bg-primary drop-shadow-lg rounded-full flipped" autoPlay muted></video>
                         :
                         <img src={this.state.image ? this.state.image : img.src} alt="Profile picture" className="aspect-square w-36 h-36 bg-white dark:bg-gray-700 drop-shadow-lg rounded-full"/>
                     }

@@ -174,7 +174,7 @@ const room = (code) => {
         const name = players[socket.id].name;
 
         // Check if message is empty or only contains spaces
-        if (message.length === 0 || getCleanedString(message).length === 0 || message === null || message === undefined || getCleanedString(message).length > 100) {
+        if (message.length === 0 || getCleanedString(message).length === 0 || getCleanedString(message).length > 100) {
             return;
         }
 

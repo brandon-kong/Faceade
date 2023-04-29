@@ -132,9 +132,10 @@ export default class GameView extends Component {
         if (Socket.Game.status == "running") {
             return <GameViewComponent state={this.state} />
         }
+
         return (
             
-            <div className="bg-primary-light h-screen p-20">
+            <div className="h-screen sm:p-20">
                 {
                     this.state.game ?
                     (
