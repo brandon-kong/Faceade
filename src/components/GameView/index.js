@@ -28,7 +28,7 @@ export default class GameView extends Component {
             <div className="w-full p-5 flex items-center justify-center bg">
                 <div className="game">
                     <GameInfo code={Socket.Game.code} />
-                    <Canvas />
+                    <Canvas inGame={this.state.status === 'running'}/>
                     <PlayerList dir='col' />
                     <Chat />
                     <Vid />

@@ -29,6 +29,12 @@
     }
 }
 
+@media screen and (max-width: 1024px) {
+  .canvas {
+    max-width: 80vh;
+  }
+}
+
 @-webkit-keyframes bg-scrolling-reverse {
     100% { background-position: -1000px 1000px; }
   }
@@ -142,10 +148,6 @@ input:focus {
 
 .vid {
     grid-area: vid;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
 .flipped {
@@ -173,4 +175,19 @@ input:focus {
 
 .game-info {
     grid-area: game-info;
+}
+
+.chat-anim {
+  animation: fadeInAnimation ease .5s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeInAnimation {
+  0% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+   }
 }

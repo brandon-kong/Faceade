@@ -20,12 +20,14 @@ export default class Chat extends Component {
     componentDidMount() {
         if (!Socket.io) return;
         Socket.io.on('message-receive', this.onMessageReceive.bind(this))
+        Socket.io.on('announcement-receive', this.onAnnouncementReceive.bind(this))
         
     }
 
     componentWillUnmount() {
         if (!Socket.io) return;
         Socket.io.removeAllListeners('message-receive')
+        Socket.io.removeAllListeners('announcement-receive')
     }
 
     handleInputChange = (e) => {
@@ -49,10 +51,26 @@ export default class Chat extends Component {
         setTimeout(() => this.chatRef.current.scrollTop = this.chatRef.current.scrollHeight, 100)
     }
 
+    onAnnouncementReceive = (message, error_id) => {
+        this.setState({ messages: [...this.state.messages, {message: message, isAnnouncement: true, id: error_id}] });
+
+        setTimeout(() => this.chatRef.current.scrollTop = this.chatRef.current.scrollHeight, 100)
+    }
+
     render() {
+
+        const codeColors = {
+            '0': 'bg-teal-300 dark:bg-teal-800 text-black dark:text-white', // player joined
+            '1': 'bg-orange-400 dark:bg-orange-800 text-black dark:text-white', // player left
+            '200': 'bg-green-300 dark:bg-green-800 text-black dark:text-white', // success message
+            '403': 'bg-red-300 dark:bg-red-800 text-black dark:text-white', // error message
+        }
+
         let chatAsArray = this.state.messages.map((message, index) => 
-            <li key={index} className={['break-words flex items-center whitespace-normal p-3 py-2 w-full rounded-md mt-2', Socket.io.id == message.id ? 'bg-slate-300 dark:bg-slate-500' : 'bg-gray-100 dark:bg-gray-700'].join(' ')}>
-                <span className="text-sm break-words overflow-y-auto"> <strong>{message.name}:</strong> {message.message}</span>
+            <li key={index} className={['transition-opacity chat-anim break-words flex items-center whitespace-normal p-3 py-2 w-full rounded-md mt-2', !message.isAnnouncement && Socket.io.id == message.id ? 'bg-slate-300 dark:bg-slate-500' : !message.isAnnouncement ?'bg-gray-200 dark:bg-gray-700' : codeColors[message.id]].join(' ')}>
+                <span className="text-sm break-words overflow-y-auto"> 
+                {message.isAnnouncement ? null : <strong>{message.name}:</strong>} {message.message}
+                </span>
             </li>
         )
 

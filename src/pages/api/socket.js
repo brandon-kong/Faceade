@@ -206,7 +206,7 @@ const SocketHandler = (req, res) => {
             })
 
             socket.on('disconnect', () => {
-                console.log('Client disconnected')
+                console.log('Cflient disconnected')
 
                 if (!socket.Room) {
                     return;
@@ -220,6 +220,14 @@ const SocketHandler = (req, res) => {
                 }
 
                 socket.Room = null;
+            })
+
+            socket.on('flip-camera', (cameraFlipped) => {
+                if (!socket.Room) {
+                    return;
+                }
+
+                socket.Room.setCameraFlipped(socket, cameraFlipped);
             })
 
             

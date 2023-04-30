@@ -24,6 +24,14 @@ export default class PlayerProfile extends Component {
         if (!Socket.Game) return;
 
         this.configureVideoState();
+        
+        Socket.io.on('camera-flipped', (id, flipped) => {
+            Socket.Game.players[id].cameraFlipped = flipped;
+
+            this.setState({
+                cameraFlipped: flipped
+            })
+        })
     }
 
     componentDidUpdate () {
@@ -69,9 +77,10 @@ export default class PlayerProfile extends Component {
             <div className="flex flex-col items-center justify-center mb-5 w-full">
                 <div className="flex flex-col gap-2 items-center justify-center">
 
+                    
                     {
                         Socket.Game && Socket.Game.players[this.state.id].videoOn ?
-                        <video ref={this.videoRef} className="w-36 h-36 bg-primary drop-shadow-lg rounded-full flipped" autoPlay muted></video>
+                        <video ref={this.videoRef} className={"w-36 h-36 bg-primary drop-shadow-lg rounded-full " + (Socket.Game.players[this.state.id].cameraFlipped ? ' flipped' : '')} autoPlay muted></video>
                         :
                         <img src={this.state.image ? this.state.image : img.src} alt="Profile picture" className="aspect-square w-36 h-36 bg-white dark:bg-gray-700 drop-shadow-lg rounded-full"/>
                     }
