@@ -133,60 +133,6 @@ export default class GameView extends Component {
             return <GameViewComponent state={this.state} />
         }
 
-        return (
-            
-            <div className="h-screen sm:p-20">
-                {
-                    this.state.game ?
-                    (
-                       <CopyContainer text={ 'http://localhost:3000/?=' +  Socket.Game.code} />
-                    )
-                    :
-                    null
-                }
-                {this.state.isInWaitingRoom ? <h1>Waiting room</h1> : null}
-
-                {
-                    (Socket.Game && Socket.Game.host_id == Socket.Game.client_id) ? (
-                        <>
-                            <input type="checkbox" checked={this.state.private} onChange={(e) => {
-                                this.setState({
-                                    private: e.target.checked
-                                })
-            
-                                Socket.io.emit('change-private', e.target.checked)
-                            }} />
-                            <label htmlFor="private">Private</label>
-
-                            {
-                                this.state.private ?
-                                <Textbox value={ this.state.password } onChange={(e) => {
-                                    this.setState({
-                                        password: e.target.value
-                                    })
-                                    Socket.io.emit('change-password', e.target.value)
-                                } } placeholder="Password" type="password" />
-                                :
-                                null
-                            }
-                        </>
-                    )
-                    :
-                    null
-                }
-                
-                <br />
-                <button onClick={this.toggleVideo.bind(this)} >Video: {Socket.Game && Socket.Game.playerData.videoOn ? "on" : "off"}</button>
-                <Chat />
-                {
-                    (Socket.Game && Socket.Game.host_id == Socket.Game.client_id) ? (
-                        <Button onClick={this.startGame.bind(this)} value="START GAME"/>
-                    )
-                    :
-                    null
-                }
-                <PlayerList />
-            </div>
-        )
+        return <GameViewComponent state={this.state} />
     }
 }

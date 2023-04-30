@@ -142,6 +142,8 @@ const room = (code) => {
         for (let player in players) {
             players[player].client.emit('player-joined', safeName, socket.id, picture);
         }
+
+        sendAnnouncement(`${safeName} has joined the room.`, 0);
     }
 
     function removePlayer(socket) {
@@ -150,6 +152,8 @@ const room = (code) => {
         for (let player in players) {
             players[player].client.emit('player-left', name, socket.id);
         }
+
+        sendAnnouncement(`${name} has left the room.`, 1);
 
         // TODO: add logic to check if the player is the host and give host to someone else
         if (socket.id === gameHost.id) {
@@ -178,13 +182,24 @@ const room = (code) => {
             return;
         }
 
+        // Check if the user is the current drawer, if so, don't send the message
+        if (socket.id === currentDrawer) {
+            socket.emit('announcement-receive', 'You cannot send messages while you are drawing.', 403);
+            return;
+        }
+
         for (let player in players) {
             players[player].client.emit('message-receive', name, socket.id, message);
         }
     }
 
+    function sendAnnouncement(announcement, code=200) {
+        for (let player in players) {
+            players[player].client.emit('announcement-receive', announcement, code);
+        }
+    }
+
     async function startRound() {
-        console.log('round started')
 
         for (let player in players) {
             players[player].client.emit('round-number-changed', round);
@@ -213,7 +228,7 @@ const room = (code) => {
 
             console.log(currentWord);  
 
-            console.log(currentDrawer + ' is drawing');
+            sendAnnouncement(`${players[currentDrawer].name} is drawing!`);
 
             for (let player in players) {
                 players[player].client.emit('receive-drawing-data', drawingData);
@@ -225,7 +240,6 @@ const room = (code) => {
                 // TIME_LIMIT is in seconds, so we need to multiply by 1000
                 timeLeft = TIME_LIMIT;
 
-                console.log(timeLeft)
                 let timeLeftInterval = setInterval(() => {
                     if (!thisRound)
                         return;
@@ -310,7 +324,7 @@ const room = (code) => {
 
             if (i == (playerOrder.length - 1)) {
                 if (round == rounds) {
-                    console.log('Game ended!');
+                    sendAnnouncement('Game ended!');
 
                     for (let player in players) {
                         players[player].client.emit('game-ended');
@@ -318,9 +332,11 @@ const room = (code) => {
 
                     return;
                 }
-                console.log('round ended!');
+                sendAnnouncement('Round ended!', 200);
                 round ++;
-                startRound()
+                setTimeout(() => {
+                    startRound()
+                }, 5000)
             }
 
         }
@@ -370,6 +386,14 @@ const room = (code) => {
         return true;
     }
 
+    function setCameraFlipped(socket, toggle) {
+        players[socket.id].cameraFlipped = toggle;
+
+        for (let player in players) {
+            players[player].client.emit('camera-flipped', socket.id, toggle);
+        }
+    }
+
     return {
         getCode,
         getHost,
@@ -397,7 +421,8 @@ const room = (code) => {
         setPassword,
         setIsPrivate,
         authenticate,
-        isAuthenticated
+        isAuthenticated,
+        setCameraFlipped
     }
 }
 
