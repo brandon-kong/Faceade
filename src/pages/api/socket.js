@@ -14,7 +14,6 @@ const SocketHandler = (req, res) => {
         res.socket.server.io = io
 
         io.on('connection', (socket) => {
-            console.log('New client connected')
 
             socket.on('attempt-to-join', (code, callback) => {
                 if (socket.Room) {
@@ -206,7 +205,6 @@ const SocketHandler = (req, res) => {
             })
 
             socket.on('disconnect', () => {
-                console.log('Cflient disconnected')
 
                 if (!socket.Room) {
                     return;

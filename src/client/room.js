@@ -177,8 +177,12 @@ const room = (code) => {
     function sendMessage(socket, message) {
         const name = players[socket.id].name;
 
+        if (getCleanedString(message).length > 100) {
+            socket.emit('announcement-receive', 'Your messages must be kept under 100 characters!', 403);
+            return;
+        }
         // Check if message is empty or only contains spaces
-        if (message.length === 0 || getCleanedString(message).length === 0 || getCleanedString(message).length > 100) {
+        if (message.length === 0 || getCleanedString(message).length === 0) {
             return;
         }
 

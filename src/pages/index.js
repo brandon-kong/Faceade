@@ -192,7 +192,7 @@ export default function Home() {
 
             }
 
-                <main className="h-screen w-screen flex items-center justify-center bg">
+                <main className="h-screen min-h-fit w-screen flex items-center justify-center bg">
                     <div className="bg-white dark:bg-gray-800 px-8 py-10 rounded-lg drop-shadow flex flex-col gap-5 items-center justify-center w-4/5 min-w-lg max-w-sm md:w-2/3">
                         <IconLabel />
                         <a onClick={() => setJoinWithUrl(!joinWithUrl)} className="hover:underline cursor-pointer">{joinWithUrl ? 'Join game with code instead' : 'Join game with URL instead'}</a>
@@ -209,26 +209,6 @@ export default function Home() {
                         <Button value="Create room" onClick={createGame} />
                     </div>
                 </main>
-                
-                <footer className="bg-white drop-shadow dark:bg-gray-800">
-                    <div className="flex items-center justify-around w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
-                        <span className="text-sm px-5 text-gray-500 sm:text-center dark:text-gray-400">
-                            © 2023 
-                            <Link href="/#" className="px-1 hover:underline text-primary">
-                                Faceade
-                            </Link>
-                        </span>
-                        <ul className="flex flex-wrap items-center text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
-                            <li>
-                                <Link href="/" className="mr-4 hover:underline md:mr-6 ">About</Link>
-                            </li>
-                            <li>
-                                <Link href="/" className="mr-4 hover:underline md:mr-6">Privacy Policy</Link>
-                            </li>
-                        </ul>
-                    </div>
-                </footer>
-                
         </>
         
     )

@@ -38,7 +38,6 @@ export default class Chat extends Component {
     sendMessage = (e) => {
         e.preventDefault();
         if (!Socket.io) return;
-        if (this.state.message.length > 100) return;
 
         Socket.io.emit('send-message', this.state.message);
         Socket.Game.lastMessage = this.state.message;
@@ -63,7 +62,7 @@ export default class Chat extends Component {
             '0': 'bg-teal-300 dark:bg-teal-800 text-black dark:text-white', // player joined
             '1': 'bg-orange-400 dark:bg-orange-800 text-black dark:text-white', // player left
             '200': 'bg-green-300 dark:bg-green-800 text-black dark:text-white', // success message
-            '403': 'bg-red-300 dark:bg-red-800 text-black dark:text-white', // error message
+            '403': 'bg-red-400 dark:bg-red-800 text-black dark:text-white', // error message
         }
 
         let chatAsArray = this.state.messages.map((message, index) => 
