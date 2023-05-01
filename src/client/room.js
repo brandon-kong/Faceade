@@ -330,8 +330,12 @@ const room = (code) => {
                         players[player].client.emit('game-ended');
                     }
 
+                    status = 'waiting';
+                    currentDrawer = null;
+
                     return;
                 }
+                currentDrawer = null;
                 sendAnnouncement('Round ended!', 200);
                 round ++;
                 setTimeout(() => {
@@ -355,6 +359,7 @@ const room = (code) => {
             return;
         }
 
+        round = 1;
         status = 'running'
 
         for (let player in players) {
