@@ -7,7 +7,7 @@ export default function Dropdown({ children, ...rest}) {
             {
                 rest.options ?
                 Object.keys(rest.options).map((i) => {
-                    return <option className='bg-gray-50 hover:bg-gray-200 dark:hover:bg-gray-200 dark:bg-gray-800' value={i}>{rest.options[i]}</option>
+                    return <option key={i} className='bg-gray-50 hover:bg-gray-200 dark:hover:bg-gray-200 dark:bg-gray-800' value={i}>{rest.options[i]}</option>
                 })
                 :
                 null
