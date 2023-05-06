@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 // Element components
 import { faUser, faClock, faLanguage } from '@fortawesome/free-solid-svg-icons'
-import { Select } from '@chakra-ui/react'
+import { Select, Button } from '@chakra-ui/react'
 
 import Dropdown from '@/components/Dropdown';
 
@@ -18,8 +18,36 @@ export default class Canvas extends Component {
         super();
 
         this.state = {
-            inGame: props.inGame
+
+            isDrawing: false,
+            prevPos: { offsetX: 0, offsetY: 0 },
+            strokeStyle: '#000',
+            tool: 'pencil',
+            backgroundColor: '#fff',
+            displayColorPicker: false,
+            displayBackgroundColorPicker: false,
+            word: '',
+            isPlayerDrawing: false,
+            round: Socket.Game.round,
+            timeLeft: (Socket.Game.timeout / 1000),
+            gameEnded: false,
+      
+            settings : Socket.Game.settings
         }
+
+        this.onMouseDown = this.onMouseDown.bind(this)
+        //this.onMouseMove = this.onMouseMove.bind(this)
+        //this.stopDrawing = this.stopDrawing.bind(this)
+        //this.reDrawOnCanvas = this.reDrawOnCanvas.bind(this)
+        //this.clearCanvas = this.clearCanvas.bind(this)
+        //this.handleDrawingData = this.handleDrawingData.bind(this)
+
+        Socket.io.on('settings-changed', this.onSettingServerChange.bind(this))
+    }
+
+    onMouseDown (e) {
+        const { offsetX, offsetY } = e.nativeEvent
+        this.setState({ isDrawing: true, prevPos: { offsetX, offsetY } })
     }
 
     startGame = () => {
@@ -27,15 +55,24 @@ export default class Canvas extends Component {
     }
 
     changePlayerCount = (e) => {
-        alert('ok')
         Socket.io.emit('change-player-count', e.target.value);
     }
+
+    onSettingsChange = (e) => {
+        Socket.io.emit('change-setting', e.target.name, e.target.value);
+    }
+
+    onSettingServerChange = (settings) => {
+        Socket.Game.settings = settings;
+        this.setState({settings: settings})
+    }
+
 
     render () {
         if (Socket.Game === null) return <Redirect to='/'></Redirect>;
         return (
-            <div className={['canvas relative rounded-md overflow-hidden h-fit border-2 border-black'].join(' ')}>
-                <canvas className={[styles['canvas-board'], 'w-full bg-white'].join(' ')} width="800" height="600" id="canvas"></canvas>
+            <div className={['canvas relative rounded-md overflow-hidden h-full'].join(' ')}>
+                <canvas className={[styles['canvas-board'], 'w-full bg-white '].join(' ')} width="800" height="600" id="canvas"></canvas>
                 
                 {
                     Socket.Game.status === 'running' ?
@@ -47,28 +84,14 @@ export default class Canvas extends Component {
                                 <FontAwesomeIcon className='text-black dark:text-white w-7 pr-2' icon={faUser}></FontAwesomeIcon><span className='text-black dark:text-white'>Players</span>
                             </div>
                             <div className='text-lg text-black dark:text-white'>
-                                <Dropdown options={
-                                    {
-                                        '2': '2',
-                                        '3': '3',
-                                        '4': '4',
-                                        '5': '5',
-                                        '6': '6',
-                                        '7': '7',
-                                        '8': '8',
-                                        '9': '9',
-                                        '10': '10',
-                                        '11': '11',
-                                        '12': '12',
-                                        '13': '13',
-                                        '14': '14',
-                                        '15': '15',
-                                        '16': '16',
-                                        '17': '17',
-                                        '18': '18',
-                                        '19': '19',
-                                        '20': '20',
-                                    }
+                                <Dropdown disabled={!(Socket.Game.host_id === Socket.io.id)} name='playerLimit' onChange={this.onSettingsChange} value={this.state.settings.playerLimit} name='playerLimit' options={
+                                    [...Array(20).keys()].map((i) => i+1).splice(1  ).reduce((obj, item) => {
+                                        obj[item] = item;
+                                        return obj;
+                                    }, {
+                                        0: 'Unlimited'
+
+                                    })
                                 }/>
                             </div>
                         </div>
@@ -77,7 +100,7 @@ export default class Canvas extends Component {
                                 <FontAwesomeIcon className='text-black dark:text-white w-7 pr-2' icon={faLanguage}></FontAwesomeIcon><span className='text-black dark:text-white'>Language</span>
                             </div>
                             <div className='text-lg text-black dark:text-white'>
-                                <Dropdown options={
+                                <Dropdown disabled={!(Socket.Game.host_id === Socket.io.id)} name='language' options={
                                     {
                                         'en': 'English',
                                     }
@@ -90,24 +113,23 @@ export default class Canvas extends Component {
                                 <FontAwesomeIcon className='text-black dark:text-white w-7 pr-2' icon={faClock}></FontAwesomeIcon><span className='text-black dark:text-white'>Round time</span>
                             </div>
                             <div className='text-lg text-black dark:text-white'>
-                                <Dropdown options={
+                                <Dropdown disabled={!(Socket.Game.host_id === Socket.io.id)} name='timeLimit' onChange={this.onSettingsChange} value={this.state.settings.timeLimit} options={
                                     {
-                                        '15': '15 seconds',
-                                        '30': '30 seconds',
-                                        '45': '45 seconds',
-                                        '60': '60 seconds',
-                                        '75': '75 seconds',
-                                        '90': '90 seconds',
-                                        '105': '105 seconds',
-                                        '120': '120 seconds',
+                                        15: '15 seconds',
+                                        30: '30 seconds',
+                                        45: '45 seconds',
+                                        60: '60 seconds',
+                                        75: '75 seconds',
+                                        90: '90 seconds',
+                                        105: '105 seconds',
+                                        120: '120 seconds',
                                     }
                                 }/>
                             </div>
                         </div>
-                        <button className='text-red-200' onClick={this.startGame.bind(this)}>
-                            Start
-                        </button>
+                        {Socket.Game.host_id === Socket.io.id ? <Button onClick={this.startGame.bind(this)} h='14' size='lg' colorScheme='green'>Start</Button> : null}
                     </div>
+                    
                 }
             </div>
         )

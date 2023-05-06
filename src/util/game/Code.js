@@ -48,9 +48,31 @@ const getRandomGameCodeThatIsPublic = (gameObject) => {
     return keys[keys.length * Math.random() << 0];
 }
 
+const getRandomGameCodeThatIsPublicAndNotFull = (gameObject) => {
+    if (Object.keys(gameObject).length === 0) {
+        // If there are no games, generate a new game code
+        return generateNewGameCode(gameObject);
+    }
+    var keys = Object.keys(gameObject);
+
+    // Filter out private games
+    keys = keys.filter(key => !gameObject[key].getIsPrivate());
+
+    // Filter out full games
+    keys = keys.filter(key => !gameObject[key].getIsFull());
+
+    if (keys.length === 0) {
+        // If there are no public games, generate a new game code
+        return generateNewGameCode(gameObject);
+    }
+    
+    return keys[keys.length * Math.random() << 0];
+}
+
 export { 
         generateCode,
         generateNewGameCode,
         getRandomGameCode,
-        getRandomGameCodeThatIsPublic
+        getRandomGameCodeThatIsPublic,
+        getRandomGameCodeThatIsPublicAndNotFull
     }

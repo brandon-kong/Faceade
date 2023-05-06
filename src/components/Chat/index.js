@@ -20,8 +20,7 @@ export default class Chat extends Component {
     componentDidMount() {
         if (!Socket.io) return;
         Socket.io.on('message-receive', this.onMessageReceive.bind(this))
-        Socket.io.on('announcement-receive', this.onAnnouncementReceive.bind(this))
-        
+        Socket.io.on('announcement-receive', this.onAnnouncementReceive.bind(this))        
     }
 
     componentWillUnmount() {
@@ -74,7 +73,7 @@ export default class Chat extends Component {
         )
 
         return (
-            <div className={["flex flex-col rounded-md w-full lg:w-72 p-3 bg-gray-100 dark:bg-gray-800 chat"].join(' ')}>
+            <div className={["flex dark:bg-scroll flex-col rounded-md w-full lg:w-72 p-3 bg-gray-100 dark:bg-gray-800 chat"].join(' ')}>
                 <h1 className="text-2xl pb-2">Chat</h1>
                 <ul ref={this.chatRef} className="grow h-14 overflow-y-auto">
                     {chatAsArray}

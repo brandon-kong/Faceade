@@ -6,8 +6,8 @@ export default function Redirect ({ to }) {
         Router.push(to)
     })
     return (
-        <div className="h-screen">
-            <p>Redirecting...</p>
+        <div className="h-screen w-screen bg-white dark:bg-black">
+            <p className="text-black dark:text-white">Redirecting...</p>
         </div>
     )
 }

@@ -1,5 +1,5 @@
 import { Server } from 'socket.io';
-import { generateNewGameCode, getRandomGameCodeThatIsPublic, getRandomGameCode } from '../../util/game/Code';
+import { generateNewGameCode, getRandomGameCodeThatIsPublicAndNotFull, getRandomGameCode } from '../../util/game/Code';
 
 import Room from '@/client/room';
 
@@ -10,7 +10,9 @@ const SocketHandler = (req, res) => {
     if (!res.socket.server.io) {
         console.log('Socket is initializing')
 
-        const io = new Server(res.socket.server)
+        const io = new Server(res.socket.server, {
+            path: '/api/socket',
+        })
         res.socket.server.io = io
 
         io.on('connection', (socket) => {
@@ -47,7 +49,7 @@ const SocketHandler = (req, res) => {
                         code = generateNewGameCode(rooms);
                     }
                     else {
-                        code = getRandomGameCodeThatIsPublic(rooms);
+                        code = getRandomGameCodeThatIsPublicAndNotFull(rooms);
                     }
                 }
 
@@ -59,6 +61,16 @@ const SocketHandler = (req, res) => {
                     // create room if it doesn't exist
                     gameCreated = true;
                     rooms[code] = Room(code);
+                }
+                else {
+                    // check if room is full
+                    if (rooms[code].getIsFull()) {
+                        callback({
+                            success: false,
+                            message: 'The room you are trying to join is full.'
+                        });
+                        return;
+                    }
                 }
                 
 
@@ -90,6 +102,7 @@ const SocketHandler = (req, res) => {
                     host_id: room.getHost().id,
                     client_id: socket.id,
                     isPrivate: room.getIsPrivate(),
+                    settings: room.getSettings(),
                 })
             })
 
@@ -218,6 +231,19 @@ const SocketHandler = (req, res) => {
                 }
 
                 socket.Room = null;
+            })
+
+            socket.on('change-setting', (setting, value) => {
+                if (!socket.Room) {
+                    return;
+                }
+
+                // check if the player is the host
+                if (socket.id !== socket.Room.getHost().id) {
+                    return;
+                }
+
+                socket.Room.setSetting(socket, setting, value);
             })
 
             socket.on('flip-camera', (cameraFlipped) => {

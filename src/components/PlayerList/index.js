@@ -72,7 +72,7 @@ export default class PlayerList extends Component {
         return (
             <div className={["bg-gray-100 dark:bg-gray-800 rounded-md flex flex-col gap-5 py-5 items-center justify-center w-full lg:w-52 player-list h-full"].join(' ')}>
                 <h1 className="text-2xl font-semibold">Players</h1>
-                <div className={["grow w-full items-center justify-center overflow-y-auto", this.props.dir ? 'flex-'+this.props.dir : 'flex-row'].join(' ')}>
+                <div className={["grow w-full h-14 items-center justify-center overflow-y-auto", this.props.dir ? 'flex-'+this.props.dir : 'flex-row'].join(' ')}>
                     {
                         Object.keys(this.state.players).map(key =>
                             this.getUpdatedPlayerProfile(key, this.state.players[key].picture)

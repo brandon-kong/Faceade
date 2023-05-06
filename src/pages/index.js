@@ -21,9 +21,11 @@ import { Inter, Albert_Sans } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })
 
-fetch('/api/socket')
-const socket = io(PUBLIC_URL, {
-    transports: ['polling'],
+fetch('http://localhost:3000/api/socket');
+
+const socket = io('http://localhost:3000', {
+    path: '/api/socket/',
+    transports: ['polling', 'websocket'],
 });
 
 Socket.io = socket;
@@ -55,7 +57,7 @@ export default function Home() {
         }
         setPickedImage(true)
 
-        Socket.io.emit('join-game', name, code, createGame, image, password, ({success, players, host_id, room_status, client_id, processedCode, isPrivate}) => {
+        Socket.io.emit('join-game', name, code, createGame, image, password, ({success, players, host_id, room_status, client_id, processedCode, isPrivate, settings}) => {
             // authenticate user on server
             if (success) {
                 Socket.Game = {
@@ -65,6 +67,7 @@ export default function Home() {
                     status: room_status,
                     client_id: client_id,
                     private: isPrivate,
+                    settings: settings,
                     words: [],
                     playerData: {
                         id: client_id,
@@ -157,9 +160,11 @@ export default function Home() {
 
     useEffect(() => {
         if (Socket.io !== null) { Socket.io.close(); Socket.Game = null; }
-        fetch('/api/socket')
-        const socket = io(PUBLIC_URL, {
-            transports: ['polling'],
+        fetch('http://localhost:3000/api/socket');
+
+        const socket = io('http://localhost:3000', {
+            path: '/api/socket/',
+            transports: ['polling', 'websocket'],
         });
 
         Socket.io = socket;

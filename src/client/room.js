@@ -36,12 +36,21 @@ const room = (code) => {
                 this.allListener = listener;
             }
         },
-        currentWord = '',
+        currentWord = null,
+        isInRound = false,
         currentWordIndex = 0,
         currentWordLength = 0,
         usedWords = [],
         currentWordGuesses = [],
-        currentWordGuessesCorrect = []
+        currentWordGuessesCorrect = [],
+
+        settings = {
+            rounds: 5,
+            timeLimit: 60,
+            playerLimit: 10,
+            wordList: [],
+            language: 'en'
+        }
 
     
     const getCode = () => joinCode;
@@ -59,6 +68,7 @@ const room = (code) => {
     const getCurrentWordGuessesCorrect = () => currentWordGuessesCorrect;
     const getIsPrivate = () => isPrivate;
     const getPassword = () => password;
+    const getSettings = () => settings;
 
     function getSafePlayers () {
         const safePlayers = {};
@@ -177,18 +187,43 @@ const room = (code) => {
     function sendMessage(socket, message) {
         const name = players[socket.id].name;
 
+        if (isInRound) {
+            // Check if the user is the current drawer, if so, don't send the message
+            if (socket.id === currentDrawer) {
+                socket.emit('announcement-receive', 'You cannot send messages while you are drawing.', 403);
+                return;
+            }
+
+            // Check if the user has already guessed the word, if so, don't send the message
+            if (players[socket.id].guessedCorrectly) {
+                socket.emit('announcement-receive', 'You cannot send messages after you have guessed the word.', 403);
+                return;
+            }
+            else {
+                // user hasn't guessed the word yet, check if the message is the word
+                if (getCleanedString(message).toLowerCase() === getCleanedString(currentWord).toLowerCase()) {
+                    // user guessed the word correctly
+                    players[socket.id].guessedCorrectly = true;
+                    guessedCorrectly.total++;
+
+                    sendAnnouncement(`${name} guessed the word correctly!`, 200);
+
+                    return;
+                }
+                else {
+                    // use algorithm to check if the message is close to the word
+
+                }
+            }
+        }
+
         if (getCleanedString(message).length > 100) {
             socket.emit('announcement-receive', 'Your messages must be kept under 100 characters!', 403);
             return;
         }
+
         // Check if message is empty or only contains spaces
         if (message.length === 0 || getCleanedString(message).length === 0) {
-            return;
-        }
-
-        // Check if the user is the current drawer, if so, don't send the message
-        if (socket.id === currentDrawer) {
-            socket.emit('announcement-receive', 'You cannot send messages while you are drawing.', 403);
             return;
         }
 
@@ -200,6 +235,18 @@ const room = (code) => {
     function sendAnnouncement(announcement, code=200) {
         for (let player in players) {
             players[player].client.emit('announcement-receive', announcement, code);
+        }
+    }
+
+    function setSetting(socket, setting, value) {
+        if (socket.id !== gameHost.id) {
+            return;
+        }
+
+        settings[setting] = value;
+
+        for (let player in players) {
+            players[player].client.emit('settings-changed', settings);
         }
     }
 
@@ -221,6 +268,7 @@ const room = (code) => {
             }
 
             // reinitialize variables
+            isInRound = true;
 
             // TODO: add logic to have drawer pick a word
             currentDrawer = playerOrder[i];
@@ -242,7 +290,7 @@ const room = (code) => {
             let startDrawing = new Promise((resolve, reject) => {
                 let thisRound = true;
                 // TIME_LIMIT is in seconds, so we need to multiply by 1000
-                timeLeft = TIME_LIMIT;
+                timeLeft = settings.timeLimit;
 
                 let timeLeftInterval = setInterval(() => {
                     if (!thisRound)
@@ -303,6 +351,7 @@ const room = (code) => {
                 guessedCorrectly.registerListener(function(val) {
                     if (val == (playerOrder.length - 1)) {
                         finishDrawing();
+                        setTimeout(() => {}, 5000)
                     }
                 })
 
@@ -339,9 +388,12 @@ const room = (code) => {
 
                     return;
                 }
+
                 currentDrawer = null;
                 sendAnnouncement('Round ended!', 200);
                 round ++;
+                isInRound = false;
+
                 setTimeout(() => {
                     startRound()
                 }, 5000)
@@ -358,8 +410,8 @@ const room = (code) => {
         }
 
         // when in development, we can just start the game, otherwise USE MIN_PLAYERS
-        if (getPlayerLength() < 0) {
-            console.log('not enough players!')
+        if (getPlayerLength() < 2) {
+            sendAnnouncement(`You need at least ${MIN_PLAYERS} players to start the game!`, 403);
             return;
         }
 
@@ -403,6 +455,13 @@ const room = (code) => {
         }
     }
 
+    function getIsFull() {
+        if (settings.playerLimit == 0) {
+            return false;
+        }
+        return getPlayerLength() >= settings.playerLimit;
+    }
+
     return {
         getCode,
         getHost,
@@ -431,7 +490,10 @@ const room = (code) => {
         setIsPrivate,
         authenticate,
         isAuthenticated,
-        setCameraFlipped
+        setCameraFlipped,
+        setSetting,
+        getSettings,
+        getIsFull
     }
 }
 

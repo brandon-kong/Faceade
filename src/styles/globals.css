@@ -29,12 +29,6 @@
     }
 }
 
-@media screen and (max-width: 1024px) {
-  .canvas {
-    max-width: 80vh;
-  }
-}
-
 @-webkit-keyframes bg-scrolling-reverse {
     100% { background-position: -1000px 1000px; }
   }
