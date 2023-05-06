@@ -84,7 +84,7 @@ export default class Canvas extends Component {
                                 <FontAwesomeIcon className='text-black dark:text-white w-7 pr-2' icon={faUser}></FontAwesomeIcon><span className='text-black dark:text-white'>Players</span>
                             </div>
                             <div className='text-lg text-black dark:text-white'>
-                                <Dropdown disabled={!(Socket.Game.host_id === Socket.io.id)} name='playerLimit' onChange={this.onSettingsChange} value={this.state.settings.playerLimit} name='playerLimit' options={
+                                <Dropdown disabled={!(Socket.Game.host_id === Socket.io.id)} onChange={this.onSettingsChange} value={this.state.settings.playerLimit} name='playerLimit' options={
                                     [...Array(20).keys()].map((i) => i+1).splice(1  ).reduce((obj, item) => {
                                         obj[item] = item;
                                         return obj;
