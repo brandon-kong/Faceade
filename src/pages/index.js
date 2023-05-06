@@ -21,10 +21,9 @@ import { Inter, Albert_Sans } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })
 
-fetch('http://localhost:3000/api/socket');
+fetch(PUBLIC_URL + '/api/socket');
 
-const socket = io('http://localhost:3000', {
-    path: '/api/socket/',
+const socket = io(PUBLIC_URL, {
     transports: ['polling', 'websocket'],
 });
 
@@ -160,9 +159,9 @@ export default function Home() {
 
     useEffect(() => {
         if (Socket.io !== null) { Socket.io.close(); Socket.Game = null; }
-        fetch('http://localhost:3000/api/socket');
+        fetch(PUBLIC_URL + '/api/socket');
 
-        const socket = io('http://localhost:3000', {
+        const socket = io(PUBLIC_URL, {
             transports: ['polling', 'websocket'],
         });
 
