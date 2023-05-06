@@ -163,7 +163,6 @@ export default function Home() {
         fetch('http://localhost:3000/api/socket');
 
         const socket = io('http://localhost:3000', {
-            path: '/api/socket/',
             transports: ['polling', 'websocket'],
         });
 
