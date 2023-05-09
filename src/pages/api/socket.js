@@ -12,6 +12,7 @@ const SocketHandler = (req, res) => {
 
         const io = new Server(res.socket.server, {
             transports: ['polling', 'websocket'],
+            path: '/api/socket/'
         })
         res.socket.server.io = io
 

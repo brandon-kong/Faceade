@@ -159,10 +159,11 @@ export default function Home() {
 
     useEffect(() => {
         if (Socket.io !== null) { Socket.io.close(); Socket.Game = null; }
-        fetch(PUBLIC_URL + '/api/socket');
+        fetch(PUBLIC_URL + '/api/socket/');
 
         const socket = io(PUBLIC_URL, {
             transports: ['polling', 'websocket'],
+            path: '/api/socket',
         });
 
         Socket.io = socket;
