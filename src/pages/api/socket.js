@@ -11,8 +11,8 @@ const SocketHandler = (req, res) => {
         console.log('Socket is initializing')
 
         const io = new Server(res.socket.server, {
-            transports: ['polling', 'websocket'],
-            path: '/api/socket/'
+            transports: ['polling'],
+            path: 'api/socket/'
         })
         res.socket.server.io = io
 
