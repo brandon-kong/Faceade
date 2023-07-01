@@ -16,6 +16,7 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Router, { } from 'next/router'
 import { Inter } from 'next/font/google'
+import { PUBLIC_URL } from '@/util/constants';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -150,7 +151,7 @@ export default function Home() {
     useEffect(() => {
         //if (Socket.io !== null) { Socket.io.close(); Socket.Game = null; }
 
-        const socket = io('https://faceade-server-7ed0465f96e6.herokuapp.com/');
+        const socket = io(PUBLIC_URL || 'http://localhost:4000');
         Socket.io = socket;
     }, [])
 
