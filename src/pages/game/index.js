@@ -3,13 +3,8 @@
 import React, { Component } from 'react';
 
 // Element components
-import Button from '@/components/Input/Button';
-import Chat from '@/components/Chat';
-import PlayerList from '@/components/PlayerList';
 import Redirect from '@/components/Redirect';
 import GameViewComponent from '@/components/GameView';
-import Textbox from '@/components/Input/Textbox';
-import CopyContainer from '@/components/CopyContainer';
 
 // Client components
 import Socket from '@/client/Socket';

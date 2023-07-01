@@ -13,21 +13,11 @@ import { io } from 'socket.io-client';
 import Socket from '@/client/Socket';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
 import Head from 'next/head';
-import { PUBLIC_URL } from '@/util/constants';
 import Router, { } from 'next/router'
-import { Inter, Albert_Sans } from 'next/font/google'
+import { Inter } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })
-
-fetch('/api/socket');
-
-const socket = io(PUBLIC_URL, {
-    transports: ['polling'],
-});
-
-Socket.io = socket;
 
 export default function Home() {
 
@@ -158,14 +148,9 @@ export default function Home() {
     }
 
     useEffect(() => {
-        if (Socket.io !== null) { Socket.io.close(); Socket.Game = null; }
-        fetch('/api/socket');
+        //if (Socket.io !== null) { Socket.io.close(); Socket.Game = null; }
 
-        const socket = io(PUBLIC_URL, {
-            transports: ['polling'],
-            path: '/api/socket',
-        });
-
+        const socket = io('https://faceade-server-7ed0465f96e6.herokuapp.com/');
         Socket.io = socket;
     }, [])
 
