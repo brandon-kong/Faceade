@@ -1,5 +1,5 @@
 const IS_DEV = process.env.NODE_ENV === 'development'
-const PUBLIC_URL = process.env.NODE_SERVER_URL || 'asdf'
+const PUBLIC_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:4000'
 const CODE_LENGTH = 6
 
 const MIN_PLAYERS = 2

@@ -151,7 +151,7 @@ export default function Home() {
     useEffect(() => {
         //if (Socket.io !== null) { Socket.io.close(); Socket.Game = null; }
 
-        const socket = io(process.env.NEXT_PUBLIC_SERVER_URL);
+        const socket = io(PUBLIC_URL);
         Socket.io = socket;
     }, [])
 
