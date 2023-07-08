@@ -1,0 +1,39 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@chakra-ui/icons": "^2.0.19",
+    "@chakra-ui/next-js": "^2.1.4",
+    "@chakra-ui/react": "^2.7.1",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@react-three/fiber": "^8.13.4",
+    "@types/node": "20.3.3",
+    "@types/react": "18.2.14",
+    "@types/react-dom": "18.2.6",
+    "bufferutil": "^4.0.7",
+    "encoding": "^0.1.13",
+    "eslint": "8.44.0",
+    "eslint-config-next": "13.4.7",
+    "face-api.js": "^0.22.2",
+    "framer-motion": "^10.12.18",
+    "fs": "^0.0.1-security",
+    "next": "13.4.7",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-particles": "^2.10.1",
+    "socket.io": "^4.7.1",
+    "socket.io-client": "^4.7.1",
+    "three": "^0.154.0",
+    "tsparticles": "^2.10.1",
+    "typescript": "5.1.6",
+    "utf-8-validate": "^5.0.10"
+  }
+}
