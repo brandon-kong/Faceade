@@ -15,6 +15,7 @@ type PlayerListProps = {
 export default function PlayerList ({ players }: PlayerListProps) {
     const { socket, game } = useContext(SocketContext);
 
+    console.log(game);
     
     return (
         <Flex
@@ -37,17 +38,25 @@ export default function PlayerList ({ players }: PlayerListProps) {
             <Divider 
             bg={'gray.300'}
             />
+            <>
+                { socket?.id }
+            </>
             <ul>
                 {
                     players && Object.keys(players).map((playerId: string) => {
                         {
-                            if (playerId === socket?.id) return;
+                            if (playerId == socket?.id) return;
                             else {
                                 return (
+                                    <>
+                                    { playerId }
+                                    { game?.playerData?.id }
                                     <PlayerCard
                                     key={playerId}
                                     player={players[playerId]}
                                     />
+                                    </>
+                                    
                                     
                                 )
                             }

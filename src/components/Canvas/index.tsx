@@ -9,6 +9,7 @@ import {
 export default function Canvas ( props: any ) {
 
     const [modelIsLoaded, setModelIsLoaded] = useState(false);
+    const [video, setVideo] = useState<any>(null);
 
     const videoRef = useRef(null);
     const videoHeight = 480;
@@ -57,11 +58,17 @@ export default function Canvas ( props: any ) {
         loadModels();
         
         try{
+            setVideo(document.getElementById('video'));
             navigator.mediaDevices.getUserMedia({ video: true, audio: false })
             .then((stream) => {
+                if (video === null) return;
+                video.srcObject = stream;
+                video.play();
                 if (videoRef.current === null) return;
-                videoRef.current.srcObject = stream;
-                videoRef.current.play()
+
+
+                //videoRef.current.srcObject = stream;
+                //videoRef.current.play()
                     
             })
         }
@@ -73,8 +80,12 @@ export default function Canvas ( props: any ) {
 
     const handleVideoOnPlay = () => {
         
-        if (canvasRef && canvasRef.current && videoRef.current) {
-            canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(videoRef.current);
+        if (canvasRef && canvasRef.current && video) {
+            const canvas = faceapi.createCanvas(video);
+            canvas.id = 'canvas';
+
+            //document.querySelector("#faceCanvas")?.append(canvas);
+            canvasRef.current.innerHTML = faceapi.createCanvas(video);
             const displaySize = {
               width: videoWidth,
               height: videoHeight
@@ -83,13 +94,13 @@ export default function Canvas ( props: any ) {
                 //faceapi.matchDimensions(canvasRef.current, displaySize);
         
                 if (!modelIsLoaded) return;
-                const detections = await faceapi.detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks()
+                const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks()
         
                 const resizedDetections = faceapi.resizeResults(detections, displaySize);
         
-                canvasRef.current.getContext('2d').clearRect(0, 0, videoWidth, videoHeight);
+                canvas.getContext('2d')?.clearRect(0, 0, videoWidth, videoHeight);
                 //faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
-                faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
+                faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
             
                 if (detections.length === 0) {
                     hasMoved = false;
@@ -122,10 +133,10 @@ export default function Canvas ( props: any ) {
             bg={'white'}
             rounded={'md'}
             >
-                <canvas ref={drawingCanvasRef} height={videoHeight} width={videoWidth} style={{ position: 'relative', transform: 'scaleX(-1)', width: '100%', height: '100%', aspectRatio: 640/480 }} />
-                <canvas ref={canvasRef} height={videoHeight} width={videoWidth} style={{ position: 'absolute', transform: 'scaleX(-1)' }} />
+                <canvas id={'drawingCanvas'} ref={drawingCanvasRef} height={videoHeight} width={videoWidth} style={{ position: 'relative', transform: 'scaleX(-1)', width: '100%', height: '100%', aspectRatio: 640/480 }} />
+                <canvas id={'faceCanvas'} ref={canvasRef} height={videoHeight} width={videoWidth} style={{ position: 'absolute', transform: 'scaleX(-1)' }} />
             </Flex>
-            <video ref={videoRef} style={{ display: 'none' }} width={videoWidth} height={videoHeight} onPlay={handleVideoOnPlay} />
+            <video id={'video'}  ref={videoRef} style={{ display: 'none' }} width={videoWidth} height={videoHeight} onPlay={handleVideoOnPlay} />
         </>
         
     )
