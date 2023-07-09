@@ -42,9 +42,6 @@ export default function PlayerList ({ players }: PlayerListProps) {
             <Divider 
             bg={'gray.300'}
             />
-            <>
-                { game?.client_id }
-            </>
             <ul>
                 {
                     players && Object.keys(players).map((playerId: string) => {
