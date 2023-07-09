@@ -9,13 +9,15 @@ import {
 import PlayerCard from '../PlayerCard'
 
 type PlayerListProps = {
-    players: Player[] | undefined
+    players: { [key: string]: Player } | undefined
 }
 
 export default function PlayerList ({ players }: PlayerListProps) {
     const { socket, game } = useContext(SocketContext);
+    if (!game) return (<></>);
+    if (!players) return (<></>);
 
-    console.log(game);
+    const player = players[game?.client_id as string];
     
     return (
         <Flex
@@ -31,7 +33,7 @@ export default function PlayerList ({ players }: PlayerListProps) {
             justify={'center'}
             >
                 <PlayerCard
-                player={game?.players[socket.id]}
+                player={player}
                 name={'You'}
                 />
             </Flex>
@@ -39,18 +41,16 @@ export default function PlayerList ({ players }: PlayerListProps) {
             bg={'gray.300'}
             />
             <>
-                { socket?.id }
+                { game?.client_id }
             </>
             <ul>
                 {
                     players && Object.keys(players).map((playerId: string) => {
                         {
-                            if (playerId == socket?.id) return;
+                            if (playerId == game?.client_id) return;
                             else {
                                 return (
                                     <>
-                                    { playerId }
-                                    { game?.playerData?.id }
                                     <PlayerCard
                                     key={playerId}
                                     player={players[playerId]}

@@ -9,7 +9,7 @@ export type Player = {
 export type Game = {
     code: string,
     host_id: string,
-    players: Player[],
+    players: { [key: string]: Player },
     status: string,
     client_id: string,
     private: boolean,
@@ -23,7 +23,7 @@ export type Game = {
 export type CreateGameCallbackType = {
     success: boolean,
     processedCode: string,
-    players: any[],
+    players: { [key: string]: any },
     room_status: string,
     host_id: string,
     client_id: string,

@@ -11,6 +11,7 @@ export default function Canvas ( props: any ) {
     const [modelIsLoaded, setModelIsLoaded] = useState(false);
     const [video, setVideo] = useState<any>(null);
 
+    const parentRef = useRef(null);
     const videoRef = useRef(null);
     const videoHeight = 480;
     const videoWidth = 640;
@@ -28,18 +29,22 @@ export default function Canvas ( props: any ) {
         const canvas = drawingCanvasRef.current;
         if (!canvas) return;
         
-        const ctx = canvas.getContext('2d');
-        ctx.strokeStyle = 'red';
-        ctx.lineWidth = 4;
-        ctx.lineCap = 'round';
-        ctx.beginPath();
-        ctx.moveTo(oldX, oldY);
-        ctx.lineTo(x, y);
-        ctx.stroke();
-        ctx.closePath();
+        
+        const ctx = (canvas as HTMLCanvasElement).getContext('2d');
+        if (ctx !== null) {
 
-        oldX = x;
-        oldY = y;
+            ctx.strokeStyle = 'red';
+            ctx.lineWidth = 4;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(oldX, oldY);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.closePath();
+
+            oldX = x;
+            oldY = y;
+        }
     }
 
     useEffect(() => {
@@ -80,27 +85,37 @@ export default function Canvas ( props: any ) {
 
     const handleVideoOnPlay = () => {
         
-        if (canvasRef && canvasRef.current && video) {
-            const canvas = faceapi.createCanvas(video);
-            canvas.id = 'canvas';
+        if (true) {
+            //const canvas = faceapi.createCanvasFromMedia(video);
+            //video.append(canvas);
+
 
             //document.querySelector("#faceCanvas")?.append(canvas);
-            canvasRef.current.innerHTML = faceapi.createCanvas(video);
+            
+            /*const parent = parentRef.current as unknown as HTMLElement;
+            parent.append(canvas);
+            parent.removeChild(canvasRef.current);
+            canvasRef.current = canvas;
+            */
+
             const displaySize = {
               width: videoWidth,
               height: videoHeight
             }
+
+            //faceapi.matchDimensions(canvas, displaySize);
+
             setInterval(async () => {
                 //faceapi.matchDimensions(canvasRef.current, displaySize);
         
                 if (!modelIsLoaded) return;
                 const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks()
         
-                const resizedDetections = faceapi.resizeResults(detections, displaySize);
+                //const resizedDetections = faceapi.resizeResults(detections, displaySize);
         
-                canvas.getContext('2d')?.clearRect(0, 0, videoWidth, videoHeight);
+                //canvas.getContext('2d')?.clearRect(0, 0, videoWidth, videoHeight);
                 //faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
-                faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
+                //faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
             
                 if (detections.length === 0) {
                     hasMoved = false;
@@ -127,6 +142,7 @@ export default function Canvas ( props: any ) {
     return (
         <>
             <Flex 
+            ref={parentRef}
             justifyContent={'center'}
             w={'full'}
             h={'full'}

@@ -83,7 +83,7 @@ export default function Home() {
 
                 const game: Game = {
                     code: data.processedCode as string,
-                    players: data.players as Player[],
+                    players: data.players as { [key: string]: Player },
                     host_id: data.host_id as string,
                     client_id: socket.id as string,
                     status: data.room_status as string,
@@ -126,7 +126,7 @@ export default function Home() {
                 
                 const game: Game = {
                     code: data.processedCode as string,
-                    players: data.players as Player[],
+                    players: data.players as { [key: string]: Player },
                     host_id: data.host_id as string,
                     client_id: socket.id as string,
                     status: data.room_status as string,

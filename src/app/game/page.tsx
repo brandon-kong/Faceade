@@ -28,9 +28,6 @@ export default function GameView () {
         if (game === null) {
             return router.push('/');
         }
-        else {
-            console.log(game);
-        }
     });
 
     return (
