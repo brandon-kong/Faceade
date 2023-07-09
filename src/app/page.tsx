@@ -20,6 +20,8 @@ import {
     Avatar,
     Icon,
 } from '@chakra-ui/react';
+
+import Socket from '@/client/Socket';
 import Canvas from '@/components/Canvas';
 import Input from '@/components/Input';
 import Canvas3D from '@/components/3D/Canvas';
@@ -90,6 +92,7 @@ export default function Home() {
                     private: data.isPrivate as boolean,
                     settings: data.settings as any,
                     words: [],
+                    round: data.round,
 
                     playerData: {
                         id: socket.id,
@@ -101,7 +104,8 @@ export default function Home() {
                     }
                 }
 
-                socketData.setGame(game);
+                Socket.game = game;
+                //socketData.setGame(game);
 
                 router.push(`/game`);
             }
@@ -133,6 +137,7 @@ export default function Home() {
                     private: data.isPrivate as boolean,
                     settings: data.settings as any,
                     words: [],
+                    round: data.round,
 
                     playerData: {
                         id: socket.id,
@@ -144,7 +149,8 @@ export default function Home() {
                     }
                 }
 
-                socketData.setGame(game);
+                Socket.game = game;
+                //socketData.setGame(game);
 
                 router.push(`/game`);
             }

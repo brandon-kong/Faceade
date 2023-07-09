@@ -1,6 +1,7 @@
 import { Player } from '@/types/Server'
 import { useContext } from 'react'
 import { SocketContext } from '@/client/SocketProvider'
+import Socket from '@/client/Socket'
 
 import {
     Flex,
@@ -13,7 +14,8 @@ type PlayerListProps = {
 }
 
 export default function PlayerList ({ players }: PlayerListProps) {
-    const { socket, game } = useContext(SocketContext);
+    //const { socket, game } = useContext(SocketContext);
+    const game = Socket.game;
     if (!game) return (<></>);
     if (!players) return (<></>);
 

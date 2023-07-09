@@ -1,5 +1,6 @@
 'use client';
 
+import Socket from '@/client/Socket';
 import { useRouter } from 'next/navigation';
 import { useContext, useEffect } from 'react';
 import { SocketContext } from '@/client/SocketProvider';
@@ -21,11 +22,14 @@ export default function GameView () {
     const router = useRouter();
 
     const socketData = useContext(SocketContext);
-    const game = socketData.game;
+    const game = Socket.game;
+    const players = game?.players;
+
+    console.log(players);
 
 
     useEffect(() => {
-        if (game === null) {
+        if (game === undefined) {
             return router.push('/');
         }
     });
@@ -54,7 +58,7 @@ export default function GameView () {
             w='full'
             h='full'
             >
-                <PlayerList players={game?.players} />
+                <PlayerList players={players} />
             </GridItem>
             
             <GridItem

@@ -7,14 +7,15 @@ export type Player = {
 }
 
 export type Game = {
-    code: string,
-    host_id: string,
+    code: string | null,
+    host_id: string | null,
     players: { [key: string]: Player },
     status: string,
-    client_id: string,
+    client_id: string | null,
     private: boolean,
+    round: number,
     settings: {
-        rounds: number,
+        rounds?: number,
     },
     words: string[],
     playerData?: Player
@@ -30,4 +31,5 @@ export type CreateGameCallbackType = {
     isPrivate: boolean,
     settings: any,
     message?: string,
+    round: number,
 }
