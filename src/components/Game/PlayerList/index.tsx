@@ -9,7 +9,7 @@ import {
 import PlayerCard from '../PlayerCard'
 
 type PlayerListProps = {
-    players: Player[]
+    players: Player[] | undefined
 }
 
 export default function PlayerList ({ players }: PlayerListProps) {
