@@ -76,7 +76,7 @@ export default function Home() {
 
     function createRoom () {
         setLoading(true);
-        const socket = socketData.socket;
+        const socket = Socket.io;
 
         socket?.emit('create-room', 
             name,
@@ -108,7 +108,7 @@ export default function Home() {
                         videoOn: false,
 
                     }
-                }
+                } as Game
 
                 //socketData.setGame(game);
 
@@ -120,7 +120,7 @@ export default function Home() {
 
     function joinGame () {
         setLoading(true);
-        const socket = socketData.socket;
+        const socket = Socket.io;
 
         socket?.emit('join-game', 
             name,
@@ -160,7 +160,11 @@ export default function Home() {
             }
         )
     }
-        
+
+    useEffect(() => {
+        const socket = io(process.env.NEXT_PUBLIC_SERVER_URL as string);
+        Socket.io = socket;
+    })
 
     return (
         <Container
