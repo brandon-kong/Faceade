@@ -16,14 +16,15 @@ import { PrimaryButton } from '@/components/Button';
 import PlayerList from '@/components/Game/PlayerList';
 import GameInfo from '@/components/Game/GameInfo';
 import Canvas from '@/components/Canvas';
+import { Player } from '@/types/Server';
 
 export default function GameView () {
     const router = useRouter();
 
-    const game = Socket.game;
+    const game = Socket.Game;
     const players = game?.players;
 
-    console.log(game);
+    console.log(Socket);
 
     return (
         <Grid
@@ -49,7 +50,7 @@ export default function GameView () {
             w='full'
             h='full'
             >
-                <PlayerList players={players} />
+                <PlayerList players={players as unknown as { [key: string ]: Player}} />
             </GridItem>
             
             <GridItem

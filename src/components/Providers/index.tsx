@@ -9,9 +9,7 @@ export default function Providers ({ children }: any) {
     return (
         <CacheProvider>
             <ChakraProvider theme={Theme}>
-                <SocketProvider>
-                    {children}
-                </SocketProvider>
+                {children}
             </ChakraProvider>
         </CacheProvider>
     )

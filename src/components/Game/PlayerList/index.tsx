@@ -12,11 +12,11 @@ type PlayerListProps = {
 }
 
 export default function PlayerList ({ players }: PlayerListProps) {
-    const game = Socket.game;
+    const game = Socket.Game;
     
     if (!players) return (<></>);
 
-    const player = players[game?.client_id as string];
+    const player = players[game?.client_id as unknown as string];
     
     return (
         <Flex

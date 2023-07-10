@@ -89,7 +89,7 @@ export default function Home() {
                     return alert(data.message);
                 }
 
-                Socket.game = {
+                Socket.Game = {
                     code: data.processedCode as string,
                     players: data.players as { [key: string]: Player },
                     host_id: data.host_id as string,
@@ -133,7 +133,7 @@ export default function Home() {
                     return alert(data.message);
                 }
                 
-                Socket.game = {
+                Socket.Game = {
                     code: data.processedCode as string,
                     players: data.players as { [key: string]: Player },
                     host_id: data.host_id as string,
