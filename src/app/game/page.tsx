@@ -23,15 +23,6 @@ export default function GameView () {
     const game = Socket.game;
     const players = game?.players;
 
-    useEffect(() => {
-
-        console.log(game);
-        
-        if (game === undefined) {
-            return router.push('/');
-        }
-    });
-
     return (
         <Grid
         w={'100%'}

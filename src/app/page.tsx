@@ -5,6 +5,7 @@ import { SocketContext } from '@/client/SocketProvider';
 import { PrimaryButton, ButtonWithoutScaling } from '@/components/Button';
 
 import { io } from 'socket.io-client'
+import Router from 'next/router';
 import { useEffect } from 'react'
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
