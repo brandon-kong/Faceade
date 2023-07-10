@@ -2,8 +2,7 @@
 
 import Socket from '@/client/Socket';
 import { useRouter } from 'next/navigation';
-import { useContext, useEffect } from 'react';
-import { SocketContext } from '@/client/SocketProvider';
+import { useEffect } from 'react';
 
 import {
     Box,
@@ -21,14 +20,13 @@ import Canvas from '@/components/Canvas';
 export default function GameView () {
     const router = useRouter();
 
-    const socketData = useContext(SocketContext);
     const game = Socket.game;
     const players = game?.players;
 
-    console.log(players);
-
-
     useEffect(() => {
+
+        console.log(game);
+        
         if (game === undefined) {
             return router.push('/');
         }

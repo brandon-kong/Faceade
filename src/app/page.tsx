@@ -81,9 +81,14 @@ export default function Home() {
             name,
             image,
             (data: CreateGameCallbackType) => {
-                setLoading(false);
+                //setLoading(false);
 
-                const game: Game = {
+                if ( data.success === false ) {
+                    setLoading(false);
+                    return alert(data.message);
+                }
+
+                Socket.game = {
                     code: data.processedCode as string,
                     players: data.players as { [key: string]: Player },
                     host_id: data.host_id as string,
@@ -104,7 +109,6 @@ export default function Home() {
                     }
                 }
 
-                Socket.game = game;
                 //socketData.setGame(game);
 
                 router.push(`/game`);
@@ -122,13 +126,13 @@ export default function Home() {
             room,
             image,
             (data: CreateGameCallbackType) => {
+
                 if ( data.success === false ) {
                     setLoading(false);
                     return alert(data.message);
                 }
-
                 
-                const game: Game = {
+                Socket.game = {
                     code: data.processedCode as string,
                     players: data.players as { [key: string]: Player },
                     host_id: data.host_id as string,
@@ -149,7 +153,6 @@ export default function Home() {
                     }
                 }
 
-                Socket.game = game;
                 //socketData.setGame(game);
 
                 router.push(`/game`);
