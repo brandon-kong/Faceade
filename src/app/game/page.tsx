@@ -23,6 +23,8 @@ export default function GameView () {
     const game = Socket.game;
     const players = game?.players;
 
+    console.log(game);
+
     return (
         <Grid
         w={'100%'}

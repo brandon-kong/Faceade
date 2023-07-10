@@ -13,6 +13,7 @@ type PlayerListProps = {
 
 export default function PlayerList ({ players }: PlayerListProps) {
     const game = Socket.game;
+    
     if (!players) return (<></>);
 
     const player = players[game?.client_id as string];
