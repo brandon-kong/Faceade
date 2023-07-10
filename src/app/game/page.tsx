@@ -24,7 +24,7 @@ export default function GameView () {
     const game = Socket.Game;
     const players = game?.players;
 
-    console.log(Socket);
+    console.log(Socket.Game);
 
     return (
         <Grid
