@@ -16,7 +16,6 @@ type PlayerListProps = {
 export default function PlayerList ({ players }: PlayerListProps) {
     //const { socket, game } = useContext(SocketContext);
     const game = Socket.game;
-    if (!game) return (<></>);
     if (!players) return (<></>);
 
     const player = players[game?.client_id as string];
