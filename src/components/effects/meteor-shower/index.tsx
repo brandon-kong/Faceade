@@ -26,7 +26,7 @@ export default function MeteorShower({ active = true }: { active?: boolean }) {
                         alt={`Meteor ${i}`}
                         width={100}
                         height={100}
-                        className={'opacity-30'}
+                        className={'opacity-20'}
                     />
                 </div>
             ))}

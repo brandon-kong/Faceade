@@ -27,8 +27,8 @@ export default function JoinCard() {
             className={'bg-white rounded-lg shadow-md px-8 py-12 relative border border-neutral-200 w-full max-w-md'}
         >
             {/* Tape */}
-            <Tape className={'absolute -left-4 -top-7 z-0 rotate-12'} />
-            <Tape className={'absolute -right-7 -bottom-5 z-0 -rotate-12'} />
+            <Tape className={'absolute -left-6 -top-0 z-0 -rotate-45'} />
+            <Tape className={'absolute -right-7 -bottom-0 z-0 -rotate-[225deg]'} />
 
             <div className={'flex flex-col gap-6'}>
                 <div className={'space-y-2'}>
