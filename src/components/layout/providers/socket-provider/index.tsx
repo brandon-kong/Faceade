@@ -12,9 +12,8 @@ type SocketContextType = {
     isInRoom: boolean;
 
     // Methods
-    connectSocket: () => Promise<Socket | undefined>
+    connectSocket: () => Promise<Socket | undefined>;
     connectToSocket: (roomId: string) => void;
-    
 };
 
 const SocketContext = createContext<SocketContextType>({
@@ -37,10 +36,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }: Sock
     // Only connect to the socket if we're on the client and they create/join a room
 
     const connectSocket = (): Promise<Socket | undefined> => {
-
         return new Promise<Socket | undefined>((resolve, reject) => {
-
-        
             if (typeof window === 'undefined') return;
 
             if (socket) {
@@ -50,7 +46,6 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }: Sock
 
             const newSocket = io(process.env.NEXT_PUBLIC_SOCKET_SERVER_URL as string);
 
-            
             newSocket.on('connect_error', () => {
                 setError('Failed to connect to socket. Retrying...');
 
@@ -64,29 +59,26 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }: Sock
                     if (attempts > 10) {
                         clearInterval(interval);
                         setError('Failed to connect to socket. Please refresh the page.');
-                        
+
                         reject('Failed to connect to socket. Please refresh the page.');
                         return;
                     }
 
                     newSocket.connect();
-                }, 5000);         
+                }, 5000);
             });
 
             setSocket(newSocket);
             registerEvents(newSocket);
             resolve(newSocket);
-
         });
     };
 
     const connectToSocket = (roomId: string) => {
         if (typeof window === 'undefined') return;
 
-        
-
         setSocket(socket);
-    }
+    };
 
     // Disconnect from the socket when the user leaves the page to prevent memory leaks
 
@@ -95,17 +87,19 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }: Sock
             if (socket) {
                 socket.disconnect();
             }
-        }
+        };
     }, [socket]);
 
     return (
-        <SocketContext.Provider value={{ 
-            socket, 
-            error, 
-            isInRoom,
-            connectToSocket,
-            connectSocket
-        }}>
+        <SocketContext.Provider
+            value={{
+                socket,
+                error,
+                isInRoom,
+                connectToSocket,
+                connectSocket,
+            }}
+        >
             {children}
         </SocketContext.Provider>
     );

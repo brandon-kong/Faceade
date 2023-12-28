@@ -6,6 +6,8 @@ import { createServer } from "http";
 import { Server as SocketServer } from "socket.io";
 
 import dotenv from "dotenv";
+import { handleGameCreate } from "./socket-handlers/game";
+import { handleSocketDisconnect } from "./socket-handlers";
 
 // Load environment variables
 
@@ -35,9 +37,12 @@ app.get("/", (req, res) => {
 
 io.on("connection", (socket) => {
     console.log(`a user connected from ${socket.handshake.address} `);
-    socket.on("disconnect", () => {
-        console.log("user disconnected");
-    });
+
+    // Game events
+    handleGameCreate(socket);
+
+    // Socket events
+    handleSocketDisconnect(socket);
 });
 
 server.listen(port, () => {

@@ -1,4 +1,4 @@
-import { getRandomValues } from "crypto";
+import { getRandomValues } from 'crypto';
 
 function getRandomIntInclusive(min: number, max: number): number {
     const randomBuffer = new Uint32Array(1);
@@ -16,9 +16,9 @@ function generateGameCode(length: number): string {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let result = '';
     for (let i = 0; i < length; i++) {
-      result += characters.charAt(getRandomIntInclusive(0, characters.length - 1));
+        result += characters.charAt(getRandomIntInclusive(0, characters.length - 1));
     }
     return result;
 }
 
-export { generateGameCode }
+export { generateGameCode };
