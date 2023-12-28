@@ -1,0 +1,18 @@
+{
+    "round": {
+        "max": 10,
+        "min": 1
+    },
+
+    "player": {
+        "max": "inf",
+        "min": 1
+    },
+
+    "time": {},
+
+    "score": {
+        "max": "inf",
+        "min": 0
+    }
+}
