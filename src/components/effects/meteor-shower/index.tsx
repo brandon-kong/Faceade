@@ -18,7 +18,7 @@ export default function MeteorShower({ active = true }: { active?: boolean }) {
     if (!active) return null;
 
     return (
-        <div className="absolute w-full h-full overflow-hidden -z-10">
+        <div className="absolute w-full h-full overflow-hidden -z-10 select-none">
             {meteors.map((style, i) => (
                 <div key={i} className="absolute w-10 h-10 bg-transparent transform meteor" style={style}>
                     <Image

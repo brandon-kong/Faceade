@@ -41,89 +41,252 @@
     },
 
     "subjects": {
-        "A": "Aardvark",
-        "B": "Baboon",
-        "C": "Cat",
-        "D": "Dog",
-        "E": "Elephant",
-        "F": "Frog",
-        "G": "Giraffe",
-        "H": "Hippo",
-        "I": "Iguana",
-        "J": "Jaguar",
-        "K": "Kangaroo",
-        "L": "Lion",
-        "M": "Monkey",
-        "N": "Newt",
-        "O": "Owl",
-        "P": "Penguin",
-        "Q": "Quail",
-        "R": "Rabbit",
-        "S": "Snake",
-        "T": "Tiger",
-        "U": "Urchin",
-        "V": "Vulture",
-        "W": "Walrus",
-        "X": "X-Ray Fish",
-        "Y": "Yak",
-        "Z": "Zebra"
+        "A": {
+            "singular": "Aardvark",
+            "plural": "Aardvarks"
+        },
+        "B": {
+            "singular": "Baboon",
+            "plural": "Baboons"
+        },
+        "C": {
+            "singular": "Cat",
+            "plural": "Cats"
+        },
+        "D": {
+            "singular": "Dog",
+            "plural": "Dogs"
+        },
+        "E": {
+            "singular": "Elephant",
+            "plural": "Elephants"
+        },
+
+        "F": {
+            "singular": "Frog",
+            "plural": "Frogs"
+        },
+        "G": {
+            "singular": "Giraffe",
+            "plural": "Giraffes"
+        },
+        "H": {
+            "singular": "Hippo",
+            "plural": "Hippos"
+        },
+        "I": {
+            "singular": "Iguana",
+            "plural": "Iguanas"
+        },
+        "J": {
+            "singular": "Jaguar",
+            "plural": "Jaguars"
+        },
+        "K": {
+            "singular": "Kangaroo",
+            "plural": "Kangaroos"
+        },
+        "L": {
+            "singular": "Lion",
+            "plural": "Lions"
+        },
+        "M": {
+            "singular": "Monkey",
+            "plural": "Monkeys"
+        },
+        "N": {
+            "singular": "Newt",
+            "plural": "Newts"
+        },
+        "O": {
+            "singular": "Owl",
+            "plural": "Owls"
+        },
+        "P": {
+            "singular": "Penguin",
+            "plural": "Penguins"
+        },
+        "Q": {
+            "singular": "Quail",
+            "plural": "Quails"
+        },
+
+        "R": {
+            "singular": "Rabbit",
+            "plural": "Rabbits"
+        },
+        "S": {
+            "singular": "Snake",
+            "plural": "Snakes"
+        },
+        "T": {
+            "singular": "Tiger",
+            "plural": "Tigers"
+        },
+        "U": {
+            "singular": "Urchin",
+            "plural": "Urchins"
+        },
+        "V": {
+            "singular": "Vulture",
+            "plural": "Vultures"
+        },
+        "W": {
+            "singular": "Walrus",
+            "plural": "Walruses"
+        },
+        "X": {
+            "singular": "X-Ray Fish",
+            "plural": "X-Ray Fish"
+        },
+        "Y": {
+            "singular": "Yak",
+            "plural": "Yaks"
+        },
+        "Z": {
+            "singular": "Zebra",
+            "plural": "Zebras"
+        }
     },
 
     "verbs": {
-        "A": "Admire",
-        "B": "Befriend",
-        "C": "Cuddle",
-        "D": "Dance with",
-        "E": "Eat",
-        "F": "Feed",
-        "G": "Gaze at",
-        "H": "Hug",
-        "I": "Invite",
-        "J": "Juggle",
-        "K": "Kiss",
-        "L": "Love",
-        "M": "Marry",
-        "N": "Nuzzle",
-        "O": "Observe",
-        "P": "Pet",
-        "Q": "Quarrel with",
-        "R": "Ride",
-        "S": "Snuggle with",
-        "T": "Tickle",
-        "U": "Unite with",
-        "V": "Visit",
-        "W": "Woo",
-        "X": "X-Ray",
-        "Y": "Yell at",
-        "Z": "Zap"
+        "A": {
+            "singular": "Admires",
+            "plural": "Admire"
+        },
+        "B": {
+            "singular": "Bakes",
+            "plural": "Bake"
+        },
+        "C": {
+            "singular": "Cleans",
+            "plural": "Clean"
+        },
+        "D": {
+            "singular": "Dances with",
+            "plural": "Dance with"
+        },
+        "E": {
+            "singular": "Eats",
+            "plural": "Eat"
+        },
+
+        "F": {
+            "singular": "Finds",
+            "plural": "Find"
+        },
+        "G": {
+            "singular": "Goes to",
+            "plural": "Go to"
+        },
+        "H": {
+            "singular": "Hugs",
+            "plural": "Hug"
+        },
+        "I": {
+            "singular": "Invites",
+            "plural": "Invite"
+        },
+        "J": {
+            "singular": "Jumps with",
+            "plural": "Jump with"
+        },
+        "K": {
+            "singular": "Kisses",
+            "plural": "Kiss"
+        },
+        "L": {
+            "singular": "Loves",
+            "plural": "Love"
+        },
+        "M": {
+            "singular": "Makes",
+            "plural": "Make"
+        },
+        "N": {
+            "singular": "Naps with",
+            "plural": "Nap with"
+        },
+        "O": {
+            "singular": "Opens",
+            "plural": "Open"
+        },
+        "P": {
+            "singular": "Plays with",
+            "plural": "Play with"
+        },
+        "Q": {
+            "singular": "Quarrels with",
+            "plural": "Quarrel with"
+        },
+
+        "R": {
+            "singular": "Reads to",
+            "plural": "Read to"
+        },
+        "S": {
+            "singular": "Sings to",
+            "plural": "Sing to"
+        },
+        "T": {
+            "singular": "Talks to",
+            "plural": "Talk to"
+        },
+        "U": {
+            "singular": "Uses",
+            "plural": "Use"
+        },
+        "V": {
+            "singular": "Visits",
+            "plural": "Visit"
+        },
+        "W": {
+            "singular": "Watches",
+            "plural": "Watch"
+        },
+
+        "X": {
+            "singular": "X-Rays",
+            "plural": "X-Ray"
+        },
+        "Y": {
+            "singular": "Yells at",
+            "plural": "Yell at"
+        },
+        "Z": {
+            "singular": "Zaps",
+            "plural": "Zap"
+        }
+
     },
 
     "subject_two": {
-        "A": "Aardvark",
-        "B": "Baboon",
-        "C": "Cat",
-        "D": "Dog",
-        "E": "Elephant",
-        "F": "Frog",
-        "G": "Giraffe",
-        "H": "Hippo",
-        "I": "Iguana",
-        "J": "Jaguar",
-        "K": "Kangaroo",
-        "L": "Lion",
-        "M": "Monkey",
-        "N": "Newt",
-        "O": "Owl",
-        "P": "Penguin",
-        "Q": "Quail",
-        "R": "Rabbit",
-        "S": "Snake",
-        "T": "Tiger",
-        "U": "Urchin",
-        "V": "Vulture",
-        "W": "Walrus",
+        "A": "Aardvarks",
+        "B": "Baboons",
+        "C": "Cats",
+        "D": "Dogs",
+        "E": "Elephants",
+        "F": "Frogs",
+        "G": "Giraffes",
+        "H": "Hippos",
+        "I": "Iguanas",
+        "J": "Jaguars",
+        "K": "Kangaroos",
+        "L": "Lions",
+        "M": "Monkeys",
+        "N": "Newts",
+        "O": "Owls",
+        "P": "Penguins",
+        "Q": "Quails",
+        "R": "Rabbits",
+        "S": "Snakes",
+        "T": "Tigers",
+        "U": "Urchins",
+        "V": "Vultures",
+        "W": "Walruses",
         "X": "X-Ray Fish",
-        "Y": "Yak",
-        "Z": "Zebra"
+        "Y": "Yaks",
+        "Z": "Zebras"
+
     }
 }
