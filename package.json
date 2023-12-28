@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write ./src/**/*.{ts,tsx,json,css}",
-    "format-check": "prettier --check ./src/**/*.{ts,tsx,json,css}"
+    "format": "prettier --write \"./src/**/*.{ts,tsx,css}\"",
+    "format-check": "prettier --check  \"./src/**/*.{ts,tsx,css}\""
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.0.2",
