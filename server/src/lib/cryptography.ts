@@ -58,12 +58,13 @@ const getPhraseFromCode = (code: string) => {
     phrase.push(adjective);
 
     if (num !== '1') {
-        subject += 's';
+        phrase.push(subject.plural)
+    }
+    else {
+        phrase.push(subject.singular)
     }
 
-    phrase.push(subject);
-
-    if (verb) {
+    if (num !== '1') {
         phrase.push(verb);
     }
 
