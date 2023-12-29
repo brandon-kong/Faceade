@@ -65,10 +65,13 @@ const getPhraseFromCode = (code: string) => {
     }
 
     if (num !== '1') {
-        phrase.push(verb);
+        phrase.push(verb.plural);
     }
+    else {
+        phrase.push(verb.singular);
+    }
+    
 
-    subject_two_ += 's';
     phrase.push(subject_two_);
 
     return phrase.join(' ');
