@@ -101,3 +101,8 @@
         transform: translate(50vw, 50vh) rotate(315deg);
     }
 }
+
+.paper-torn {
+   background-image: url("../../public/images/torn-paper.png");
+  }
+

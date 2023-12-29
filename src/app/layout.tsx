@@ -7,6 +7,8 @@ import Brand from '@/components/layout/navigation/brand';
 
 import { cn } from '@/lib/utils';
 import Footer from '@/components/layout/navigation/footer';
+import GalleryProvider from '@/components/layout/providers/gallery-provider';
+import LoadProvider from '@/components/layout/providers/load-provider';
 
 const bubblegum_sans = Bubblegum_Sans({
     weight: ['400'],
@@ -35,12 +37,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en">
             <body className={cn(`${bubblegum_sans.variable} ${poppins.variable} font-mono`)}>
-                <SocketProvider>
-                    <Brand />
-                    {children}
+               <LoadProvider>
+                    <SocketProvider>
+                        <GalleryProvider>
+                            
+                            <Brand />
+                            {children}
+                            <Footer />
+                            
 
-                    <Footer />
-                </SocketProvider>
+                        </GalleryProvider>
+                    </SocketProvider>
+                </LoadProvider>
             </body>
         </html>
     );

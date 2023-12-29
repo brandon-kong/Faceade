@@ -6,6 +6,13 @@ import { Player } from "../game/players";
 
 export const handleGameCreate = (socket: Socket, db: Db) => {
     socket.on("create-game", () => {
+
+        // If the player is already in a game, don't let them create a new one
+
+        if (socket.rooms.size > 1) {
+            return;
+        }
+
         console.log(`Creating game for ${socket.id}`);
 
         const game_id = generateGameId();
@@ -34,7 +41,17 @@ export const handleGameCreate = (socket: Socket, db: Db) => {
             game_id: game_id,
             game_code,
             players: [host_data],
-            started: false,
+            state: {
+                started: false,
+                view: 'lobby',
+                isEditing: true,
+            },
+            settings: {
+                custom_words: [],
+                time_limit: 60,
+                rounds: 6,
+                max_players: 10,
+            },
             host: host_data,
         });
 

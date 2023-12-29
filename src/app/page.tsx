@@ -1,5 +1,6 @@
 import MeteorShower from '@/components/effects/meteor-shower';
 import LandingSection from '@/components/layout/landing';
+import HowToPlaySection from '@/components/layout/landing/how-to-play';
 import JoinCard from '@/components/layout/landing/join-card';
 import Image from 'next/image';
 
@@ -12,6 +13,7 @@ export default function Home() {
         >
             <MeteorShower />
             <LandingSection />
+            <HowToPlaySection />
         </main>
     );
 }
