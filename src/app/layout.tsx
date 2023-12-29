@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import Footer from '@/components/layout/navigation/footer';
 import GalleryProvider from '@/components/layout/providers/gallery-provider';
 import LoadProvider from '@/components/layout/providers/load-provider';
+import GameHUD from '@/components/layout/navigation/game';
 
 const bubblegum_sans = Bubblegum_Sans({
     weight: ['400'],
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         <GalleryProvider>
                             
                             <Brand />
+                            <GameHUD />
                             {children}
                             <Footer />
                             

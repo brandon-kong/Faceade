@@ -1,8 +1,6 @@
 import MeteorShower from '@/components/effects/meteor-shower';
 import LandingSection from '@/components/layout/landing';
 import HowToPlaySection from '@/components/layout/landing/how-to-play';
-import JoinCard from '@/components/layout/landing/join-card';
-import Image from 'next/image';
 
 export default function Home() {
     return (
@@ -11,9 +9,14 @@ export default function Home() {
                 'min-h-screen relative pattern-paper pattern-blue-100 pattern-bg-transparent pattern-size-20 pattern-opacity-100'
             }
         >
+            
+                
             <MeteorShower />
             <LandingSection />
             <HowToPlaySection />
+                
+            
+            
         </main>
     );
 }
