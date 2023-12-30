@@ -5,6 +5,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 
 import type { Socket } from 'socket.io-client';
+import { useLoading } from '../load-provider/context';
 
 type SocketContextType = {
     socket?: Socket;
@@ -32,7 +33,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }: Sock
     const [error, setError] = useState<string | undefined>(undefined);
     const [socket, setSocket] = useState<Socket | undefined>(undefined);
     const [isInRoom, setIsInRoom] = useState<boolean>(false);
-
+    
     // Only connect to the socket if we're on the client and they create/join a room
 
     const connectSocket = (): Promise<Socket | undefined> => {
@@ -44,7 +45,12 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }: Sock
                 return;
             }
 
-            const newSocket = io(process.env.NEXT_PUBLIC_SOCKET_SERVER_URL as string);
+            const newSocket = io(process.env.NEXT_PUBLIC_SOCKET_SERVER_URL as string, {
+                forceNew: true,
+                reconnection: true,
+                reconnectionDelay: 5000,
+                reconnectionAttempts: 10,
+            });
 
             newSocket.on('connect_error', () => {
                 setError('Failed to connect to socket. Retrying...');

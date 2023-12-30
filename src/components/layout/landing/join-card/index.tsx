@@ -9,18 +9,24 @@ import { Button } from '@/components/ui/button';
 import { useSocket } from '@/components/layout/providers/socket-provider';
 import { createGame } from '@/lib/room/socket';
 
+import { useLoading } from '../../providers/load-provider/context';
+
 export default function JoinCard() {
     const { connectSocket } = useSocket();
+    const { setLoading } = useLoading();
 
     const handleCreateGame = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        setLoading(true);
 
         const socket = await connectSocket();
 
         if (!socket) return;
 
         createGame(socket);
-    };
+
+};
 
     return (
         <section
