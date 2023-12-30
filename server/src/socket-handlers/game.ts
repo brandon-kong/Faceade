@@ -4,6 +4,8 @@ import { generateGameCode, generateGameId, getPhraseFromCode } from "../lib/cryp
 import { type Db } from "mongodb";
 import { Player } from "../game/players";
 
+import Debug from "../lib/debug";
+
 export const handleGameCreate = (socket: Socket, db: Db) => {
     socket.on("create-game", () => {
 
@@ -13,7 +15,7 @@ export const handleGameCreate = (socket: Socket, db: Db) => {
             return;
         }
 
-        console.log(`Creating game for ${socket.id}`);
+        Debug.log(`Creating game for ${socket.id}`);
 
         const game_id = generateGameId();
 
@@ -23,8 +25,8 @@ export const handleGameCreate = (socket: Socket, db: Db) => {
 
         const phrase = getPhraseFromCode(game_code);
 
-        console.log(`Game code: ${game_code}`);
-        console.log(`Game code phrase: ${phrase}`);
+        Debug.log(`Game code: ${game_code}`);
+        Debug.log(`Game code phrase: ${phrase}`);
 
         socket.join(game_id);
 

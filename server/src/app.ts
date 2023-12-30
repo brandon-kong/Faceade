@@ -9,11 +9,11 @@ import dotenv from "dotenv";
 import { handleGameCreate } from "./socket-handlers/game";
 import { handleSocketDisconnect } from "./socket-handlers";
 
+import Debug from "./lib/debug";
+
 // MongoDB
 
 import connect, { getDatabase } from "./lib/db";
-
-let database;
 
 // Load environment variables
 
@@ -44,6 +44,7 @@ connect().then(() => {
 });
 
 
+const address = process.env.SERVER_ADDRESS || "http://localhost";
 const port: number = Number(process.env.PORT) || 4000;
 
 app.get("/", (req, res) => {
@@ -52,7 +53,7 @@ app.get("/", (req, res) => {
 
 io.on("connection", (socket) => {
 
-    console.log(`a user connected from ${socket.handshake.address} `);
+    Debug.log(`a user connected from ${socket.handshake.address} `);
     const db = getDatabase();
 
     // Game events
@@ -63,5 +64,5 @@ io.on("connection", (socket) => {
 });
 
 server.listen(port, () => {
-    console.log(`Server started at http://localhost:${port}`);
+    console.log(`Server started at ${address}:${port}`);
 });
