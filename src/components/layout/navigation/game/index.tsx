@@ -14,14 +14,14 @@ const items = [
         icon: '/icons/players.svg',
     },
     {
-        name: 'Terms',
+        name: 'Leaderboard',
         href: '/terms',
-        icon: '/icons/house.svg',
+        icon: '/icons/leaderboard.svg',
     },
     {
-        name: 'Credits',
-        href: '/credits',
-        icon: '/icons/house.svg',
+        name: 'Settings',
+        href: '/terms',
+        icon: '/icons/settings.svg',
     }
 ]
 export default function GameHUD ()

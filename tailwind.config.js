@@ -39,9 +39,6 @@ module.exports = {
       },
     },
     extend: {
-      animation: {
-        bounce: 'bounce 1s infinite',
-      },
       backgroundImage: {
         'tape': "url('/images/tape-cross.png')",
       },
@@ -115,7 +112,7 @@ module.exports = {
         },
         bounce: {
           '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-10px)' },
+          '50%': { transform: 'translateY(-20px)' },
         },
       },
       animation: {
