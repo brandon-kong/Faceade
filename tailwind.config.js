@@ -93,8 +93,21 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
     },
+    maxWidth: {
+      "canvas": "var(--canvas-width)",
+    },
+    maxHeight: {
+      "canvas": "var(--canvas-height)",
+    },
+    width: {
+      "hud-inset": "var(--hud-inset)",
+    },
+    height: {
+      "hud-inset": "var(--hud-inset)",
+    },
     spacing: {
       "hud-screen-spacing": "var(--hud-screen-spacing)",
+      "game-padding": "var(--game-padding)",
     },
     borderRadius: {
       lg: "var(--radius)",

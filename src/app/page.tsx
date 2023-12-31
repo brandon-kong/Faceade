@@ -1,4 +1,5 @@
 import MeteorShower from '@/components/effects/meteor-shower';
+import GameView from '@/components/layout/game';
 import LandingSection from '@/components/layout/landing';
 import HowToPlaySection from '@/components/layout/landing/how-to-play';
 
@@ -10,11 +11,19 @@ export default function Home() {
             }
         >
             
+            {
+                /*
+                <>
                 
-            <MeteorShower />
-            <LandingSection />
-            <HowToPlaySection />
+                <MeteorShower />
+                <LandingSection />
+                <HowToPlaySection />
                 
+                </>
+                */
+            }
+            
+              <GameView />  
             
             
         </main>

@@ -27,12 +27,12 @@ const items = [
 export default function GameHUD ()
 {
     return (
-        <nav className={'fixed w-fit z-50 p-hud-screen-spacing inset-x-0 transform top-1/2 -translate-y-1/2'}>
-            <div className={'bg-white rounded-lg shadow-md p-4 border-2 border-neutral-100 w-fit'}>
+        <nav className={'w-full h-hud-inset'}>
+            <div className={'bg-white rounded-r-lg shadow-md p-4 border-2 border-neutral-100'}>
                 <TooltipProvider>
 
                 
-                    <ul className={'space-y-8 flex flex-col items-center'}>
+                    <ul className={'justify-around flex items-center'}>
                         {
                             items.map((item, index) => (
                                 <li
@@ -50,7 +50,7 @@ export default function GameHUD ()
                                         </Link>
                                     </TooltipTrigger>
                                     <TooltipContent
-                                    side={'right'}
+                                    side={'bottom'}
                                     sideOffset={10}
                                     >
                                         <p>
