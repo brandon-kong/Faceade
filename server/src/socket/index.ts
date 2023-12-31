@@ -19,11 +19,10 @@ export const handleSocketDisconnect = (socket: Socket, db: Db) => {
                     socket_id: socket.id,
                 },
             },
+        }).then(() => {
+             // Remove player from any games they were hosting, and replace them with a new host
+            removeInactiveGames(db);
         });
-
-        // Remove player from any games they were hosting, and replace them with a new host
-
-        removeInactiveGames(db);
         
     });
 }
