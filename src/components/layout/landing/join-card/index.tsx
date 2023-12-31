@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import Tape from '@/components/tape';
 import { Input } from '@/components/ui/input';
 
@@ -7,13 +9,15 @@ import { TypographyH1, TypographyP } from '@/components/typography';
 import { Button } from '@/components/ui/button';
 
 import { useSocket } from '@/components/layout/providers/socket-provider';
-import { createGame } from '@/lib/room/socket';
+import { createGame, joinGame } from '@/lib/room/socket';
 
 import { useLoading } from '../../providers/load-provider/context';
 
 export default function JoinCard() {
     const { connectSocket } = useSocket();
     const { setLoading } = useLoading();
+
+    const [code, setCode] = useState<string>('');
 
     const handleCreateGame = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -26,7 +30,20 @@ export default function JoinCard() {
 
         createGame(socket);
 
-};
+    };
+
+    const handleJoinGame = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        setLoading(true);
+
+        const socket = await connectSocket();
+
+        if (!socket) return;
+
+        joinGame(socket, code);
+
+    }
 
     return (
         <section
@@ -46,8 +63,11 @@ export default function JoinCard() {
 
                 <div>
                     <form onSubmit={e => e.preventDefault()} className={'w-full flex flex-col gap-4'}>
-                        <Input placeholder={'Enter game code'} />
-                        <Button className={''}>Join</Button>
+                        <Input placeholder={'Enter game code'} value={code} onChange={(e) => setCode(e.target.value)}/>
+                        <Button className={''}
+                        type={'submit'}
+                        onClick={handleJoinGame}
+                        >Join</Button>
 
                         <Button variant={'opaque'} onClick={handleCreateGame}>
                             Create a new game

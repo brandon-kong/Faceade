@@ -32,6 +32,9 @@ const poppins = Poppins({
 export const metadata: Metadata = {
     title: 'Faceade',
     description: 'Faceade is a game where you can play with others in a virtual drawing room, where you can draw using your body movements.',
+    icons: {
+        icon: '/icon.png'
+    }
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
