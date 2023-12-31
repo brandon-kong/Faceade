@@ -9,7 +9,7 @@ import { TypographyH1, TypographyP } from '@/components/typography';
 import { Button } from '@/components/ui/button';
 
 import { useSocket } from '@/components/layout/providers/socket-provider';
-import { createGame, joinGame } from '@/lib/room/socket';
+import { createGame, joinGame } from '@/lib/room/game';
 
 import { useLoading } from '../../providers/load-provider/context';
 
@@ -22,7 +22,7 @@ export default function JoinCard() {
     const handleCreateGame = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        setLoading(true);
+        //setLoading(true);
 
         const socket = await connectSocket();
 
@@ -35,7 +35,7 @@ export default function JoinCard() {
     const handleJoinGame = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        setLoading(true);
+        //setLoading(true);
 
         const socket = await connectSocket();
 
