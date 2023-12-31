@@ -45,8 +45,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <SocketProvider>
                         <GalleryProvider>
                             
-                            <Brand />
-                            <GameHUD />
+                            {
+                                /*
+                                <Brand />
+                                */
+
+                            }
+                            
                             {children}
                             <Footer />
                             

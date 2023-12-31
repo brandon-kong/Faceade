@@ -35,6 +35,12 @@
         --radius: 0.5rem;
 
         --hud-screen-spacing: 1.25rem;
+        --hud-inset: 6rem;
+
+        --game-padding: calc(var(--hud-inset) / 2);
+
+        --canvas-width: 40rem;
+        --canvas-height: 40rem;
     }
 
     .dark {
@@ -106,3 +112,46 @@
    background-image: url("../../public/images/torn-paper.png");
   }
 
+
+
+/* Game */
+
+.game-container {
+    @apply h-full grid gap-3;
+    grid-template-areas:
+        "logo logo logo"
+        "bar bar bar"
+        "canvas canvas chat"
+        ". toolbar .";
+
+    grid-template-columns: min-content auto auto;
+    grid-template-rows: min-content 48px min-content min-content;
+}
+
+.game-bar {
+    @apply h-full text-center relative rounded-lg shadow-md;
+
+    grid-area: bar;
+}
+
+.game-canvas {
+    @apply h-full rounded-lg shadow-md;
+
+    grid-area: canvas;
+}
+
+.game-chat {
+    @apply h-full rounded-lg;
+
+    grid-area: chat;
+}
+
+.game-toolbar {
+    @apply h-full rounded-lg shadow-md;
+
+    grid-area: toolbar;
+}
+
+#canvas {
+    image-rendering: pixelated;
+}
