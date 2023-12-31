@@ -6,6 +6,9 @@ import { io } from 'socket.io-client';
 
 import type { Socket } from 'socket.io-client';
 import { useLoading } from '../load-provider/context';
+import { useGame } from '../game-provider/context';
+
+import { Chat } from '@/types';
 
 type SocketContextType = {
     socket?: Socket;
@@ -29,10 +32,17 @@ type SocketProviderProps = {
     children?: React.ReactNode;
 };
 
+export type SocketEvents = {
+    addMessage: (message: Chat) => void;
+    setIsInRoom: (isInRoom: boolean) => void;
+};
+
 export const SocketProvider: React.FC<SocketProviderProps> = ({ children }: SocketProviderProps) => {
     const [error, setError] = useState<string | undefined>(undefined);
     const [socket, setSocket] = useState<Socket | undefined>(undefined);
     const [isInRoom, setIsInRoom] = useState<boolean>(false);
+
+    const { addMessage } = useGame();
     
     // Only connect to the socket if we're on the client and they create/join a room
 
@@ -75,7 +85,18 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }: Sock
             });
 
             setSocket(newSocket);
-            registerEvents(newSocket);
+
+            // Pass utility functions to the socket to make it easier to use
+            
+            type SocketEvents = {
+                addMessage: (message: Chat) => void;
+                setIsInRoom: (isInRoom: boolean) => void;
+            };
+
+            registerEvents(newSocket, {
+                addMessage,
+                setIsInRoom,
+            });
             resolve(newSocket);
         });
     };

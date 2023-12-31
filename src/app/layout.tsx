@@ -10,6 +10,7 @@ import Footer from '@/components/layout/navigation/footer';
 import GalleryProvider from '@/components/layout/providers/gallery-provider';
 import LoadProvider from '@/components/layout/providers/load-provider';
 import GameHUD from '@/components/layout/navigation/game';
+import { GameProvider } from '@/components/layout/providers/game-provider';
 
 const bubblegum_sans = Bubblegum_Sans({
     weight: ['400'],
@@ -42,22 +43,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <html lang="en">
             <body className={cn(`${bubblegum_sans.variable} ${poppins.variable} font-mono`)}>
                <LoadProvider>
+                <GameProvider>
                     <SocketProvider>
-                        <GalleryProvider>
-                            
-                            {
-                                /*
-                                <Brand />
-                                */
+                        
 
-                            }
-                            
-                            {children}
-                            <Footer />
-                            
+                            <GalleryProvider>
+                                
+                                {
+                                    /*
+                                    <Brand />
+                                    */
 
-                        </GalleryProvider>
-                    </SocketProvider>
+                                }
+                                
+                                {children}
+                                <Footer />
+                                
+
+                            </GalleryProvider>
+                        
+                        </SocketProvider>
+                    </GameProvider>
                 </LoadProvider>
             </body>
         </html>

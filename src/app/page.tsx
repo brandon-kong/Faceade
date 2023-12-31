@@ -16,13 +16,13 @@ export default function Home() {
                 <>
                 
                 <MeteorShower />
-                <LandingSection />
+                
                 <HowToPlaySection />
                 
                 </>
                 */
             }
-            
+            <LandingSection />
               <GameView />  
             
             
