@@ -5,9 +5,9 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 
 const pageVariants = {
-    initial: { opacity: 1, x: '100vw', skew: '-15deg' },
+    initial: { opacity: 0, x: '100vw', skew: '-0deg' },
     animate: { opacity: 1, x: 0, skew: '0deg', transition: { duration: 0.5 } },
-    exit: { opacity: 0, x: '-100vw', skew: '45deg', transition: { duration: 0.5 } },
+    exit: { opacity: 0, x: '-100vw', skew: '0deg', transition: { duration: 0.5 } },
 };
 
 import { useGallery } from '../providers/gallery-provider';
@@ -27,8 +27,6 @@ export default function GalleryView ({ isOpen }: { isOpen: boolean }) {
             animate="animate"
             exit="exit"
             >
-                
-                
                 <div className="flex flex-col gap-6">
                     <div
                     className={'w-full flex justify-between items-center'}
@@ -37,16 +35,13 @@ export default function GalleryView ({ isOpen }: { isOpen: boolean }) {
                         <div
                         className={'select-none'}
                         >
-                            <button className={''}
+                            <button className={'hover:scale-110 hover:opacity-50 transform transition-all duration-200 ease-in-out'}
                             onClick={closeGallery}
                             >
                                 <Image src={'/icons/close.svg'} width={40} height={40} alt={'close'} />
                             </button>
                         </div>
                     </div>
-                    
-
-                    
                 </div>
             </motion.section>
 
