@@ -7,6 +7,11 @@ type GameState = {
     isEditing: boolean;
 }
 
+export type Chat = {
+    player: PlayerType;
+    message: string;
+}
+
 export type GameType = {
     _id: ObjectId;
     game_code: string;
@@ -14,6 +19,8 @@ export type GameType = {
     host: PlayerType;
     players: PlayerType[];
     last_updated: Date;
+
+    chat: Chat[];
 }
 
 export default class Game
@@ -26,6 +33,8 @@ export default class Game
     last_updated: Date;
 
     state: GameState;
+
+    chat: Chat[];
 
     constructor(game_code: string, game_id: string, host: Player, players: Player[], last_updated: Date)
     {
@@ -42,6 +51,8 @@ export default class Game
             view: 'lobby',
             isEditing: true,
         };
+
+        this.chat = [];
     }
 
     serialize(): GameType
@@ -53,6 +64,7 @@ export default class Game
             host: this.host.serialize(),
             players: this.players.map(player => player.serialize()),
             last_updated: this.last_updated,
+            chat: this.chat,
         };
     }
 }

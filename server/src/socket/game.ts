@@ -6,6 +6,7 @@ import Player from "../game/players";
 
 import Debug from "../lib/debug";
 import Game, { GameType } from "../game";
+import { handlePlayerChat } from "./chat";
 
 export const handleGameCreate = (socket: Socket, db: Db) => {
     socket.on("create-game", () => {
@@ -270,4 +271,5 @@ export const handleGameJoin = (socket: Socket, db: Db) => {
 export default function registerGameEvents(socket: Socket, db: Db) {
     handleGameCreate(socket, db);
     handleGameJoin(socket, db);
+    handlePlayerChat(socket, db);
 }
