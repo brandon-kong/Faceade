@@ -1,12 +1,13 @@
 import type { Socket } from "socket.io";
 import type { Db } from "mongodb";
 import { removeInactiveGames } from "../lib/cleanup";
+import { GameType } from "../game";
 
 export const handleSocketDisconnect = (socket: Socket, db: Db) => {
     socket.on("disconnect", () => {
         // Remove the player from any games they were in
             
-        db.collection("games").updateOne({
+        db.collection<GameType>("games").updateOne({
             "players": {
                 $elemMatch: {
                     socket_id: socket.id,

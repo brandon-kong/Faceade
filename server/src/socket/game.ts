@@ -57,6 +57,11 @@ export const handleGameCreate = (socket: Socket, db: Db) => {
                 reason: "Failed to create game",
             });
         });
+
+        socket.emit("game-created", {
+            game_id,
+            game_code,
+        });
     });
 }
 
@@ -79,49 +84,142 @@ export const handleGameJoin = (socket: Socket, db: Db) => {
         });
 
         if (!game) {
-            socket.emit("game-join-failed", {
-                reason: "Game not found",
+           // Create a new game with the given code
+
+            Debug.log(`Game ${game_code} does not exist, creating...`);
+
+            const game_id = generateGameId();
+
+            const host = new Player(socket.id, game_id, 0, true);
+            const game = new Game(game_code, game_id, host, [host], new Date());
+
+            const game_data = game.serialize();
+
+            // Save an instance of the game in the database
+
+            db.collection<GameType>("games").insertOne(game_data).then(() => {
+                Debug.log(`Game ${game_id} created`);
+
+                socket.emit("game-created", {
+                    game_id,
+                    game_code,
+                });
+            }).catch((err) => {
+                Debug.log(`Error creating game: ${err}`);
+                // Send an error message to the client
+
+                socket.emit("game-create-failed", {
+                    reason: "Failed to create game",
+                });
             });
-            return;
         }
+        else {
 
-        // Join the game
+            // If the game code is empty, join a random game
 
-        socket.join(game.game_id);
+            if (game_code === "") {
+                Debug.log("Joining random game...");
 
-        // Create a new player instance
+                // Find any game
+                // In the future, this should find a game with the fewest players that isn't private
 
-        const player = new Player(socket.id, game.game_id, 0, false);
-        const player_data = player.serialize();
+                const game = await db.collection<GameType>("games").findOne({
+                    "players.length": {
+                        $size: {
+                            $gt: 0,
+                        },
+                    },
+                });
 
-        // Add the player to the game
+                if (!game) {
+                    Debug.log("No games found");
+                    socket.emit("game-join-failed", {
+                        reason: "No games found",
+                    });
+                    return;
+                }
 
-        // Handle errors with database
-        db.collection("games").updateOne({
-            game_id: game.game_id,
-        }, {
-            $push: {
-                players: player_data,
-            },
-        }).then(() => {
-            Debug.log(`Player ${socket.id} joined game ${game.game_id}`);
-        }).catch((err) => {
-            Debug.log(`Error joining game: ${err}`);
-            // Send an error message to the client
+                game_code = game.game_code;
 
-            socket.emit("game-join-failed", {
-                reason: "Failed to join game",
+                Debug.log(`Joining game ${game_code}`);
+
+                // Join the game
+
+                socket.join(game.game_id);
+
+                // Create a new player instance
+
+                const player = new Player(socket.id, game.game_id, 0, false);
+
+                // Add the player to the game
+
+                // Handle errors with database
+
+                db.collection("games").updateOne({
+                    game_id: game.game_id,
+                }, {
+                    $push: {
+                        players: player.serialize(),
+                    },
+                }).then(() => {
+                    Debug.log(`Player ${socket.id} joined game ${game.game_id}`);
+                }).catch((err) => {
+                    Debug.log(`Error joining game: ${err}`);
+                    // Send an error message to the client
+
+                    socket.emit("game-join-failed", {
+                        reason: "Failed to join game",
+                    });
+                    
+                    // Force the client to leave the game
+                    socket.leave(game.game_id);
+
+                    return;
+                });
+
+                socket.emit("game-joined", {
+                    game_id: game.game_id,
+                });
+            }
+
+            // Join the game
+
+            socket.join(game.game_id);
+
+            // Create a new player instance
+
+            const player = new Player(socket.id, game.game_id, 0, false);
+            const player_data = player.serialize();
+
+            // Add the player to the game
+
+            // Handle errors with database
+            db.collection("games").updateOne({
+                game_id: game.game_id,
+            }, {
+                $push: {
+                    players: player_data,
+                },
+            }).then(() => {
+                Debug.log(`Player ${socket.id} joined game ${game.game_id}`);
+            }).catch((err) => {
+                Debug.log(`Error joining game: ${err}`);
+                // Send an error message to the client
+
+                socket.emit("game-join-failed", {
+                    reason: "Failed to join game",
+                });
+                
+                // Force the client to leave the game
+                socket.leave(game.game_id);
+
+                return;
             });
-            
-            // Force the client to leave the game
-            socket.leave(game.game_id);
 
-            return;
-        });
-
-        socket.emit("game-joined", {
-            game_id: game.game_id,
-        });
+            socket.emit("game-joined", {
+                game_id: game.game_id,
+            });
+        }
     });
 }
 
