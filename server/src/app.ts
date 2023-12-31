@@ -6,8 +6,8 @@ import { createServer } from "http";
 import { Server as SocketServer } from "socket.io";
 
 import dotenv from "dotenv";
-import { handleGameCreate } from "./socket-handlers/game";
-import { handleSocketDisconnect } from "./socket-handlers";
+import registerGameEvents, { handleGameCreate } from "./socket/game";
+import { handleSocketDisconnect } from "./socket";
 
 import Debug from "./lib/debug";
 
@@ -57,7 +57,7 @@ io.on("connection", (socket) => {
     const db = getDatabase();
 
     // Game events
-    handleGameCreate(socket, db);
+    registerGameEvents(socket, db);
 
     // Socket events
     handleSocketDisconnect(socket, db);
