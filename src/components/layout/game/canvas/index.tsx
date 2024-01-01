@@ -174,7 +174,7 @@ export default function Canvas ()
             canvas.removeEventListener('mousemove', draw);
             window.removeEventListener('resize', resizeCanvas);
         }
-    }, [draw, redraw]);
+    }, [draw, redraw, lastX, lastY, socket]);
 
     return (
         <div
