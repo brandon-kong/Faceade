@@ -321,7 +321,7 @@ const handleAddDrawingAction = (socket: Socket, db: Db) => {
                 Debug.log(`Game ${game_id} updated`);
                 
                 // Broadcast the entire drawing to all the players in the room
-                socket.to(game_id).emit("drawing-action-added", game.drawing.actions);
+                socket.to(game_id).emit("drawing-action-added", action);
             }).catch((err) => {
                 Debug.log(`Error updating game ${game_id}: ${err}`);
             });

@@ -6,22 +6,7 @@ import { useEffect } from "react";
 import { useSocket } from "../../providers/socket-provider";
 import { useGame } from "../../providers/game-provider/context";
 
-export type DrawingAction = 
-| {
-    type: 'line' | 'endLine' | 'startLine';
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-    radius: number;
-    color: string;
-} | {
-    type: 'point';
-    x: number;
-    y: number;
-    radius: number;
-    color: string;
-}
+import { Point, DrawingAction } from "@/types";
 
 export default function Canvas ()
 {
@@ -47,10 +32,14 @@ export default function Canvas ()
 
         const action: DrawingAction = {
             type: 'line',
-            x1: lastX / canvas.width,
-            y1: lastY / canvas.height,
-            x2: x / canvas.width,
-            y2: y / canvas.height,
+            from: {
+                x: lastX / canvas.width,
+                y: lastY / canvas.height,
+            },
+            to: {
+                x: x / canvas.width,
+                y: y / canvas.height,
+            },
             radius: 5,
             color: 'black',
         };
@@ -86,10 +75,16 @@ export default function Canvas ()
             switch (action.type) {
                 case 'startLine':
                     ctx.beginPath();
+                    ctx.moveTo(action.from.x * canvas.width, action.from.y * canvas.height);
                 case 'line':
-                    ctx.moveTo(action.x1 * canvas.width, action.y1 * canvas.height);
-                    ctx.lineWidth = action.radius * 2;
-                    ctx.lineTo(action.x2 * canvas.width, action.y2 * canvas.height);
+                    ctx.moveTo(action.from.x * canvas.width, action.from.y * canvas.height);
+                    if (action.type === 'line') {
+                        ctx.lineWidth = action.radius * 2;
+                        ctx.lineCap = 'round';
+                        ctx.strokeStyle = action.color;
+                        ctx.lineTo(action.to.x * canvas.width, action.to.y * canvas.height);
+                    }
+                    
                     ctx.stroke();
                     break;
                 case 'endLine':
@@ -105,7 +100,6 @@ export default function Canvas ()
         const dpr = window.devicePixelRatio || 1;
         canvas.width = canvas.offsetWidth * dpr;
         canvas.height = canvas.offsetHeight * dpr;
-        
 
         const ctx = canvas.getContext('2d');
         
@@ -124,12 +118,10 @@ export default function Canvas ()
 
             const action: DrawingAction = {
                 type: 'startLine',
-                x1: x / canvas.width,
-                y1: y / canvas.height,
-                x2: 0,
-                y2: 0,
-                radius: 5,
-                color: 'black',
+                from: {
+                    x: x / canvas.width,
+                    y: y / canvas.height,
+                },
             };
 
             addDrawingAction(socket, action);
@@ -142,12 +134,10 @@ export default function Canvas ()
 
             const action: DrawingAction = {
                 type: 'endLine',
-                x1: lastX / canvas.width,
-                y1: lastY / canvas.height,
-                x2: 0,
-                y2: 0,
-                radius: 5,
-                color: 'black',
+                from: {
+                    x: lastX / canvas.width,
+                    y: lastY / canvas.height,
+                }
             };
 
             addDrawingAction(socket, action);
