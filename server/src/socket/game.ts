@@ -8,6 +8,8 @@ import Debug from "../lib/debug";
 import Game, { GameType } from "../game";
 import { handlePlayerChat } from "./chat";
 
+import type { DrawingAction } from "../game/drawing";
+
 export const handleGameCreate = (socket: Socket, db: Db) => {
     socket.on("create-game", () => {
 
@@ -268,8 +270,71 @@ export const handleGameJoin = (socket: Socket, db: Db) => {
     });
 }
 
+const handleAddDrawingAction = (socket: Socket, db: Db) => {
+    socket.on("drawing-action", (action: DrawingAction) => {
+        
+        Debug.log(`Player ${socket.id} added drawing action: ${action}`);
+        // Find the game that the player is in
+
+        if (socket.rooms.size < 2) {
+            Debug.log(`Player ${socket.id} is not in a game`);
+            
+            socket.emit("drawing-action-failed", {
+                reason: "Not in a game",
+            });
+        }
+
+        const game_id = Array.from(socket.rooms)[1];
+
+        // Find the game in the database
+
+        db.collection<GameType>("games").findOne({
+            game_id,
+        }).then((game) => {
+            if (!game) {
+                Debug.log(`Game ${game_id} not found`);
+                return;
+            }
+
+            // Find the player in the game
+
+            const player = game.players.find((player) => player.socket_id === socket.id);
+
+            if (!player) {
+                Debug.log(`Player ${socket.id} not found in game ${game_id}`);
+                return;
+            }
+
+            // Add the action to the game's drawing
+
+            game.drawing.actions.push(action);
+
+            // Update the game in the database
+
+            db.collection<GameType>("games").updateOne({
+                game_id,
+            }, {
+                $set: {
+                    drawing: game.drawing,
+                },
+            }).then(() => {
+                Debug.log(`Game ${game_id} updated`);
+                
+                // Broadcast the entire drawing to all the players in the room
+                socket.to(game_id).emit("drawing-action-added", game.drawing.actions);
+            }).catch((err) => {
+                Debug.log(`Error updating game ${game_id}: ${err}`);
+            });
+
+        }).catch((err) => {
+            Debug.log(`Error finding game ${game_id}: ${err}`);
+        });
+    });
+}
+
 export default function registerGameEvents(socket: Socket, db: Db) {
     handleGameCreate(socket, db);
     handleGameJoin(socket, db);
     handlePlayerChat(socket, db);
+    handleAddDrawingAction(socket, db);
 }

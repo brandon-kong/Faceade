@@ -9,6 +9,7 @@ import { useLoading } from '../load-provider/context';
 import { useGame } from '../game-provider/context';
 
 import { Chat } from '@/types';
+import { DrawingAction } from '../../game/canvas';
 
 type SocketContextType = {
     socket?: Socket;
@@ -35,6 +36,7 @@ type SocketProviderProps = {
 export type SocketEvents = {
     addMessage: (message: Chat) => void;
     setIsInRoom: (isInRoom: boolean) => void;
+    setDrawingActions: (actions: DrawingAction[]) => void;
 };
 
 export const SocketProvider: React.FC<SocketProviderProps> = ({ children }: SocketProviderProps) => {
@@ -42,7 +44,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }: Sock
     const [socket, setSocket] = useState<Socket | undefined>(undefined);
     const [isInRoom, setIsInRoom] = useState<boolean>(false);
 
-    const { addMessage } = useGame();
+    const { addMessage, setDrawingActions } = useGame();
     
     // Only connect to the socket if we're on the client and they create/join a room
 
@@ -87,15 +89,11 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }: Sock
             setSocket(newSocket);
 
             // Pass utility functions to the socket to make it easier to use
-            
-            type SocketEvents = {
-                addMessage: (message: Chat) => void;
-                setIsInRoom: (isInRoom: boolean) => void;
-            };
 
             registerEvents(newSocket, {
                 addMessage,
                 setIsInRoom,
+                setDrawingActions,
             });
             resolve(newSocket);
         });
