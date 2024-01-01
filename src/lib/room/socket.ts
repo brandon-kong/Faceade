@@ -45,6 +45,10 @@ const registerEvents = (socket: Socket, utility: SocketEvents) => {
         // Draw on canvas
         
     });
+
+    socket.on("replicate-drawing-actions", (actions: DrawingAction[]) => {
+        utility.setDrawingActions(actions);
+    });
 };
 
 

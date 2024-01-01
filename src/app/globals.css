@@ -128,6 +128,19 @@
     grid-template-rows: min-content 48px min-content min-content;
 }
 
+@media screen and (max-width: 768px) {
+    .game-container {
+        grid-template-areas:
+            "logo logo"
+            "bar bar"
+            "canvas canvas"
+            "chat toolbar";
+
+        grid-template-columns: min-content auto auto;
+        grid-template-rows: min-content 48px min-content min-content;
+    }
+}
+
 .game-bar {
     @apply h-full text-center relative rounded-lg shadow-md;
 

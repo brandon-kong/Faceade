@@ -24,12 +24,6 @@ export type DrawingAction =
     radius: number;
     color: string;
 } | {
-    type: 'point';
-    x: number;
-    y: number;
-    radius: number;
-    color: string;
-} | {
     type: 'startLine' | 'endLine';
     from: Point;
 }

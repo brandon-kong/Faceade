@@ -71,27 +71,31 @@ export default function Canvas ()
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         const actions = drawing.actions;
+        let lastAction: DrawingAction | null = null;
+
         actions.forEach((action, index) => {
             switch (action.type) {
                 case 'startLine':
                     ctx.beginPath();
                     ctx.moveTo(action.from.x * canvas.width, action.from.y * canvas.height);
+                    break;
                 case 'line':
                     ctx.moveTo(action.from.x * canvas.width, action.from.y * canvas.height);
-                    if (action.type === 'line') {
-                        ctx.lineWidth = action.radius * 2;
-                        ctx.lineCap = 'round';
-                        ctx.strokeStyle = action.color;
-                        ctx.lineTo(action.to.x * canvas.width, action.to.y * canvas.height);
-                    }
-                    
+                    ctx.lineWidth = action.radius * 2;
+                    ctx.lineCap = 'round';
+                    ctx.strokeStyle = action.color;
+                    ctx.lineTo(action.to.x * canvas.width, action.to.y * canvas.height);
                     ctx.stroke();
                     break;
                 case 'endLine':
                     ctx.closePath();
                     break;
             }
+
+            lastAction = action;
         });
+
+        ctx.stroke();
     }, [drawing.actions]);
 
     useEffect(() => {
