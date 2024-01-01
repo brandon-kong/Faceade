@@ -1,3 +1,4 @@
+import { DrawingAction } from '@/components/layout/game/canvas';
 import type { Socket } from 'socket.io-client';
 
 export const createGame = (socket: Socket | undefined) => {
@@ -17,3 +18,12 @@ export const joinGame = (socket: Socket | undefined, gameCode: string) => {
         console.log('socket is not defined');
     }
 }
+
+export const addDrawingAction = (socket: Socket | undefined, action: DrawingAction) => {
+    if (socket) {
+        socket.emit('drawing-action', action);
+    } else {
+        // handle error
+        console.log('socket is not defined');
+    }
+};

@@ -1,25 +1,37 @@
 'use client';
 
+import { addDrawingAction } from "@/lib/room/game";
 import { useState, useCallback } from "react";
 import { useEffect } from "react";
+import { useSocket } from "../../providers/socket-provider";
+import { useGame } from "../../providers/game-provider/context";
 
-type DrawingAction = {
-    type: 'line';
+export type DrawingAction = 
+| {
+    type: 'line' | 'endLine' | 'startLine';
     x1: number;
     y1: number;
     x2: number;
     y2: number;
     radius: number;
     color: string;
+} | {
+    type: 'point';
+    x: number;
+    y: number;
+    radius: number;
+    color: string;
 }
 
 export default function Canvas ()
 {
-    const [drawingActions, setDrawingActions] = useState<DrawingAction[]>([]);
     // allow drawing on canvas
     const [painting, setPainting] = useState<boolean>(false);
     const [lastX, setLastX] = useState<number>(0);
     const [lastY, setLastY] = useState<number>(0);
+
+    const { socket } = useSocket();
+    const { drawing, setDrawingActions } = useGame();
 
     const draw = useCallback((e: MouseEvent) => {
         if (!painting) return;
@@ -33,6 +45,21 @@ export default function Canvas ()
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
+        const action: DrawingAction = {
+            type: 'line',
+            x1: lastX / canvas.width,
+            y1: lastY / canvas.height,
+            x2: x / canvas.width,
+            y2: y / canvas.height,
+            radius: 5,
+            color: 'black',
+        };
+
+        setDrawingActions(prev => [
+            ...prev,
+            action,
+        ]);      
+
         ctx.lineWidth = 10;
         ctx.lineCap = 'round';
         ctx.lineTo(x, y);
@@ -40,23 +67,12 @@ export default function Canvas ()
         ctx.beginPath();
         ctx.moveTo(x, y);
 
-        setDrawingActions(prev => [
-            ...prev,
-            {
-                type: 'line',
-                x1: lastX / canvas.width,
-                y1: lastY / canvas.height,
-                x2: (e.clientX - rect.left) / canvas.width,
-                y2: (e.clientY - rect.top) / canvas.height,
-                radius: 10,
-                color: 'black',
-            }
-        ]);      
+        addDrawingAction(socket, action);
         
         setLastX(x);
         setLastY(y);
     }
-    , [lastY, lastX, painting]);
+    , [lastX, lastY, painting, socket, setDrawingActions]);
 
     const redraw = useCallback(() => {
         const canvas = document.getElementById('canvas') as HTMLCanvasElement;
@@ -65,18 +81,23 @@ export default function Canvas ()
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        for (let action of drawingActions) {
-            if (action.type === 'line') {
-                ctx.beginPath();
-                ctx.lineWidth = action.radius * 2;
-                ctx.lineCap = 'round';
-                ctx.strokeStyle = action.color;
-                ctx.moveTo(action.x1 * canvas.width, action.y1 * canvas.height);
-                ctx.lineTo(action.x2 * canvas.width, action.y2 * canvas.height);
-                ctx.stroke();
+        const actions = drawing.actions;
+        actions.forEach((action, index) => {
+            switch (action.type) {
+                case 'startLine':
+                    ctx.beginPath();
+                case 'line':
+                    ctx.moveTo(action.x1 * canvas.width, action.y1 * canvas.height);
+                    ctx.lineWidth = action.radius * 2;
+                    ctx.lineTo(action.x2 * canvas.width, action.y2 * canvas.height);
+                    ctx.stroke();
+                    break;
+                case 'endLine':
+                    ctx.closePath();
+                    break;
             }
-        }
-    }, [drawingActions]);
+        });
+    }, [drawing.actions]);
 
     useEffect(() => {
 
@@ -100,12 +121,36 @@ export default function Canvas ()
 
             setLastX(x);
             setLastY(y);
+
+            const action: DrawingAction = {
+                type: 'startLine',
+                x1: x / canvas.width,
+                y1: y / canvas.height,
+                x2: 0,
+                y2: 0,
+                radius: 5,
+                color: 'black',
+            };
+
+            addDrawingAction(socket, action);
         }
 
         function finishedPosition() {
             if (!ctx) return;
             setPainting(false);
             ctx.beginPath();
+
+            const action: DrawingAction = {
+                type: 'endLine',
+                x1: lastX / canvas.width,
+                y1: lastY / canvas.height,
+                x2: 0,
+                y2: 0,
+                radius: 5,
+                color: 'black',
+            };
+
+            addDrawingAction(socket, action);
         }
 
         canvas.addEventListener('mousedown', startPosition);

@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import Player, { PlayerType } from "./players";
+import { DrawingAction } from "./drawing";
 
 type GameState = {
     started: boolean;
@@ -21,6 +22,9 @@ export type GameType = {
     last_updated: Date;
 
     chat: Chat[];
+    drawing: {
+        actions: DrawingAction[];
+    }
 }
 
 export default class Game
@@ -35,6 +39,9 @@ export default class Game
     state: GameState;
 
     chat: Chat[];
+    drawing: {
+        actions: DrawingAction[];
+    };
 
     constructor(game_code: string, game_id: string, host: Player, players: Player[], last_updated: Date)
     {
@@ -53,6 +60,9 @@ export default class Game
         };
 
         this.chat = [];
+        this.drawing = {
+            actions: [],
+        };
     }
 
     serialize(): GameType
@@ -65,6 +75,9 @@ export default class Game
             players: this.players.map(player => player.serialize()),
             last_updated: this.last_updated,
             chat: this.chat,
+            drawing: {
+                actions: [],
+            },
         };
     }
 }
