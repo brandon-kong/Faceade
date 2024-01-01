@@ -1,4 +1,4 @@
-import { DrawingAction } from '@/components/layout/game/canvas';
+import type { DrawingAction } from '@/types';
 import type { Socket } from 'socket.io-client';
 
 export const createGame = (socket: Socket | undefined) => {

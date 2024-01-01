@@ -10,6 +10,34 @@ import { handlePlayerChat } from "./chat";
 
 import type { DrawingAction } from "../game/drawing";
 
+export const replicateGameToClient = (socket: Socket, db: Db, game_id: string) => {
+    // Check if the socket is in the game
+
+    if (!socket.rooms.has(game_id)) {
+        Debug.log(`Player ${socket.id} is not in game ${game_id}`);
+        return;
+    }
+
+    // Get the game from the database
+
+    db.collection<GameType>("games").findOne({
+        game_id,
+    }).then((game) => {
+        if (!game) {
+            Debug.log(`Game ${game_id} not found`);
+            return;
+        }
+
+        // Emit all events to the client
+
+        // Start with drawing data
+        socket.emit("replicate-drawing-actions", game.drawing.actions);
+
+    }).catch((err) => {
+        Debug.log(`Error finding game ${game_id}: ${err}`);
+    });
+};
+
 export const handleGameCreate = (socket: Socket, db: Db) => {
     socket.on("create-game", () => {
 
@@ -164,6 +192,8 @@ export const handleGameJoin = (socket: Socket, db: Db) => {
 
             }).then(() => {
                 Debug.log(`Player ${socket.id} joined game ${game.game_id}`);
+
+                replicateGameToClient(socket, db, game.game_id);
             }).catch((err) => {
                 Debug.log(`Error joining game: ${err}`);
                 // Send an error message to the client
@@ -248,6 +278,11 @@ export const handleGameJoin = (socket: Socket, db: Db) => {
                     },
                 }).then(() => {
                     Debug.log(`Player ${socket.id} joined game ${game.game_id}`);
+                    socket.emit("game-joined", {
+                        game_id: game.game_id,
+                    });
+
+                    replicateGameToClient(socket, db, game.game_id);
                 }).catch((err) => {
                     Debug.log(`Error joining game: ${err}`);
                     // Send an error message to the client
@@ -262,9 +297,7 @@ export const handleGameJoin = (socket: Socket, db: Db) => {
                     return;
                 });
 
-                socket.emit("game-joined", {
-                    game_id: game.game_id,
-                });
+                
             
         }
     });
@@ -321,7 +354,7 @@ const handleAddDrawingAction = (socket: Socket, db: Db) => {
                 Debug.log(`Game ${game_id} updated`);
                 
                 // Broadcast the entire drawing to all the players in the room
-                socket.to(game_id).emit("drawing-action-added", game.drawing.actions);
+                socket.to(game_id).emit("drawing-action-added", action);
             }).catch((err) => {
                 Debug.log(`Error updating game ${game_id}: ${err}`);
             });

@@ -1,9 +1,22 @@
-export type DrawingAction = {
-    type: 'line' | 'endLine';
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
+export type Point = {
+    x: number;
+    y: number;
+}
+
+export type DrawingAction = 
+| {
+    type: 'line';
+    from: Point;
+    to: Point;
     radius: number;
     color: string;
+} | {
+    type: 'point';
+    x: number;
+    y: number;
+    radius: number;
+    color: string;
+} | {
+    type: 'startLine' | 'endLine';
+    from: Point;
 }

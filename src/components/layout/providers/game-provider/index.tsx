@@ -4,7 +4,7 @@ import { Chat } from '@/types';
 import React, { useState, useContext, createContext, useEffect } from 'react';
 
 import { GameContext } from './context';
-import { DrawingAction } from '../../game/canvas';
+import type { DrawingAction } from '@/types';
 
 type GameProviderProps = {
     children?: React.ReactNode;
@@ -18,6 +18,10 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }: GameProv
         setMessages((prev) => [...prev, message]);
     };
 
+    const addDrawingAction = (action: DrawingAction) => {
+        setDrawingActions((prev) => [...prev, action]);
+    }
+
     return (
         <GameContext.Provider
             value={{
@@ -28,6 +32,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }: GameProv
                 setMessages,
                 addMessage,
                 setDrawingActions,
+                addDrawingAction,
             }}
         >
             {children}

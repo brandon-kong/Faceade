@@ -1,6 +1,6 @@
 import { Chat } from '@/types';
 import React, { useContext, createContext } from 'react';
-import { DrawingAction } from '../../game/canvas';
+import type { DrawingAction } from '@/types';
 
 export type GameContextType = {
     messages: Chat[];
@@ -13,6 +13,7 @@ export type GameContextType = {
     // Methods
     addMessage: (message: Chat) => void;
     
+    addDrawingAction: (action: DrawingAction) => void;
     setDrawingActions: React.Dispatch<React.SetStateAction<DrawingAction[]>>;
 
     // Properties
@@ -29,6 +30,7 @@ export const GameContext = createContext<GameContextType>({
     addMessage: () => undefined,
     setMessages: () => undefined,
     setDrawingActions: () => undefined,
+    addDrawingAction: () => undefined,
 });
 
 export const useGame = () => useContext(GameContext);
