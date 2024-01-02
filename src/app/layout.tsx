@@ -32,36 +32,28 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
     title: 'Faceade',
-    description: 'Faceade is a game where you can play with others in a virtual drawing room, where you can draw using your body movements.',
+    description:
+        'Faceade is a game where you can play with others in a virtual drawing room, where you can draw using your body movements.',
     icons: {
-        icon: '/icon.png'
-    }
+        icon: '/icon.png',
+    },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en">
             <body className={cn(`${bubblegum_sans.variable} ${poppins.variable} font-mono`)}>
-               <LoadProvider>
-                <GameProvider>
-                    <SocketProvider>
-                        
-
+                <LoadProvider>
+                    <GameProvider>
+                        <SocketProvider>
                             <GalleryProvider>
-                                
-                                {
-                                    /*
+                                {/*
                                     <Brand />
-                                    */
+                                    */}
 
-                                }
-                                
                                 {children}
                                 <Footer />
-                                
-
                             </GalleryProvider>
-                        
                         </SocketProvider>
                     </GameProvider>
                 </LoadProvider>

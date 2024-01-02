@@ -1,15 +1,14 @@
 'use client';
 
-import { addDrawingAction } from "@/lib/room/game";
-import { useState, useCallback } from "react";
-import { useEffect } from "react";
-import { useSocket } from "../../providers/socket-provider";
-import { useGame } from "../../providers/game-provider/context";
+import { addDrawingAction } from '@/lib/room/game';
+import { useState, useCallback } from 'react';
+import { useEffect } from 'react';
+import { useSocket } from '../../providers/socket-provider';
+import { useGame } from '../../providers/game-provider/context';
 
-import { Point, DrawingAction } from "@/types";
+import { Point, DrawingAction } from '@/types';
 
-export default function Canvas ()
-{
+export default function Canvas() {
     // allow drawing on canvas
     const [painting, setPainting] = useState<boolean>(false);
     const [lastX, setLastX] = useState<number>(0);
@@ -18,50 +17,49 @@ export default function Canvas ()
     const { socket } = useSocket();
     const { drawing, setDrawingActions } = useGame();
 
-    const draw = useCallback((e: MouseEvent) => {
-        if (!painting) return;
+    const draw = useCallback(
+        (e: MouseEvent) => {
+            if (!painting) return;
 
-        const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
+            const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
 
-        const rect = canvas.getBoundingClientRect();
+            const rect = canvas.getBoundingClientRect();
 
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
 
-        const action: DrawingAction = {
-            type: 'line',
-            from: {
-                x: lastX / canvas.width,
-                y: lastY / canvas.height,
-            },
-            to: {
-                x: x / canvas.width,
-                y: y / canvas.height,
-            },
-            radius: 5,
-            color: 'black',
-        };
+            const action: DrawingAction = {
+                type: 'line',
+                from: {
+                    x: lastX / canvas.width,
+                    y: lastY / canvas.height,
+                },
+                to: {
+                    x: x / canvas.width,
+                    y: y / canvas.height,
+                },
+                radius: 5,
+                color: 'black',
+            };
 
-        setDrawingActions(prev => [
-            ...prev,
-            action,
-        ]);      
+            setDrawingActions(prev => [...prev, action]);
 
-        ctx.lineWidth = 10;
-        ctx.lineCap = 'round';
-        ctx.lineTo(x, y);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(x, y);
+            ctx.lineWidth = 10;
+            ctx.lineCap = 'round';
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
 
-        addDrawingAction(socket, action);
-        
-        setLastX(x);
-        setLastY(y);
-    }
-    , [lastX, lastY, painting, socket, setDrawingActions]);
+            addDrawingAction(socket, action);
+
+            setLastX(x);
+            setLastY(y);
+        },
+        [lastX, lastY, painting, socket, setDrawingActions],
+    );
 
     const redraw = useCallback(() => {
         const canvas = document.getElementById('canvas') as HTMLCanvasElement;
@@ -99,14 +97,13 @@ export default function Canvas ()
     }, [drawing.actions]);
 
     useEffect(() => {
-
         const canvas = document.getElementById('canvas') as HTMLCanvasElement;
         const dpr = window.devicePixelRatio || 1;
         canvas.width = canvas.offsetWidth * dpr;
         canvas.height = canvas.offsetHeight * dpr;
 
         const ctx = canvas.getContext('2d');
-        
+
         ctx && ctx.scale(dpr, dpr);
 
         function startPosition(e: MouseEvent) {
@@ -141,7 +138,7 @@ export default function Canvas ()
                 from: {
                     x: lastX / canvas.width,
                     y: lastY / canvas.height,
-                }
+                },
             };
 
             addDrawingAction(socket, action);
@@ -151,17 +148,16 @@ export default function Canvas ()
         canvas.addEventListener('mouseup', finishedPosition);
 
         canvas.addEventListener('mousemove', draw);
-        
 
         function resizeCanvas() {
             const dpr = window.devicePixelRatio || 1;
             canvas.width = canvas.offsetWidth * dpr;
             canvas.height = canvas.offsetHeight * dpr;
             ctx && ctx.scale(dpr, dpr);
-            
+
             redraw();
         }
-        
+
         window.addEventListener('resize', resizeCanvas);
 
         resizeCanvas();
@@ -173,19 +169,12 @@ export default function Canvas ()
 
             canvas.removeEventListener('mousemove', draw);
             window.removeEventListener('resize', resizeCanvas);
-        }
+        };
     }, [draw, redraw, lastX, lastY, socket]);
 
     return (
-        <div
-        className={'w-full rounded-lg shadow-md bg-white relative overflow-hidden'}
-        >
-            <canvas 
-            width={800}
-            height={600}
-            id={'canvas'}
-            className={'w-full h-auto bg-white aspect-[4/3]'}
-            />
+        <div className={'w-full rounded-lg shadow-md bg-white relative overflow-hidden'}>
+            <canvas width={800} height={600} id={'canvas'} className={'w-full h-auto bg-white aspect-[4/3]'} />
         </div>
-    )
+    );
 }

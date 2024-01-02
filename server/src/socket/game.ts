@@ -9,16 +9,13 @@ import Game, { GameType } from "../game";
 import { handlePlayerChat } from "./chat";
 
 import type { DrawingAction } from "../game/drawing";
+import { getNameFromSocket } from "../lib/name";
 
-export const replicateGameToClient = (socket: Socket, db: Db, game_id: string) => {
-    // Check if the socket is in the game
-
+export const sendGameDataOnJoin = (socket: Socket, db: Db, game_id: string) => {
     if (!socket.rooms.has(game_id)) {
         Debug.log(`Player ${socket.id} is not in game ${game_id}`);
         return;
     }
-
-    // Get the game from the database
 
     db.collection<GameType>("games").findOne({
         game_id,
@@ -30,13 +27,22 @@ export const replicateGameToClient = (socket: Socket, db: Db, game_id: string) =
 
         // Emit all events to the client
 
+        const player_name = getNameFromSocket(game, socket);
+
+        socket.to(game_id).emit("server-announcement", {
+            "message": `${player_name} has joined`
+        });
+
+        socket.emit('game-joined');
+        socket.emit('host-status', game.host.socket_id === socket.id);
+
         // Start with drawing data
         socket.emit("replicate-drawing-actions", game.drawing.actions);
 
     }).catch((err) => {
         Debug.log(`Error finding game ${game_id}: ${err}`);
     });
-};
+}
 
 export const handleGameCreate = (socket: Socket, db: Db) => {
     socket.on("create-game", () => {
@@ -80,6 +86,10 @@ export const handleGameCreate = (socket: Socket, db: Db) => {
                 game_id,
                 game_code,
             });
+
+            sendGameDataOnJoin(socket, db, game.game_id);
+
+            //
         }).catch((err) => {
             Debug.log(`Error creating game: ${err}`);
             // Send an error message to the client
@@ -145,6 +155,8 @@ export const handleGameJoin = (socket: Socket, db: Db) => {
                         game_id,
                         game_code,
                     });
+
+                    sendGameDataOnJoin(socket, db, game.game_id);
                 }).catch((err) => {
                     Debug.log(`Error creating game: ${err}`);
                     // Send an error message to the client
@@ -193,7 +205,7 @@ export const handleGameJoin = (socket: Socket, db: Db) => {
             }).then(() => {
                 Debug.log(`Player ${socket.id} joined game ${game.game_id}`);
 
-                replicateGameToClient(socket, db, game.game_id);
+                sendGameDataOnJoin(socket, db, game.game_id);
             }).catch((err) => {
                 Debug.log(`Error joining game: ${err}`);
                 // Send an error message to the client
@@ -282,7 +294,7 @@ export const handleGameJoin = (socket: Socket, db: Db) => {
                         game_id: game.game_id,
                     });
 
-                    replicateGameToClient(socket, db, game.game_id);
+                    sendGameDataOnJoin(socket, db, game.game_id);
                 }).catch((err) => {
                     Debug.log(`Error joining game: ${err}`);
                     // Send an error message to the client

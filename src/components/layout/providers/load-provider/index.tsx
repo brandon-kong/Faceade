@@ -45,20 +45,18 @@ export default function LoadProvider({ children }: LoadProviderProps) {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className={'fixed w-full h-full bg-white bg-opacity-80 flex items-center justify-center z-[100]'}
+                        className={
+                            'fixed w-full h-full bg-white bg-opacity-80 flex items-center justify-center z-[100]'
+                        }
                     >
-                        <div
-                        className={'flex flex-col gap-4 items-center text-center'}
-                        >
+                        <div className={'flex flex-col gap-4 items-center text-center'}>
                             <Loading />
                         </div>
-                        
                     </motion.div>
                 )}
             </AnimatePresence>
-            
+
             {children}
         </LoadContext.Provider>
     );
-};
-
+}

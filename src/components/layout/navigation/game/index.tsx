@@ -1,6 +1,6 @@
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import Image from "next/image"
-import Link from "next/link"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import Image from 'next/image';
+import Link from 'next/link';
 
 const items = [
     {
@@ -22,48 +22,39 @@ const items = [
         name: 'Settings',
         href: '/terms',
         icon: '/icons/settings.svg',
-    }
-]
-export default function GameHUD ()
-{
+    },
+];
+export default function GameHUD() {
     return (
-        <nav className={'w-full h-hud-inset'}>
+        <nav className={'fixed top-0 mx-auto h-hud-inset'}>
             <div className={'bg-white rounded-r-lg shadow-md p-4 border-2 border-neutral-100'}>
                 <TooltipProvider>
-
-                
-                    <ul className={'justify-around flex items-center'}>
-                        {
-                            items.map((item, index) => (
-                                <li
-                                key={index}
-                                >
-                                    <Tooltip
-                                    
-                                    >
-
+                    <ul className={'justify-around flex items-center gap-8'}>
+                        {items.map((item, index) => (
+                            <li key={index}>
+                                <Tooltip>
                                     <TooltipTrigger asChild>
                                         <Link href={item.href}>
-                                            <Image src={item.icon} width={45} height={45} alt={item.name} 
-                                            className={'cursor-pointer select-none hover:scale-110 transform transition-all'}
+                                            <Image
+                                                src={item.icon}
+                                                width={45}
+                                                height={45}
+                                                alt={item.name}
+                                                className={
+                                                    'cursor-pointer select-none hover:scale-110 transform transition-all'
+                                                }
                                             />
                                         </Link>
                                     </TooltipTrigger>
-                                    <TooltipContent
-                                    side={'bottom'}
-                                    sideOffset={10}
-                                    >
-                                        <p>
-                                            { item.name }
-                                        </p>
+                                    <TooltipContent side={'bottom'} sideOffset={10}>
+                                        <p>{item.name}</p>
                                     </TooltipContent>
-                                    </Tooltip>
-                                </li>
-                            ))
-                        }
+                                </Tooltip>
+                            </li>
+                        ))}
                     </ul>
                 </TooltipProvider>
             </div>
         </nav>
-    )
+    );
 }
