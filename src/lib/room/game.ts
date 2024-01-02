@@ -17,7 +17,7 @@ export const joinGame = (socket: Socket | undefined, gameCode: string) => {
         // handle error
         console.log('socket is not defined');
     }
-}
+};
 
 export const addDrawingAction = (socket: Socket | undefined, action: DrawingAction) => {
     if (socket) {

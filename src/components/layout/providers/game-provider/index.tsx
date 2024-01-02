@@ -12,15 +12,16 @@ type GameProviderProps = {
 
 export const GameProvider: React.FC<GameProviderProps> = ({ children }: GameProviderProps) => {
     const [messages, setMessages] = useState<Chat[]>([]);
+    const [isHost, setIsHost] = useState<boolean>(false);
     const [drawingActions, setDrawingActions] = useState<DrawingAction[]>([]);
 
     const addMessage = (message: Chat) => {
-        setMessages((prev) => [...prev, message]);
+        setMessages(prev => [...prev, message]);
     };
 
     const addDrawingAction = (action: DrawingAction) => {
-        setDrawingActions((prev) => [...prev, action]);
-    }
+        setDrawingActions(prev => [...prev, action]);
+    };
 
     return (
         <GameContext.Provider
@@ -29,10 +30,14 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }: GameProv
                 drawing: {
                     actions: drawingActions,
                 },
+                isHost,
+
                 setMessages,
                 addMessage,
                 setDrawingActions,
                 addDrawingAction,
+
+                setIsHost,
             }}
         >
             {children}

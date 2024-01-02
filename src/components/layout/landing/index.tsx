@@ -11,7 +11,7 @@ export default function LandingSection() {
 
     const handleChevronClick = () => {
         openGallery();
-    }
+    };
 
     return (
         <section className={'w-full h-full min-h-screen block md:flex'}>
@@ -19,22 +19,15 @@ export default function LandingSection() {
                 <JoinCard />
             </div>
 
-            <div
-            className={'flex-[2] h-screen items-center justify-center p-12 hidden lg:flex'}
-            >
-
+            <div className={'flex-[2] h-screen items-center justify-center p-12 hidden lg:flex'}>
                 <div className={'w-full h-full items-center justify-center flex bg-white shadow-lg relative'}>
-                    
                     <div
-                    onClick={handleChevronClick}
-                    className={'absolute -left-8 rounded-full bg-white shadow-lg flex items-center justify-center w-16 h-16 hover:scale-110 transition-transform cursor-pointer'}
+                        onClick={handleChevronClick}
+                        className={
+                            'absolute -left-8 rounded-full bg-white shadow-lg flex items-center justify-center w-16 h-16 hover:scale-110 transition-transform cursor-pointer'
+                        }
                     >
-                        <Image
-                        src={'/icons/chevron-left.svg'}
-                        width={20}
-                        height={20}
-                        alt={'chevron'}
-                        />
+                        <Image src={'/icons/chevron-left.svg'} width={20} height={20} alt={'chevron'} />
                     </div>
                     <Image
                         src={'/images/face.svg'}

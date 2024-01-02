@@ -38,6 +38,8 @@ export type SocketEvents = {
     setIsInRoom: (isInRoom: boolean) => void;
     setDrawingActions: (actions: DrawingAction[]) => void;
     addDrawingAction: (action: DrawingAction) => void;
+
+    setIsHost: (isHost: boolean) => void;
 };
 
 export const SocketProvider: React.FC<SocketProviderProps> = ({ children }: SocketProviderProps) => {
@@ -45,8 +47,8 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }: Sock
     const [socket, setSocket] = useState<Socket | undefined>(undefined);
     const [isInRoom, setIsInRoom] = useState<boolean>(false);
 
-    const { addMessage, setDrawingActions, addDrawingAction } = useGame();
-    
+    const { addMessage, setDrawingActions, addDrawingAction, setIsHost } = useGame();
+
     // Only connect to the socket if we're on the client and they create/join a room
 
     const connectSocket = (): Promise<Socket | undefined> => {
@@ -96,6 +98,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }: Sock
                 setIsInRoom,
                 setDrawingActions,
                 addDrawingAction,
+                setIsHost,
             });
             resolve(newSocket);
         });

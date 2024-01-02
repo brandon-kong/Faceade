@@ -37,7 +37,6 @@ const GalleryProvider: React.FC<GalleryProviderProps> = ({ children }: GalleryPr
                 closeGallery,
             }}
         >
-            
             {children}
             <GalleryView isOpen={isOpen} />
         </GalleryContext.Provider>

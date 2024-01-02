@@ -109,20 +109,18 @@
 }
 
 .paper-torn {
-   background-image: url("../../public/images/torn-paper.png");
-  }
-
-
+    background-image: url('../../public/images/torn-paper.png');
+}
 
 /* Game */
 
 .game-container {
     @apply h-full grid gap-3;
     grid-template-areas:
-        "logo logo logo"
-        "bar bar bar"
-        "canvas canvas chat"
-        ". toolbar .";
+        'logo logo logo'
+        'bar bar bar'
+        'canvas canvas chat'
+        '. toolbar .';
 
     grid-template-columns: min-content auto auto;
     grid-template-rows: min-content 48px min-content min-content;
@@ -131,10 +129,10 @@
 @media screen and (max-width: 768px) {
     .game-container {
         grid-template-areas:
-            "logo logo"
-            "bar bar"
-            "canvas canvas"
-            "chat toolbar";
+            'logo logo'
+            'bar bar'
+            'canvas canvas'
+            'chat toolbar';
 
         grid-template-columns: min-content auto auto;
         grid-template-rows: min-content 48px min-content min-content;

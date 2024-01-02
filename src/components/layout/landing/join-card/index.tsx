@@ -29,7 +29,6 @@ export default function JoinCard() {
         if (!socket) return;
 
         createGame(socket);
-
     };
 
     const handleJoinGame = async (e: React.FormEvent) => {
@@ -42,8 +41,7 @@ export default function JoinCard() {
         if (!socket) return;
 
         joinGame(socket, code);
-
-    }
+    };
 
     return (
         <section
@@ -63,11 +61,10 @@ export default function JoinCard() {
 
                 <div>
                     <form onSubmit={e => e.preventDefault()} className={'w-full flex flex-col gap-4'}>
-                        <Input placeholder={'Enter game code'} value={code} onChange={(e) => setCode(e.target.value)}/>
-                        <Button className={''}
-                        type={'submit'}
-                        onClick={handleJoinGame}
-                        >Join</Button>
+                        <Input placeholder={'Enter game code'} value={code} onChange={e => setCode(e.target.value)} />
+                        <Button className={''} type={'submit'} onClick={handleJoinGame}>
+                            Join
+                        </Button>
 
                         <Button variant={'opaque'} onClick={handleCreateGame}>
                             Create a new game
