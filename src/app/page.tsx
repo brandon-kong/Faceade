@@ -30,8 +30,9 @@ export default function Home() {
             ) : (
                 <>
                     <MeteorShower />
-                    <HowToPlaySection />
                     <LandingSection />
+                    <HowToPlaySection />
+                    
                 </>
             )}
         </main>
